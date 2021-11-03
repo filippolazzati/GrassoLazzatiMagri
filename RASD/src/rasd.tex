@@ -1,0 +1,669 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{color}   %May be necessary if you want to color links
+\usepackage{hyperref}
+\usepackage{float}
+\hypersetup{
+    colorlinks=false, %set true if you want colored links
+    linktoc=all,     %set to all if you want both sections and subsections linked
+    %linkcolor=blue,  %choose some color if you want links to stand out
+}
+
+\title{DREAM - RASD}
+\author{Filippo Lazzati}
+%\date{October 2021}
+
+\begin{document}
+\thispagestyle{empty} 
+\begin{titlepage}
+    \begin{center}
+       \vspace*{2cm}
+       {\Huge \textbf{DREAM}} %%Replace this with the Title of your research
+       \vspace{0.5cm}
+       \\
+    \begin{LARGE}
+        {Data-dRiven PrEdictive FArMing in Telengana}
+        \vspace{1.5cm}
+        \\
+        {\textit{Requirement Analysis and Specification Document - RASD}}
+       \vspace{8cm}
+        
+        {Christian Grasso - Filippo Lazzati - Chiara Magri}
+       \vspace{0.5cm}
+       {Year: 2021/2022}
+       
+    \end{LARGE}  
+   \end{center}
+\end{titlepage}
+\newpage
+\tableofcontents %this command creates an index
+\newpage
+\listoftables
+\newpage
+\section{Introduction}
+\subsection{Purpose}
+\subsection{Scope}
+\subsection{Definitions, Acronyms, Abbreviations}
+\subsection{Revision history}
+\subsection{Reference Documents}
+\subsection{Document Structure}
+
+\section{Overall description}
+\subsection{Product perspective}
+\subsection{Product functions} \label{Product functions}
+The main goal that Telengana’s government wants to achieve with \verb|DREAM| is to help policy makers 
+formulating policies in the field of agriculture. In order to accomplish this objective, Telengana’s 
+government is asking for predictive models for food systems that can drive decisions exploiting huge 
+amount of data. In this section, a list of the most important requirements of the system is provided; notice 
+that they are just briefly described, since they will be analysed in-depth in chapter 3.
+\subsubsection{Data collection}
+Just like every data-driven decision, data is essential. \verb |DREAM| must be able to manage different kinds of data coming from different sources:
+\begin{enumerate}
+\item agronomists and farmers insert into the system standard kind of information about the farms they 
+respectively visit and own, but also other kinds of information like, for example, the types of products 
+cultivated and the production volume for each product (kinds of information that allow the analytics to 
+profile these users). \verb |DREAM| also allows them to insert less-structured data, for instance full-text feedback 
+about the inserted data (farmers can insert data about any problem they face);
+\item data gathered by sensors deployed on the territory and by the water irrigation system are automatically 
+collected by \verb|DREAM| through effective interfaces interacting with such systems;
+\item already existing systems are integrated with \verb|DREAM|;
+\item the last but not the least, farmers can interact through discussion forums, that are stored by \verb|DREAM|.
+\end{enumerate}
+\subsubsection{Data analysis}
+The raw data collected by \verb|DREAM| must be processed before being delivered to the end-user. Therefore, 
+starting with the big volume of information “ingested”, various kinds of analytics are performed in order to 
+provide a more aggregate version of the data:
+\begin{itemize}
+%machine learning techniques are used to customize (for example) the suggestions recommended to the 
+%farmers based on their location and their type of production;
+\item the suggestions provided to the farmers are customized according to their information;
+\item information about farmers’ production is used to distinguish among farmers who are performing well 
+and those who are not;% (classification problem);
+%data mining algorithms are used to track patterns and identify relations
+\item  patterns and relations are identified among the data (for instance between weather 
+forecasts and production volumes);
+% statistical algorithms are applied for quantifying the improvement (if present) in the crop after having 
+% adopted agronomists’ suggestions.
+\item analytics are also used for quantifying the improvement (if present) in the crop after having adopted agronomists’ suggestions.
+\end{itemize}
+\subsubsection{Forum}
+As previously mentioned, farmers are allowed to open discussion forums on \verb|DREAM| with other farmers. 
+This allows to keep in touch with other people doing the same job and, hence, to ask for advice in case of 
+needing.
+\subsubsection{Request and supply of help}
+There are 4 different ways for a farmer to ask for help: ask for it directly to other farmers, ask in the forum, ask to to
+the agronomists or waiting for the system to recognize him as in trouble. As far as the first option is 
+concerned, the service is provided through a GUI. On the other side, either farmers who are performing 
+well or agronomists may be reached by the system on behalf of other farmers (or of the system itself) for a 
+request of help. Then the system introduces them. It should be remarked that a farmer can contact only 
+agronomists in the same area.
+\subsubsection{Daily plan}
+\verb|DREAM| automatically devises a daily plan for each agronomist consisting in a list of farms that must be visited and provides a possible time schedule for such meetings. Every daily plan must be actively accepted 
+by the agronomist before the involved farmer is notified. Anyway, the agronomist can apply some changes 
+to the schedule, but the system will not approve them if some constraints are violated.
+\subsection{User characteristics}
+With regards to the possible actors of \verb|DREAM|, three different main user classes can be identified:
+\begin{description}
+\item \textbf{Policy makers}: their job is to devise policies to regulate the agricultural production. \verb|DREAM| helps 
+them providing aggregate data. Policy makers access the system and then receive high-level 
+information about which farmers are performing well and which not, and possible reasons to this 
+fact. Furthermore, \verb|DREAM| helps to understand the impact of agronomists’ clues in farmers’ 
+productions;
+\item \textbf{Farmers}: they have a farm and some plots of land to cultivate. They access the system and insert 
+data about themselves, helping \verb|DREAM| to profile them. They insert data about their productions, 
+the area where they work, eventual problems they must face, questions in the forum … and so on. 
+On the other side, \verb|DREAM| puts them in touch with someone who can help them and provides data 
+that may be relevant to them;
+\item \textbf{Agronomists}: an agronomist has to find methods for increasing the production and the quality of 
+the harvest. They insert the area they are responsible of and the they receive data about the best 
+performing farmers and weather forecasts. They can answer to farmers’ questions and they receive 
+a raw daily plan about which farmers they should visit.
+\end{description}
+\subsection{Assumptions, dependencies and constraints}
+
+\section{Specific requirements}
+\subsection{External Interface Requirements}
+\subsection{Functional Requirements}
+\verb |DREAM| allows its users to perform many tasks, and \verb |DREAM| itself is able to interact with other different systems to achieve some results (see section \ref{Product functions}). In order to provide a summary of the possible situations in which \verb |DREAM| is involved and used, this paragraph first lists some concrete scenarios \footnote{“A narrative description of what people do and experience as
+they try to make use of computer systems and applications” [M.
+Carrol, Scenario-based Design, Wiley, 1995]} and then abstracts from details and specificities showing the corresponding use cases.
+\subsubsection{Scenarios}
+\paragraph{A storm ruined the harvest}
+Arin is a farmer who mainly cultivates potatoes, onions and tomatoes in the fields of his family. The harvest of March was really good, and Arin hoped that the same volume of production might have been repeated in April as well. Unfortunately, the North Indian Ocean cyclone season starts in April, and in the second week of this month Tauktae storm, the strongest storm of of the season, violently hit Arin's lands, halving the crop.\par
+\noindent Consequently, Arin wants to share in the system (\verb|DREAM|) the outcome of the storm. Arin opens its browser and access the system using its credentials. Next, he selects from a menu in the incoming webpage the entry for inserting data about production and problems. Then he fills the form with a description about the storm and what it caused to its fields, and finally he sends it.\par
+\noindent Arin hopes to receive some aid.
+\paragraph{Great year for the potatoes}
+Like many other farmers in India, Ikbal knows that the best period for cultivating potatoes is during the months from October to December. The weather is neither hot nor cold and the monsoons are nearly over at this time. Therefore, last October Ikbal planted many potatoes, and in February, with the help of some peasants who work for him, has picked up all of them. \par
+\noindent In order to publish in \verb|DREAM| the results of this year potatoes' harvest, he access the system through its computer, opens the form for inserting data about the production and then starts to fill it. The form is quite structured, and requires some data for each entry. After having inserted all the objective information about the crop, Ikbal would like to share something he has found out during this year, namely that planting the potatoes at depth x allows to retrieve substantial crops of this vegetable. Thus, Ikbal fills in also the optional text box and then sends it.
+\paragraph{Registering to the system as an agronomist}
+Dalbir worked for many years as an agronomist in Bihar, but recently he has been moved to Telengana. Telengana uses this innovative system, \verb|DREAM|, to keep track of the harvests of farmers, to collect interesting data from sensors and many other things. All the agronomists in Telengana must work with \verb|DREAM|, therefore Dalbir has to create an account. \par
+\noindent Dalbir opens the webpage of \verb|DREAM| and initiates the procedure for creating a new account. He follows the procedure tailored for agronomists, which allows him to create a new username and password. Next, Dalbir has to insert some data about his job in order to finish the registration. Among the others, Dalbir is asked to insert the area where he works.\par
+\noindent His data will be verified later.
+\paragraph{Visiting a farm}
+The first task of Dalbir is to visit the farm of Arin. The date and hour of the meeting has been established by \verb |DREAM|, which has notified also Arin about the meeting. Arin has been chosen because last month he performed very bad.\par
+\noindent During the meeting, Arin has the opportunity of explaining all the problems he faced during the past month, one for all Tauktae (the strongest storm of the North Indian Ocean cyclone season). Arin takes Dalbir to the fields, where Dalbir can gather some sample from the terrain. At the end of the meeting, Dalbir gives Arin some advices, and then he moves to another farm. \par
+\noindent Once in the office, Dalbir inserts in the system a report about his visit to Arin's farm.
+\paragraph{A bad schedule}
+Like every evening, Dalbir accesses \verb|DREAM| for downloading the daily plan of the next day. Every daily plan provided by the system contains time and place of every meeting, in addition to some information about the farmer. Dalbir notices that Ikbal's farm is closer to his parents' house, and Dalbir knows that they would be really happy to if he had lunch with them.\par
+\noindent However, the meeting with Ikbal is scheduled for the 3p.m o' clock. Therefore, Dalbir decides to exchange the meetings with Ikbal and Tarak, visiting Ikbal at 11.30a.m. and Tarak at 3p.m.. Through the user interface of \verb|DREAM|, Dalbir exhanges the two meetings and once he has confirmed, \verb|DREAM| notifies the farmers of the change.
+\paragraph{Collecting data(?)}
+\verb|DREAM| is a software system designed to provide various kinds of analytics to its users, in particular to the policy makers. As a matter of fact, policy makers want to distinguish between well- and bad- performing farmers, as well as understand the impact of initiatives carried out by the agronomists and find patterns and relations among the data.\par
+\noindent Therefore, periodically, \verb|DREAM| interacts with sensors deployed on the territory in order to retrieve the humidity of the soil, with the water irrigation system to retrieve the amount of water used by each farmer and with an already existing website which provides up-to-date weather forecasts. In particular:
+\begin{itemize}
+    \item 3 times a day the soil sensors are asked to provide data about the humidity of the soil;
+    \item once a day the water irrigation system is asked to provide the water used by each farmer (when the data is available);
+    \item the weather forecasts website is accessed monthly to compute some analytics on the data, but also on demand when agronomists or farmers ask for weather forecasts.
+\end{itemize}
+
+\subsubsection{Use cases}
+%\paragraph{Use case 1 - InsertProblems}
+%\begin{center} %leave it to start the table at newline
+
+\begin{tabular}{|p{3.5cm}|m{8cm}|}
+ \hline
+ \multicolumn{2}{|c|}{\emph{USE CASE 1}} \\
+ \hline
+ Name & InsertProblems\\
+ \hline
+ Actor & Farmer\\
+ \hline
+ Entry condition & The farmer faces a problem and decides to communicate it on \verb|DREAM|\\
+ \hline
+ Event flow & \begin{enumerate}
+    \item The farmer accesses the system through its username and password;
+    \item in the homepage, the farmer selects from the menu the item "insert problem";
+    \item the farmer selects the kind of problem, when it occurred and how much it lasted;
+    \item the farmer gives a brief description of the problem;
+    \item the farmer selects whether he likes to meet as soon as possible an agronomist;
+    \item the farmer clicks on the "send" button;
+    \item \verb|DREAM| automatically detects where is the farm from the account of the farmer;
+    \item \verb|DREAM| stores the data and eventually takes into account the request of a meeting with an agronomist.
+ \end{enumerate}\\
+ \hline
+ Exit condition & The problem is saved in the \verb|DREAM| database and, if requested, an agronomist is scheduled to meet the farmer in the next days. The farmer is notified about the meeting.\\
+ \hline
+ Exceptions & \begin{itemize}
+     \item If the kind of problem is not present, the farmer can add it by its own.
+     \item In case no agronomist can be scheduled for the current week, the farmer is notified about the problem and an agronomist will be found for the next week.
+ \end{itemize}\\
+ \hline
+ Special requirements & \begin{itemize}
+     \item The availability of an agronomist is checked in less than 3 second;
+     \item the page is refreshed in less than 1 second.
+ \end{itemize}\\
+ \hline
+\end{tabular}
+%%%%%%%%%%%TABLE 2%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\centering
+\begin{tabular}{|p{3.5cm}|m{8cm}|}
+ \hline
+ \multicolumn{2}{|c|}{\emph{USE CASE 2}} \\
+ \hline
+ Name & InsertProductions\\
+ \hline
+ Actor & Farmer\\
+ \hline
+ Entry condition & The farmer gets the results of a crop\\
+ \hline
+ Event flow & \begin{enumerate}
+    \item The farmer accesses the system through its username and password;
+    \item in the homepage, the farmer selects from the menu the item "insert productions";
+    \item the farmer inserts the picked product, when it was planted, the volume planted, the volume picked;
+    \item the farmer optionally gives a brief description of the harvest or an observation he made;
+    \item the farmer clicks on the "send" button;
+    \item \verb|DREAM| automatically detects where is the farm from the account of the farmer;
+    \item \verb|DREAM| stores the data.
+ \end{enumerate}\\
+ \hline
+ Exit condition & The data is saved in the \verb|DREAM| database and the farmer is notified.\\
+ \hline
+ Exceptions & \begin{itemize}
+     \item If the kind of product is not present, the farmer can add it by its own.
+ \end{itemize}\\
+ \hline
+ Special requirements & \begin{itemize}
+     \item the page is refreshed in less than 1 second.
+ \end{itemize}\\
+ \hline
+\end{tabular}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 3%%%%%%%%%%%%%%%%%%%%%%%
+
+\centering
+\begin{tabular}{|p{3.5cm}|m{8cm}|}
+ \hline
+ \multicolumn{2}{|c|}{\emph{USE CASE 3}} \\
+ \hline
+ Name & RegisterAgronomist\\
+ \hline
+ Actor & Agronomist\\
+ \hline
+ Entry condition & The agronomist does not have an account.\\
+ \hline
+ Event flow & \begin{enumerate}
+    \item The agronomist goes to the \verb|DREAM| homepage;
+    \item the agronomist selects "create account", then "create agronomist account";
+    \item the agronomist inserts his e-mail and devises a password;
+    \item the system verifies the e-mail of the agronomist;
+    \item the agronomist inserts personal data like name, surname, date of birth, specialization;
+    \item the agronomist selects the area where he will work;
+    \item the agronomist clicks on "done";
+    \item \verb|DREAM| verifies the identity of the agronomist;
+    \item the agronomist is notified that he can begin to work.
+ \end{enumerate}\\
+ \hline
+ Exit condition & The agronomist's account is saved in the \verb|DREAM| database and the identity of the agronomist has been verified.\\
+ \hline
+ Exceptions & \begin{itemize}
+     \item If the e-mail is already used, the agronomist is forced to change it;
+     \item If the password is too short, the agronomist is forced to change it;
+     \item if the identity of the agronomist cannot be verified, a mail notifying the error is sent to the agronomist.
+ \end{itemize}\\
+ \hline
+ Special requirements & \begin{itemize}
+     \item the identity must be verified within 3 days.
+ \end{itemize}\\
+ \hline
+\end{tabular}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 4%%%%%%%%%%%%%%%%%%%%%%%
+
+\centering
+\begin{tabular}{|p{3.5cm}|m{8cm}|}
+ \hline
+ \multicolumn{2}{|c|}{\emph{USE CASE 4}} \\
+ \hline
+ Name & RegisterFarmer\\
+ \hline
+ Actor & Farmer\\
+ \hline
+ Entry condition & The farmer does not have an account.\\
+ \hline
+ Event flow & \begin{enumerate}
+    \item The farmer goes to the \verb|DREAM| homepage;
+    \item the farmer selects "create account", then "create farmer account";
+    \item the farmer inserts his e-mail and devises a password;
+    \item the system verifies the e-mail of the farmer;
+    \item the farmer inserts personal data like name, surname, date of birth, location of the farm;
+    \item the farmer clicks on "done";
+    \item \verb|DREAM| verifies the existence of the farm;
+    \item the farmer is notified that the account has been created.
+ \end{enumerate}\\
+ \hline
+ Exit condition & The farmer's account is saved in the \verb|DREAM| database and the existence of the farm has been verified.\\
+ \hline
+ Exceptions & \begin{itemize}
+     \item If the e-mail is already used, the farmer is forced to change it;
+     \item If the password is too short, the farmer is forced to change it;
+     \item if the existence of the farm cannot be verified, a mail notifying the error is sent to the farmer.
+ \end{itemize}\\
+ \hline
+ Special requirements & \begin{itemize}
+     \item the existence of the farm must be verified within 1 day.
+ \end{itemize}\\
+ \hline
+\end{tabular}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 5%%%%%%%%%%%%%%%%%%%%%%%
+
+\centering
+\begin{tabular}{|p{3.5cm}|m{8cm}|}
+ \hline
+ \multicolumn{2}{|c|}{\emph{USE CASE 5}} \\
+ \hline
+ Name & VisitFarm\\
+ \hline
+ Actor & Agronomist, Farmer\\
+ \hline
+ Entry condition & The agronomist is scheduled to visit a farm. The farmer and the agronomist have been informed of the meeting. The time of the meeting occurs.\\
+ \hline
+ Event flow & \begin{enumerate}
+    \item The agronomist is scheduled to visit a certain farm at a certain time;
+    \item the farmer is notified about the meeting;
+    \item the agronomist accesses \verb|DREAM|;
+    \item the agronomist selects "insert farm data";
+    \item the agronomist selects the farm and inserts data with a comment;
+    \item the agronomist clicks on "done";
+    \item \verb|DREAM| stores the data;
+    \item the farm is removed from the to-visit farms.
+ \end{enumerate}\\
+ \hline
+ Exit condition & The data about the meeting have been inserted by the agronomist and stored in \verb|DREAM| and the farm is not in the to-visit farms.\\
+ \hline
+ Exceptions & \begin{itemize}
+     \item If the farmer does not show up at the meeting, the agronomist specifies so when inserting data about the meeting.
+ \end{itemize}\\
+ \hline
+ Special requirements & None\\
+ \hline
+\end{tabular}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 6%%%%%%%%%%%%%%%%%%%%%%%
+
+\centering
+\begin{tabular}{|p{3.5cm}|m{8cm}|}
+ \hline
+ \multicolumn{2}{|c|}{\emph{USE CASE 6}} \\
+ \hline
+ Name & GenerateDailyPlan\\
+ \hline
+ Actor & Agronomist, Farmer\\
+ \hline
+ Entry condition & The next day is a working day and the agronomist accesses the system.\\
+ \hline
+ Event flow & \begin{enumerate}
+    \item The agronomist receives a daily plan for the following day;
+    \item if it is ok for the agronomist, he clicks on  "accept", otherwise he clicks on "change it";
+    \item the agronomist selects some changes, then he clicks on "accept";
+    \item \verb|DREAM| checks if the new daily plan is acceptable; if not, an error is notified to the agronomist, who has to re-accept (or re-change) the schedule until \verb|DREAM| accepts it;
+    \item the farmer is notified about the meeting.
+ \end{enumerate}\\
+ \hline
+ Exit condition & The daily plan has been confirmed and the farmer has been notified.\\
+ \hline
+ Exceptions & \begin{itemize}
+     \item In case the agronomist does not accept the daily plan, the farmers are not notified about the meeting.
+ \end{itemize}\\
+ \hline
+ Special requirements &\begin{itemize}
+     \item Every farmer must be visited at least twice a year;
+     \item bad performing farmers must be visited more times than the others.
+ \end{itemize}\\
+ \hline
+\end{tabular}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 7%%%%%%%%%%%%%%%%%%%%%%%
+
+\centering
+\begin{tabular}{|p{3.5cm}|m{8cm}|}
+ \hline
+ \multicolumn{2}{|c|}{\emph{USE CASE 7}} \\
+ \hline
+ Name & GetSoilSensorsData\\
+ \hline
+ Actor & SoilSensors\\
+ \hline
+ Entry condition & A timer has expired.\\
+ \hline
+ Event flow & \begin{enumerate}
+    \item \verb|DREAM| asks the soil sensors for some data;
+    \item the soil sensors answer with the data;
+    \item \verb|DREAM| stores the data in its database.
+ \end{enumerate}\\
+ \hline
+ Exit condition & \verb|DREAM| has stored in its database the data coming from the sensors.\\
+ \hline
+ Exceptions & \begin{itemize}
+     \item In case a sensor is not reachable, \verb|DREAM| stores that the data of that sensor at that time is not available because "the sensor is not reachable".
+ \end{itemize}\\
+ \hline
+ Special requirements &\begin{itemize}
+     \item The sensor must answer in less than 5 seconds;
+     \item \verb|DREAM| must try to contact the sensor 3 times before giving up.
+ \end{itemize}\\
+ \hline
+\end{tabular}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 8%%%%%%%%%%%%%%%%%%%%%%%
+
+\centering
+\begin{tabular}{|p{3.5cm}|m{8cm}|}
+ \hline
+ \multicolumn{2}{|c|}{\emph{USE CASE 8}} \\
+ \hline
+ Name & GetWaterIrrigationSystemData\\
+ \hline
+ Actor & WaterIrrigationSystem\\
+ \hline
+ Entry condition & A timer has expired.\\
+ \hline
+ Event flow & \begin{enumerate}
+    \item \verb|DREAM| asks the water irrigation system for some data;
+    \item the water irrigation system answers with the data;
+    \item \verb|DREAM| stores the data in its database.
+ \end{enumerate}\\
+ \hline
+ Exit condition & \verb|DREAM| has stored in its database the data coming from the water irrigation system.\\
+ \hline
+ Exceptions & \begin{itemize}
+     \item In case the water irrigation system is not reachable, \verb|DREAM| stores that the data of the water irrigation system at that time is not available because "the water irrigation system is not reachable".
+ \end{itemize}\\
+ \hline
+ Special requirements &\begin{itemize}
+     \item The water irrigation system must answer in less than 5 seconds;
+     \item \verb|DREAM| must try to contact the sensor 3 times before giving up.
+ \end{itemize}\\
+ \hline
+\end{tabular}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 9%%%%%%%%%%%%%%%%%%%%%%%
+
+\centering
+\begin{tabular}{|p{3.5cm}|m{8cm}|}
+ \hline
+ \multicolumn{2}{|c|}{\emph{USE CASE 9}} \\
+ \hline
+ Name & VisualizeAggregateData\\
+ \hline
+ Actor & PolicyMaker\\
+ \hline
+ Entry condition & A policy maker accesses the platform and enters the \emph{Aggregate Data} section.\\
+ \hline
+ Event flow & \begin{enumerate}
+    \item The policy maker accesses the system;
+    \item the policy maker selects the \emph{Aggregate Data} menu item;
+    \item the policy maker chooses the date range they wish to analyze;
+    \item \verb|DREAM| generates aggregate statistics for all areas in the database;
+    \item \verb|DREAM| shows the data to the user.
+ \end{enumerate}\\
+ \hline
+ Exit condition & The user finishes analyzing the data.\\
+ \hline
+ Exceptions & \begin{itemize}
+     \item If the system has not yet collected any data for the specified period, a warning is returned.
+ \end{itemize}\\
+ \hline
+ Special requirements &\begin{itemize}
+     \item The data generation must be completed in less than 3 seconds.
+ \end{itemize}\\
+ \hline
+\end{tabular}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 10%%%%%%%%%%%%%%%%%%%%%%%
+
+\centering
+\begin{tabular}{|p{3.5cm}|m{8cm}|}
+ \hline
+ \multicolumn{2}{|c|}{\emph{USE CASE 10}} \\
+ \hline
+ Name & VisualizeBestFarmers\\
+ \hline
+ Actor & Agronomist\\
+ \hline
+ Entry condition & An agronomist accesses the platform and enters the \emph{Farms} section.\\
+ \hline
+ Event flow & \begin{enumerate}
+    \item The agronomist accesses the system;
+    \item the agronomist selects the \emph{Farms} menu item;
+    \item optionally, the agronomist chooses how the farms should be ranked (e.g. most productive, most resilient to bad weather, ...);
+    \item \verb|DREAM| shows a list of the best farms ordered according to the selected parameter.
+ \end{enumerate}\\
+ \hline
+ Exit condition & The user finishes analyzing the data.\\
+ \hline
+ Exceptions & \begin{itemize}
+     \item If the system has not yet collected any data in the agronomist's area, a warning is shown.
+ \end{itemize}\\
+ \hline
+ Special requirements &\begin{itemize}
+     \item The data must be shown in less than 1 second.
+ \end{itemize}\\
+ \hline
+\end{tabular}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 11%%%%%%%%%%%%%%%%%%%%%%%
+
+\centering
+\begin{tabular}{|p{3.5cm}|m{8cm}|}
+ \hline
+ \multicolumn{2}{|c|}{\emph{USE CASE 11}} \\
+ \hline
+ Name & VisualizeForecasts\\
+ \hline
+ Actor & Agronomist\\
+ \hline
+ Entry condition & An agronomist accesses the platform and enters the \emph{Weather Forecasts} section.\\
+ \hline
+ Event flow & \begin{enumerate}
+    \item The agronomist accesses the system;
+    \item the agronomist selects the \emph{Weather Forecasts} menu item;
+    \item the agronomist chooses the date for which forecasts should be shown;
+    \item \verb|DREAM| connects to the Telengana government website to fetch forecasts for the chosen date;
+    \item \verb|DREAM| shows a map with the forecast.
+ \end{enumerate}\\
+ \hline
+ Exit condition & The user finishes analyzing the data.\\
+ \hline
+ Exceptions & \begin{itemize}
+     \item If the Telengana government website is currently unreachable, an error is shown to the user.
+     \item If no weather data is available for the chosen date, an error is shown to the user.
+ \end{itemize}\\
+ \hline
+ Special requirements &\begin{itemize}
+     \item The Telengana government website must serve requests in less than 5 seconds;
+     \item The Telengana government website is assumed not to change in a backwards-incompatible manner without notice.
+ \end{itemize}\\
+ \hline
+\end{tabular}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 12%%%%%%%%%%%%%%%%%%%%%%%
+
+\centering
+\begin{tabular}{|p{3.5cm}|m{8cm}|}
+ \hline
+ \multicolumn{2}{|c|}{\emph{USE CASE 12}} \\
+ \hline
+ Name & VisualizeFarmerForecastsAndSuggestions\\
+ \hline
+ Actor & Farmer\\
+ \hline
+ Entry condition & A farmer accesses the platform.\\
+ \hline
+ Event flow & \begin{enumerate}
+    \item The farmer accesses the system;
+    \item \verb|DREAM| connects to the Telengana government website to fetch forecasts for the following days;
+    \item \verb|DREAM| automatically shows forecasts and suggestions for the farmer.
+ \end{enumerate}\\
+ \hline
+ Exit condition & The user logs out.\\
+ \hline
+ Exceptions & \begin{itemize}
+     \item If the Telengana government website is currently unreachable, an error is shown to the user.
+     \item If there are no suggestions for the farmer, a notice is shown.
+ \end{itemize}\\
+ \hline
+ Special requirements &\begin{itemize}
+     \item The Telengana government website must serve requests in less than 5 seconds;
+     \item The Telengana government website is assumed not to change in a backwards-incompatible manner without notice;
+     \item If an issue occurs with the weather forecasts, the suggestion section should not be impacted.
+ \end{itemize}\\
+ \hline
+\end{tabular}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 13%%%%%%%%%%%%%%%%%%%%%%%
+
+\centering
+\begin{tabular}{|p{3.5cm}|m{8cm}|}
+ \hline
+ \multicolumn{2}{|c|}{\emph{USE CASE 13}} \\
+ \hline
+ Name & GetWeatherForecasts\\
+ \hline
+ Actor & OuterWeatherSource\\
+ \hline
+ Entry condition & Either (a) a user requests weather data; or (b) \verb|DREAM| needs to access weather information for statistical purposes.\\
+ \hline
+ Event flow & \begin{enumerate}
+    \item \verb|DREAM| connects to the Telengana government website to fetch the required forecasts;
+    \item The data is stored and analyzed as needed.
+ \end{enumerate}\\
+ \hline
+ Exit condition & The weather forecast data is collected by the system.\\
+ \hline
+ Exceptions & \begin{itemize}
+     \item If the Telengana government website is currently unreachable, the process is aborted and an error is returned.
+ \end{itemize}\\
+ \hline
+ Special requirements &\begin{itemize}
+     \item The Telengana government website must serve requests in less than 5 seconds;
+     \item The Telengana government website is assumed not to change in a backwards-incompatible manner without notice.
+ \end{itemize}\\
+ \hline
+\end{tabular}
+%%%%%%%%%%%%%%%%%%IMAGES%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.75]{sequence_diagrams/InsertProblems}
+    \caption{Sequence diagram for the InsertProblems use case}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.75]{sequence_diagrams/InsertProductions}
+    \caption{Sequence diagram for the InsertProductions use case}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.60]{sequence_diagrams/RegisterAgronomist}
+    \caption{Sequence diagram for the RegisterAgronomist use case}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.60]{sequence_diagrams/RegisterAgronomist}
+    \caption{Sequence diagram for the RegisterFarmer use case}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.75]{sequence_diagrams/VisitFarm}
+    \caption{Sequence diagram for the VisitFarm use case}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.75]{sequence_diagrams/GenerateDailyPlan}
+    \caption{Sequence diagram for the GenerateDailyPlan use case}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.75]{sequence_diagrams/GetSoilSensorsData}
+    \caption{Sequence diagram for the GetSoilSensorsData use case}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.75]{sequence_diagrams/GetWaterIrrigationSystemData}
+    \caption{Sequence diagram for the GetWaterIrrigationSystemData use case}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+	\includegraphics[scale=0.5]{sequence_diagrams/VisualizeAggregateData}
+    \caption{Sequence diagram for the VisualizeAggregateData use case}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+	\includegraphics[scale=0.5]{sequence_diagrams/VisualizeBestFarmers}
+    \caption{Sequence diagram for the VisualizeBestFarmers use case}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+	\includegraphics[scale=0.5]{sequence_diagrams/VisualizeForecasts}
+    \caption{Sequence diagram for the VisualizeForecasts use case}
+\end{figure}
+
+\subsection{Performance Requirements}
+\subsection{Design Constraints}
+\subsection{Software System Attributes}
+\section{Formal analysis using Alloy}
+\section{Effort spent}
+\section{References}
+\end{document}
