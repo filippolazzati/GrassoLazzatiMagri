@@ -41,8 +41,6 @@
 \newpage
 \tableofcontents %this command creates an index
 \newpage
-\listoftables
-\newpage
 \section{Introduction}
 \subsection{Purpose}
 \subsection{Scope}
@@ -149,8 +147,8 @@ The first task of Dalbir is to visit the farm of Arin. The date and hour of the 
 \paragraph{A bad schedule}
 Like every evening, Dalbir accesses \verb|DREAM| for downloading the daily plan of the next day. Every daily plan provided by the system contains time and place of every meeting, in addition to some information about the farmer. Dalbir notices that Ikbal's farm is closer to his parents' house, and Dalbir knows that they would be really happy to if he had lunch with them.\par
 \noindent However, the meeting with Ikbal is scheduled for the 3p.m o' clock. Therefore, Dalbir decides to exchange the meetings with Ikbal and Tarak, visiting Ikbal at 11.30a.m. and Tarak at 3p.m.. Through the user interface of \verb|DREAM|, Dalbir exhanges the two meetings and once he has confirmed, \verb|DREAM| notifies the farmers of the change.
-\paragraph{Collecting data(?)}
-\verb|DREAM| is a software system designed to provide various kinds of analytics to its users, in particular to the policy makers. As a matter of fact, policy makers want to distinguish between well- and bad- performing farmers, as well as understand the impact of initiatives carried out by the agronomists and find patterns and relations among the data.\par
+%\paragraph{Collecting data(?)}
+% \verb|DREAM| is a software system designed to provide various kinds of analytics to its users, in particular to the policy makers. As a matter of fact, policy makers want to distinguish between well- and bad- performing farmers, as well as understand the impact of initiatives carried out by the agronomists and find patterns and relations among the data.\par
 \noindent Therefore, periodically, \verb|DREAM| interacts with sensors deployed on the territory in order to retrieve the humidity of the soil, with the water irrigation system to retrieve the amount of water used by each farmer and with an already existing website which provides up-to-date weather forecasts. In particular:
 \begin{itemize}
     \item 3 times a day the soil sensors are asked to provide data about the humidity of the soil;
@@ -537,32 +535,28 @@ Like every evening, Dalbir accesses \verb|DREAM| for downloading the daily plan 
  \hline
  \multicolumn{2}{|c|}{\emph{USE CASE 12}} \\
  \hline
- Name & VisualizeFarmerForecastsAndSuggestions\\
+ Name & VisualizeFarmerSuggestions\\
  \hline
  Actor & Farmer\\
  \hline
- Entry condition & A farmer accesses the platform.\\
+ Entry condition & A farmer wants to check if there are any suggestions for them.\\
  \hline
  Event flow & \begin{enumerate}
     \item The farmer accesses the system;
-    \item \verb|DREAM| connects to the Telengana government website to fetch forecasts for the following days;
-    \item \verb|DREAM| automatically shows forecasts and suggestions for the farmer.
+    \item the farmer accesses the \emph{Suggestions} section;
+    \item \verb|DREAM| automatically shows suggestions for the farmer.
  \end{enumerate}\\
  \hline
- Exit condition & The user logs out.\\
+ Exit condition & The farmer views the list of suggestions.\\
  \hline
  Exceptions & \begin{itemize}
-     \item If the Telengana government website is currently unreachable, an error is shown to the user.
      \item If there are no suggestions for the farmer, a notice is shown.
  \end{itemize}\\
  \hline
- Special requirements &\begin{itemize}
-     \item The Telengana government website must serve requests in less than 5 seconds;
-     \item The Telengana government website is assumed not to change in a backwards-incompatible manner without notice;
-     \item If an issue occurs with the weather forecasts, the suggestion section should not be impacted.
- \end{itemize}\\
+ Special requirements & None.\\
  \hline
 \end{tabular}
+\newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 13%%%%%%%%%%%%%%%%%%%%%%%
 
 \centering
@@ -593,6 +587,7 @@ Like every evening, Dalbir accesses \verb|DREAM| for downloading the daily plan 
  \end{itemize}\\
  \hline
 \end{tabular}
+\newpage
 %%%%%%%%%%%%%%%%%%IMAGES%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}[h]
     \centering
@@ -660,6 +655,7 @@ Like every evening, Dalbir accesses \verb|DREAM| for downloading the daily plan 
     \caption{Sequence diagram for the VisualizeForecasts use case}
 \end{figure}
 
+\raggedright
 \subsection{Performance Requirements}
 \subsection{Design Constraints}
 \subsection{Software System Attributes}
