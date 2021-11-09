@@ -5,7 +5,12 @@
 \usepackage{graphicx}
 \usepackage{color}   %May be necessary if you want to color links
 \usepackage{hyperref}
+\usepackage{longtable}
 \usepackage{float}
+\usepackage[table]{xcolor}
+\setlength{\arrayrulewidth}{0.5mm}
+\setlength{\tabcolsep}{18pt}
+\renewcommand{\arraystretch}{2.5}
 \hypersetup{
     colorlinks=false, %set true if you want colored links
     linktoc=all,     %set to all if you want both sections and subsections linked
@@ -20,16 +25,17 @@
 \thispagestyle{empty} 
 \begin{titlepage}
     \begin{center}
-       \vspace*{2cm}
+       %\vspace*{2cm}
        {\Huge \textbf{DREAM}} %%Replace this with the Title of your research
        \vspace{0.5cm}
        \\
     \begin{LARGE}
         {Data-dRiven PrEdictive FArMing in Telengana}
-        \vspace{1.5cm}
+        \vspace{1.0cm}
         \\
         {\textit{Requirement Analysis and Specification Document - RASD}}
-       \vspace{8cm}
+        \includegraphics[width=13cm]{logo/polimi.png}
+       \vspace{1.5cm}
         
         {Christian Grasso - Filippo Lazzati - Chiara Magri}
        \vspace{0.5cm}
@@ -42,9 +48,245 @@
 \tableofcontents %this command creates an index
 \newpage
 \section{Introduction}
+A RASD\footnote{Requirements Analysis and Specification
+Document} is a document that aims to present all the requirements of the system to be developed, explaining the 
+domain in which it has to operate. A RASD should work as baseline for the following tasks in software development,
+in particular in project planning, software evaluation and change control. Such document has a wide audience, and hence it has to
+be written as clear as possible.
 \subsection{Purpose}
+The main goal that Telengana’s government wants to achieve with \verb|DREAM| is to help policy makers 
+formulating policies in the field of agriculture. In order to accomplish this objective, Telengana’s 
+government is asking for predictive models for food systems that can drive decisions exploiting huge 
+amount of data. Therefore, \verb|DREAM| must be a software system that gather data from some sensors and from the farmers and the agronomists and performs data analysis over it in order to help policy makers doing their job. Moreover, \verb|DREAM| aims to help farmers by putting them in contact with each other so that they can exchange advices and aids. Finally, \verb|DREAM| also schedules the daily work of agronomists and make them visit the worse-performing farmers.
+Consequently, the goals of this project are:
+\rowcolors{2}{gray!15}{gray!35}
+ \begin{longtable}[c]{|m{0.75cm}|m{11cm}|}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ \hline
+ \multicolumn{2}{|c|}{\cellcolor{white}\textbf{\emph{Goals}}}
+ % do not write anything here
+ \endfirsthead
+ % do not write anything here
+ \endhead
+ % do not write anything here
+ \endfoot
+ % do not write anything here
+ \endlastfoot
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\hline
+G & The policy makers are able to identify best performing farmers, in particular w.r.t resilience toward climatic adverse events, as they will be given incentives and will be asked to provide help to other farmers.\\
+  \hline
+G & The policy makers are able to identify worst performing farmers, as they need to be receive help for improving their activity.\\
+  \hline
+G & The policy makers are able to understand if the initiatives involving agronomists and best performing farmers have a good impact on the work of the farmers.\\
+  \hline
+G & Farmers are able to visualize data weather forecasts regarding their piece of land.\\
+  \hline
+G & Farmers receive personalized suggestions about crops to plant.\\
+  \hline
+G & Farmers receive persnalized suggestions about fertilizers to use.\\
+  \hline
+G & Farmers are able to insert data in the system about their production and any problem they encounter.\\
+  \hline
+G & Farmers are able to communicate via a forum // discussioni di sicuro non è un goal !!!.\\
+  \hline
+G & Farmers are able to request for help to agronomists and other farmers.\\
+  \hline
+G & Agronomists are able to visualize weather forecast for the area they are responsible of.\\
+  \hline
+G & Agronomists are able to identify the best performing farmers in the area they are responsible of.\\
+  \hline
+G & Agronomists have a daily plan of visits to farms, where each farm has to be visited at least twice a year, but worst performing farms are visited more often; they can confirm the execution of a plan at the end of the day or specify deviations.\\
+  \hline
+G & Farmers sono aiutati nella loro produzione e scambiano discussioni.\\
+  \hline
+  \end{longtable}
 \subsection{Scope}
+
+\rowcolors{2}{gray!15}{gray!35}
+\begin{longtable}[c]{|m{0.75cm}|m{11cm}|}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ \hline
+ \multicolumn{2}{|c|}{\cellcolor{white}\textbf{\emph{World phenomena}}}
+ % do not write anything here
+ \endfirsthead
+ % do not write anything here
+ \endhead
+ % do not write anything here
+ \endfoot
+ % do not write anything here
+ \endlastfoot
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \hline
+ WP1 & In the mandal X, in the day YYYY/MM/DD,  the weather is WW\footnote{sunny | partially cloudy |  cloudy | foggy  |  rainy | stormy | tornado | hurricane}.\\
+ \hline
+ WP2 & In the mandal X, the maximun, minimum and average temperatures in the day YYYY/MM/DD are TMAX, TMIN and TAVG.\\
+ \hline
+ WP3 & In the mandal X, the millimeters of rain fallen in the day YYYY/MM/DD are RR.\\
+ \hline
+ WP4 & In the mandal X, the average wind of the day YYYY/MM/DD has a speed of VV\footnote{N | W | S | E | NW | NE | SE | SW } km/h and a direction DR\\
+ \hline
+ WP5 & In the mandal X, the average humidity  of the day YYYY/MM/DD  rate is HR.\\
+ \hline
+ WP6 & In the mandal X, the average atmospheric pressure  of the day YYYY/MM/DD  rate is AP millibars.\\
+ \hline
+ WP7 & The soil moisture on a terrain T is SM (soil moisture = mass of water/mass of solid particles in the terrain – or volume, depending on the definition).\\
+ \hline
+ WP8 & A farmers is responsible for a plot of land of area A in the district D.\\
+ \hline
+ WP9 & A terrain is culivated with (NP plants of) product P.\\
+ % not for all products is possible to count the number of plants es cotton -> for there products is sufficient to count the area of the field.
+ \hline
+ WP10 & A farmer during the day YYYY/MM/DD  plants NS seeds or NP plants of product PR.\\
+ \hline
+ WP11 & A farmer during the day YYYY/MM/DD  harvests a quantity of K kgs of product PR.\\
+ \hline
+ WP12 & A farmer during the day YYYY/MM/DD  uses a quantity FQ of fertilizer on a plant P.\\
+ \hline
+ WP13 &  A farmer waters does manual irrigation on of his fields.\\
+ \hline
+ WP14 & The water irrigation system  of a terrain TT spreads a quantity WI of water during the day YYYY/MM/DD.\\
+ \hline
+ WP15 & A farmer faces a problem in his work.\\
+ \hline
+ WP16 & A farmer is granted an incentive.\\
+ \hline
+ WP17 & farmer is contacted by a policy maker to take part into initiatives to provide his best practices to others.\\
+ \hline
+ WP18 & A policy maker is given a password by the Telangana administration.\\
+ \hline
+ WP19 & An agronomist is responsible for an area A of terrains.\\
+ \hline
+ WP20 & An agronomist is given a password by the Telangana administration.\\
+ \hline
+ WP21 & An agronomist visits a farm.\\
+ \hline
+ \end{longtable}
+ 
+ \rowcolors{2}{gray!15}{gray!35}
+ \begin{longtable}[c]{|m{0.75cm}|m{11cm}|}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ \hline
+ \multicolumn{2}{|c|}{\cellcolor{white}\textbf{\emph{Shared phenomena}}}
+ % do not write anything here
+ \endfirsthead
+ % do not write anything here
+ \endhead
+ % do not write anything here
+ \endfoot
+ % do not write anything here
+ \endlastfoot
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \hline
+ SP1 & The forecast indicates that in the mandal X, in the day YYYY/MM/DD,  the weather will be WW\footnote{sunny | partially cloudy |  cloudy | foggy  |  rainy | stormy | tornado | hurricane}.\\
+ \hline
+ SP2 & The forecast indicates that in the mandal X, in  the day | week | month the maximun, minimum and average temperatures will be TMAX, TMIN and TAVG.\\
+ \hline
+ SP3 & The forecast indicates that in the mandal X, in  the day | week | month the millimeters of rain fallen will be RR.\\
+ \hline
+ SP4 & The forecast indicates that in the district | mandal X, in  the day | week | month , the average wind will have a speed of VV km/h and a direction DR\footnote{N | W | S | E | NW | NE | SE | SW }.\\
+ \hline
+ SP5 & The forecast indicates that in the mandal X, in  the day | week | month , the average humidity  rate will be HR.\\
+ \hline
+ SP6 & The forecast indicates that in the mandal X, in  the day | week | month , the average pressure will be AP millibars.\\
+ \hline
+ SP7 & The weather reports indicate that in the district | mandal X, in the day YYYY/MM/DD,  the weather was WW\footnote{sunny | partially cloudy |  cloudy | foggy  |  rainy | stormy | tornado | hurricane}.\\
+ \hline
+ SP8 & The weather reports indicate that in the district | mandal X, in  the day | week | month the maximun, minimum and average temperatures in the day YYYY/MM/DD were TMAX, TMIN and TAVG.\\
+ \hline
+ SP9 & The weather reports indicate that in the district | mandal X, in  the day | week | month the millimeters of rain fallen in the day YYYY/MM/DD were RR.\\
+ \hline
+ SP10 & The weather reports indicate that in the district | mandal X, in  the day | week | month , the average wind of the day YYYY/MM/DD had a speed of VV km/h and a direction DR\footnote{N | W | S | E | NW | NE | SE | SW }.\\
+ \hline
+ SP11 & The weather reports indicate that in the district | mandal X, in  the day | week | month, the average humidity  of the day YYYY/MM/DD  rate were HR.\\
+ \hline
+ SP12 & •	The weather reports indicate that in district | mandal X, in the day | week | month, the average atmospheric pressure was AP millibars.\\
+ \hline
+ SP13 & The soil moisture sensor detects a soil moisture on a terrain T of SM\% (soil moisture = mass of water/mass of solid particles in the terrain – or volume, depending on the definition).\\
+ \hline
+ SP14 & A farmer inserts in DREAMS his personal data (name, surname, contacts).\\
+ \hline
+ SP15 & A farmers inserts in DREAMS the location and the area of the plot of land that he owns | is responsible of.\\
+ \hline
+ SP16 & A farmer inserts in DREAMS that in his piece of land, an area A is devoted to the cultivation of product P (and inserts number of plants)  %// not for all products is possible to count the number of plants es cotton -> for there products is sufficient to count the area of the field
+ \\
+ \hline
+ SP17 & A farmes logs in.\\
+ \hline
+ SP18 & A farmer inserts in DREAMS that during the day YYYY/MM/DD  he has planted NS seeds or NP plants of product PR.\\
+ \hline
+ SP19 & A farmer inserts in DREAMS that during the day YYYY/MM/DD he has harvested a quantity of K kgs of product PR.\\
+ \hline
+ SP20 & A farmer inserts in DREAMS during the day YYYY/MM/DD  that he has used a quantity FQ of fertilizer on a plant P.\\
+ \hline
+ SP21 & The water irrigation system  sensor of a terrain TT measures that a quantity WI of water  has been spread during the day YYYY/MM/DD // we know the location of sensors -> put in DA.\\
+ \hline
+ SP22 & A farmer inserts in DREAMS that that during the day YYYY/MM/DD he has watered a piece of land PL with a quantity of water WI.\\
+ \hline
+ SP23 & A farmer visualizes the weather forecasts relative to its land location.\\
+ \hline
+ SP24 & A farmer visualizes a suggestion regarding a crop to plant in its land.\\
+ \hline
+ SP25 & A farmer visualizes a suggestion regarding a fertilizer to use.\\
+ \hline
+ SP26 & A farmer inserts into DREAMS data regarding a problem he has.\\
+ \hline
+ SP27 & A farmer issues a request for help to an agronomist.\\
+ \hline
+ SP28 & A farmer issues a request for help to another farmer.\\
+ \hline
+ SP29 & A farmer responds to a request for help received by another farmer.\\
+ \hline
+ SP30 & A farmer shares a post on a discussion forum.\\
+ \hline
+ SP31 & A policy maker inserts his personal data (name, surname, contacts)  into DREAMS when signing up.\\
+ \hline
+ SP32 & policy maker logs in.\\
+ \hline
+ SP33 & REAMS shows statistics regarding farmers (type of products, amount produced, fertilizers, watering, location…).\\
+ \hline
+ SP34 & •	DREAMS shows a list of best performing farmers, considering also resilience towards metereological adverse events.\\
+ \hline
+ SP35 & •	DREAMS shows a list of worse performing farmers.\\
+ \hline
+ SP36 & •	DREAMS shows correlations between agronomists and good farmers interventions and farmers statistics // punto da riguardare .\\
+ \hline
+ SP37 &  policy maker selects a farmer from a list of best performing farmers and saves it as well performing farmer .\\
+ \hline
+ SP38 & •	A policy maker selects a farmer from a list of worst performing farmers and saves it as badly performing farmer .\\
+ \hline
+ SP39 & •	An agronomists signs in the DREAMS system.\\
+ \hline
+ SP40 & •	An agronomist inserts the area A of terrains he is responsible of into the DREAMS system.\\
+ \hline
+ SP41 & •	An agronomist inserts his personal data (name, surname, contacts) into the DREAMS system.\\
+ \hline
+ SP42 & •	An agronomist receives a request for help from a farmer.\\
+ \hline
+ SP43 & •	An agronomist replies to a request for help from a farmer.\\
+ \hline
+ SP44 & •	An agronomist visualizes the weather forecast for the area he is responsible of.\\
+ \hline
+ SP & •	An agronomist visualizes a list of the best performing farmers in the area he is responsible of.\\
+ \hline
+ SP & •	DREAMS computes a daily plan  for an agronomist to visit the farms he is responsible of.\\
+ \hline
+ SP & •	An agronomist updates his daily plan for visiting farms.\\
+ \hline
+ SP & •	At the end of a work day, an agronomist confirms the execution of his daily plan for visiting farms.\\
+ \hline
+ SP & •	At the end of a work day, an agronomist specifies a deviation for his daily plan for visiting farms.\\
+ \hline
+ SP & •	An agronomist inserts into the system information regarding a visit to a farm.\\
+ \hline
+ \end{longtable}
+
 \subsection{Definitions, Acronyms, Abbreviations}
+\begin{itemize}
+    \item WW = sunny | partially cloudy |  cloudy | foggy  |  rainy | stormy | tornado | hurricane
+    \item DR = N | W | S | E | NW | NE | SE | SW 
+    \item 
+\end{itemize}
 \subsection{Revision history}
 \subsection{Reference Documents}
 \subsection{Document Structure}
@@ -52,10 +294,7 @@
 \section{Overall description}
 \subsection{Product perspective}
 \subsection{Product functions} \label{Product functions}
-The main goal that Telengana’s government wants to achieve with \verb|DREAM| is to help policy makers 
-formulating policies in the field of agriculture. In order to accomplish this objective, Telengana’s 
-government is asking for predictive models for food systems that can drive decisions exploiting huge 
-amount of data. In this section, a list of the most important requirements of the system is provided; notice 
+In this section, a list of the most important requirements of the system is provided; notice 
 that they are just briefly described, since they will be analysed in-depth in chapter 3.
 \subsubsection{Data collection}
 Just like every data-driven decision, data is essential. \verb |DREAM| must be able to manage different kinds of data coming from different sources:
@@ -122,12 +361,140 @@ a raw daily plan about which farmers they should visit.
 \end{description}
 \subsection{Assumptions, dependencies and constraints}
 
+\rowcolors{2}{gray!15}{gray!35}
+\begin{longtable}[c]{|m{0.75cm}|m{11cm}|}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ \hline
+ \multicolumn{2}{|c|}{\cellcolor{white}\textbf{\emph{Domain assumptions}}}
+ % do not write anything here
+ \endfirsthead
+ % do not write anything here
+ \endhead
+ % do not write anything here
+ \endfoot
+ % do not write anything here
+ \endlastfoot
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \hline
+  D & •	TSDPS (Telengana State Develompent Planning Society) provides weather forecasts and reports, which are available to the DREAMS system // come?.\\
+  \hline
+  D & •	If the weather reports indicates that in the district | mandal X, in the day YYYY/MM/DD,  the weather was WW,  it was indeed WW.\\
+  \hline
+  D & •	The maximum, minimum and average temperatures in the weather reports have a precision of TP°C.\\
+  \hline
+  D & •	The rainfall in the weather reports has a precision of TR mm.\\
+  \hline
+  D & The wind speed in the weather reports has a precision of WSP km/h.\\
+  \hline
+  D & The wind direction in the weather reports has a precision of WDP km/h.\\
+  \hline
+  D & The average humidity in the weather reports has a precision of HP.\\
+  \hline
+  D & The pressure in the weather reports has a precision of PP millibars.\\
+  \hline
+  D & Water irrigation system provide data to the DREAMS system in the format , with a precision of WIP /not good.\\
+  \hline
+  D & Soil moisture sensors are installed  km2 (// balzabile, possiamo anche non assumerlo), and provide data with a precision of SM.\\
+  \hline
+  D & Each farmer owns a device connected to the Internet network // requirement vago, ma secondo me va bene così.\\
+  \hline
+  D & Farmers inserts correctly their personal data and data regarding their piece of land.\\
+  \hline
+  D & Farmers insert correctly data regarding their production (harvest, watering, fertilizers…).\\
+  \hline
+  D & Rispondono alle richieste di aiuto.\\
+  \hline
+  D & Opera o su tutto o su nulla (per un certo prodotto).\\
+  \hline
+  D & Each policy maker owns a personal computer, connected to the Internet network and with a browser installed.\\
+  \hline
+  D & Policy makers are given a password – associated to their mail – by the Telengana agriculture department.\\
+  \hline
+  D & Policy makers contact best performing farmers (following an approved protocol established by Telengana government) for granting incentives and asking to collaborate for providing help to other farmers // eliminabile.\\
+  \hline
+  D & Each agronomist owns a device connected to the Internet network and with a browser installed // oppure un’applicazione mobile? Oppure entrambe?.\\
+  \hline
+  D & Agronomists are given a password – associated to their mail – by the Telengana agriculture department.\\
+  \hline
+  D & Agronomists insert correct information regarding their visits to the farms.\\
+  \hline
+  D & Agronomists reply to help requests issued by farmers.\\
+  \hline
+  \end{longtable}
 \section{Specific requirements}
 \subsection{External Interface Requirements}
 \subsection{Functional Requirements}
-\verb |DREAM| allows its users to perform many tasks, and \verb |DREAM| itself is able to interact with other different systems to achieve some results (see section \ref{Product functions}). In order to provide a summary of the possible situations in which \verb |DREAM| is involved and used, this paragraph first lists some concrete scenarios \footnote{“A narrative description of what people do and experience as
+\verb |DREAM| allows its users to perform many tasks, and \verb |DREAM| itself is able to interact with other different systems to achieve some results (see section \ref{Product functions}). In order to provide the main requirements of the system and a summary of the possible situations in which \verb |DREAM| is involved and used, this paragraph first lists all the requirements of the system, then it lists some concrete scenarios \footnote{“A narrative description of what people do and experience as
 they try to make use of computer systems and applications” [M.
-Carrol, Scenario-based Design, Wiley, 1995]} and then abstracts from details and specificities showing the corresponding use cases.
+Carrol, Scenario-based Design, Wiley, 1995]} and finally it abstracts from details and specificities showing the corresponding use cases.
+\subsubsection{Requirements}
+
+\rowcolors{2}{gray!15}{gray!35}
+\begin{longtable}[c]{|m{0.75cm}|m{11cm}|}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ \hline
+ \multicolumn{2}{|c|}{\cellcolor{white}\textbf{\emph{Requirements}}}
+ % do not write anything here
+ \endfirsthead
+ % do not write anything here
+ \endhead
+ % do not write anything here
+ \endfoot
+ % do not write anything here
+ \endlastfoot
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \hline
+  R & The DREAMS system is able to store data regarding users.\\
+  \hline
+  R & The DREAMS system is able to store data regarding the production of a farmer.\\
+  \hline
+  R & The DREAMS system is able to store data from the water irrigation system.\\
+  \hline
+  R & The DREAMS system is able to store data from the soil moisture sensors.\\
+  \hline
+  R & The DREAMS system is able to store data inserted by agronomists regarding their visit to the farms.\\
+  \hline
+  R & The DREAMS system is able to compute a list of N best performing farmers (in a certain area A).\\
+  \hline
+  R & The DREAMS system is able to compute a list of N best performing farmers, also taking into account resilience towards adverse metereological events.\\
+  \hline
+  R & The DREAMS system is able to compute a list of N worst performing farmers.\\
+  \hline
+  R & The DREAMS system is able to save the identification of a farmer as well or badly performing farmer done by a policy maker // da esprimere meglio.\\
+  \hline
+  R & The DREAMS system is able to show statistics about production of farmers.\\
+  \hline
+  R & The DREAMS system is able to identify possible correlations between improvements in farmers work and activities involving agronomists and best performing farmers.\\
+  \hline
+  R & The DREAMS system is able to show weather forecasts relative to a certain area.\\
+  \hline
+  R & The DREAMS system is able to suggest crops to plant to farmers.\\
+  \hline
+  R & The DREAMS system is able to suggest fertilizers to use to farmers.\\
+  \hline
+  R & The DREAMS system provides a forum where farmers can discuss.\\
+  \hline
+  R & The DREAMS system allows a farmer to visualize agronomists available in his area.\\
+  \hline
+  R & The DREAMS system allows a farmer to request for help to an agronomist in his area.\\
+  \hline
+  R & The DREAMS system allows an agronomist to reply to a request issued by a farmer.\\
+  \hline
+  R &  The DREAMS system allows a farmer to visualize best performing farmers.\\
+  \hline
+  R & The DREAMS system allows a farmer to request for help to a best performing farmer.\\
+  \hline
+  R & The DREAMS system allows a farmer identified as best performing to reply to a request issued by another farmer.\\
+  \hline
+  R & The DREAMS system provides agronomists with a daily plan for visiting farms, where each farm in the area assigned to the agronomist is visited at least twice a year.\\
+  \hline
+  R & The DREAMS system enforces that in the daily plan of agronomists, visits to worst performing farmers are scheduled more often than twice a year.\\
+  \hline
+  R & The DREAMS system allows agronomists to confirm the execution of the daily plan at the end of the day.\\
+  \hline
+  R & The DREAMS system allows agronomists to specify deviations from the daily plan at the end of the day.\\
+  \hline
+  \end{longtable}
 \subsubsection{Scenarios}
 \paragraph{A storm ruined the harvest}
 Arin is a farmer who mainly cultivates potatoes, onions and tomatoes in the fields of his family. The harvest of March was really good, and Arin hoped that the same volume of production might have been repeated in April as well. Unfortunately, the North Indian Ocean cyclone season starts in April, and in the second week of this month Tauktae storm, the strongest storm of of the season, violently hit Arin's lands, halving the crop.\par
@@ -160,9 +527,18 @@ Like every evening, Dalbir accesses \verb|DREAM| for downloading the daily plan 
 %\paragraph{Use case 1 - InsertProblems}
 %\begin{center} %leave it to start the table at newline
 
-\begin{tabular}{|p{3.5cm}|m{8cm}|}
+\rowcolors{2}{blue!15}{blue!25}
+\begin{longtable}{|p{3.5cm}|m{8cm}|}
  \hline
- \multicolumn{2}{|c|}{\emph{USE CASE 1}} \\
+ \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 1}} \\
+ % do not write anything here
+ \endfirsthead
+ % do not write anything here
+ \endhead
+ % do not write anything here
+ \endfoot
+ % do not write anything here
+ \endlastfoot
  \hline
  Name & InsertProblems\\
  \hline
@@ -193,13 +569,26 @@ Like every evening, Dalbir accesses \verb|DREAM| for downloading the daily plan 
      \item the page is refreshed in less than 1 second.
  \end{itemize}\\
  \hline
-\end{tabular}
+\end{longtable}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.75]{sequence_diagrams/InsertProblems}
+    \caption{Sequence diagram for the InsertProblems use case}
+\end{figure}
 %%%%%%%%%%%TABLE 2%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \centering
-\begin{tabular}{|p{3.5cm}|m{8cm}|}
+\begin{longtable}{|p{3.5cm}|m{8cm}|}
  \hline
- \multicolumn{2}{|c|}{\emph{USE CASE 2}} \\
+ \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 2}} \\
+  % do not write anything here
+ \endfirsthead
+ % do not write anything here
+ \endhead
+ % do not write anything here
+ \endfoot
+ % do not write anything here
+ \endlastfoot
  \hline
  Name & InsertProductions\\
  \hline
@@ -227,13 +616,27 @@ Like every evening, Dalbir accesses \verb|DREAM| for downloading the daily plan 
      \item the page is refreshed in less than 1 second.
  \end{itemize}\\
  \hline
-\end{tabular}
+\end{longtable}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.75]{sequence_diagrams/InsertProductions}
+    \caption{Sequence diagram for the InsertProductions use case}
+\end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 3%%%%%%%%%%%%%%%%%%%%%%%
 
 \centering
-\begin{tabular}{|p{3.5cm}|m{8cm}|}
+\begin{longtable}{|p{3.5cm}|m{8cm}|}
  \hline
- \multicolumn{2}{|c|}{\emph{USE CASE 3}} \\
+ \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 3}} \\
+  % do not write anything here
+ \endfirsthead
+ % do not write anything here
+ \endhead
+ % do not write anything here
+ \endfoot
+ % do not write anything here
+ \endlastfoot
  \hline
  Name & RegisterAgronomist\\
  \hline
@@ -265,13 +668,27 @@ Like every evening, Dalbir accesses \verb|DREAM| for downloading the daily plan 
      \item the identity must be verified within 3 days.
  \end{itemize}\\
  \hline
-\end{tabular}
+\end{longtable}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.60]{sequence_diagrams/RegisterAgronomist}
+    \caption{Sequence diagram for the RegisterAgronomist use case}
+\end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 4%%%%%%%%%%%%%%%%%%%%%%%
 
 \centering
-\begin{tabular}{|p{3.5cm}|m{8cm}|}
+\begin{longtable}{|p{3.5cm}|m{8cm}|}
  \hline
- \multicolumn{2}{|c|}{\emph{USE CASE 4}} \\
+ \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 4}} \\
+  % do not write anything here
+ \endfirsthead
+ % do not write anything here
+ \endhead
+ % do not write anything here
+ \endfoot
+ % do not write anything here
+ \endlastfoot
  \hline
  Name & RegisterFarmer\\
  \hline
@@ -286,7 +703,6 @@ Like every evening, Dalbir accesses \verb|DREAM| for downloading the daily plan 
     \item the system verifies the e-mail of the farmer;
     \item the farmer inserts personal data like name, surname, date of birth, location of the farm;
     \item the farmer clicks on "done";
-    \item \verb|DREAM| verifies the existence of the farm;
     \item the farmer is notified that the account has been created.
  \end{enumerate}\\
  \hline
@@ -294,21 +710,36 @@ Like every evening, Dalbir accesses \verb|DREAM| for downloading the daily plan 
  \hline
  Exceptions & \begin{itemize}
      \item If the e-mail is already used, the farmer is forced to change it;
-     \item If the password is too short, the farmer is forced to change it;
-     \item if the existence of the farm cannot be verified, a mail notifying the error is sent to the farmer.
+     \item If the password is too short, the farmer is forced to change it.
  \end{itemize}\\
  \hline
- Special requirements & \begin{itemize}
-     \item the existence of the farm must be verified within 1 day.
+ Special requirements & \begin{itemize} 
  \end{itemize}\\
  \hline
-\end{tabular}
+\end{longtable}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.60]{sequence_diagrams/RegisterAgronomist}
+    \caption{Sequence diagram for the RegisterFarmer use case}
+\end{figure}
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 5%%%%%%%%%%%%%%%%%%%%%%%
 
 \centering
-\begin{tabular}{|p{3.5cm}|m{8cm}|}
+\begin{longtable}{|p{3.5cm}|m{8cm}|}
  \hline
- \multicolumn{2}{|c|}{\emph{USE CASE 5}} \\
+ \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 5}} \\
+  % do not write anything here
+ \endfirsthead
+ % do not write anything here
+ \endhead
+ % do not write anything here
+ \endfoot
+ % do not write anything here
+ \endlastfoot
  \hline
  Name & VisitFarm\\
  \hline
@@ -323,11 +754,10 @@ Like every evening, Dalbir accesses \verb|DREAM| for downloading the daily plan 
     \item the agronomist selects "insert farm data";
     \item the agronomist selects the farm and inserts data with a comment;
     \item the agronomist clicks on "done";
-    \item \verb|DREAM| stores the data;
-    \item the farm is removed from the to-visit farms.
+    \item \verb|DREAM| stores the data.
  \end{enumerate}\\
  \hline
- Exit condition & The data about the meeting have been inserted by the agronomist and stored in \verb|DREAM| and the farm is not in the to-visit farms.\\
+ Exit condition & The data about the meeting has been inserted by the agronomist and stored in \verb|DREAM|.
  \hline
  Exceptions & \begin{itemize}
      \item If the farmer does not show up at the meeting, the agronomist specifies so when inserting data about the meeting.
@@ -335,13 +765,28 @@ Like every evening, Dalbir accesses \verb|DREAM| for downloading the daily plan 
  \hline
  Special requirements & None\\
  \hline
-\end{tabular}
+\end{longtable}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.75]{sequence_diagrams/VisitFarm}
+    \caption{Sequence diagram for the VisitFarm use case}
+\end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 6%%%%%%%%%%%%%%%%%%%%%%%
 
 \centering
-\begin{tabular}{|p{3.5cm}|m{8cm}|}
+\begin{longtable}{|p{3.5cm}|m{8cm}|}
  \hline
- \multicolumn{2}{|c|}{\emph{USE CASE 6}} \\
+ \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 6}} \\
+  % do not write anything here
+ \endfirsthead
+ % do not write anything here
+ \endhead
+ % do not write anything here
+ \endfoot
+ % do not write anything here
+ \endlastfoot
  \hline
  Name & GenerateDailyPlan\\
  \hline
@@ -353,14 +798,15 @@ Like every evening, Dalbir accesses \verb|DREAM| for downloading the daily plan 
     \item The agronomist receives a daily plan for the following day;
     \item if it is ok for the agronomist, he clicks on  "accept", otherwise he clicks on "change it";
     \item the agronomist selects some changes, then he clicks on "accept";
-    \item \verb|DREAM| checks if the new daily plan is acceptable; if not, an error is notified to the agronomist, who has to re-accept (or re-change) the schedule until \verb|DREAM| accepts it;
+    \item \verb|DREAM| checks if the new daily plan is acceptable;
     \item the farmer is notified about the meeting.
  \end{enumerate}\\
  \hline
  Exit condition & The daily plan has been confirmed and the farmer has been notified.\\
  \hline
  Exceptions & \begin{itemize}
-     \item In case the agronomist does not accept the daily plan, the farmers are not notified about the meeting.
+     \item In case the agronomist does not accept the daily plan, the farmers are not notified about the meeting;
+     \item if the daily plan is not acceptable, an error is notified to the agronomist, who has to re-accept (or re-change) the schedule until \verb|DREAM| accepts it;
  \end{itemize}\\
  \hline
  Special requirements &\begin{itemize}
@@ -368,13 +814,28 @@ Like every evening, Dalbir accesses \verb|DREAM| for downloading the daily plan 
      \item bad performing farmers must be visited more times than the others.
  \end{itemize}\\
  \hline
-\end{tabular}
+\end{longtable}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.75]{sequence_diagrams/GenerateDailyPlan}
+    \caption{Sequence diagram for the GenerateDailyPlan use case}
+\end{figure}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 7%%%%%%%%%%%%%%%%%%%%%%%
 
 \centering
-\begin{tabular}{|p{3.5cm}|m{8cm}|}
+\begin{longtable}{|p{3.5cm}|m{8cm}|}
  \hline
- \multicolumn{2}{|c|}{\emph{USE CASE 7}} \\
+ \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 7}} \\
+  % do not write anything here
+ \endfirsthead
+ % do not write anything here
+ \endhead
+ % do not write anything here
+ \endfoot
+ % do not write anything here
+ \endlastfoot
  \hline
  Name & GetSoilSensorsData\\
  \hline
@@ -399,13 +860,28 @@ Like every evening, Dalbir accesses \verb|DREAM| for downloading the daily plan 
      \item \verb|DREAM| must try to contact the sensor 3 times before giving up.
  \end{itemize}\\
  \hline
-\end{tabular}
+\end{longtable}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.75]{sequence_diagrams/GetSoilSensorsData}
+    \caption{Sequence diagram for the GetSoilSensorsData use case}
+\end{figure}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 8%%%%%%%%%%%%%%%%%%%%%%%
 
 \centering
-\begin{tabular}{|p{3.5cm}|m{8cm}|}
+\begin{longtable}{|p{3.5cm}|m{8cm}|}
  \hline
- \multicolumn{2}{|c|}{\emph{USE CASE 8}} \\
+ \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 8}} \\
+  % do not write anything here
+ \endfirsthead
+ % do not write anything here
+ \endhead
+ % do not write anything here
+ \endfoot
+ % do not write anything here
+ \endlastfoot
  \hline
  Name & GetWaterIrrigationSystemData\\
  \hline
@@ -430,13 +906,28 @@ Like every evening, Dalbir accesses \verb|DREAM| for downloading the daily plan 
      \item \verb|DREAM| must try to contact the sensor 3 times before giving up.
  \end{itemize}\\
  \hline
-\end{tabular}
+\end{longtable}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.75]{sequence_diagrams/GetWaterIrrigationSystemData}
+    \caption{Sequence diagram for the GetWaterIrrigationSystemData use case}
+\end{figure}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 9%%%%%%%%%%%%%%%%%%%%%%%
 
 \centering
-\begin{tabular}{|p{3.5cm}|m{8cm}|}
+\begin{longtable}{|p{3.5cm}|m{8cm}|}
  \hline
- \multicolumn{2}{|c|}{\emph{USE CASE 9}} \\
+ \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 9}} \\
+  % do not write anything here
+ \endfirsthead
+ % do not write anything here
+ \endhead
+ % do not write anything here
+ \endfoot
+ % do not write anything here
+ \endlastfoot
  \hline
  Name & VisualizeAggregateData\\
  \hline
@@ -462,13 +953,29 @@ Like every evening, Dalbir accesses \verb|DREAM| for downloading the daily plan 
      \item The data generation must be completed in less than 3 seconds.
  \end{itemize}\\
  \hline
-\end{tabular}
+\end{longtable}
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[scale=0.5]{sequence_diagrams/VisualizeAggregateData}
+    \caption{Sequence diagram for the VisualizeAggregateData use case}
+\end{figure}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 10%%%%%%%%%%%%%%%%%%%%%%%
 
 \centering
-\begin{tabular}{|p{3.5cm}|m{8cm}|}
+\begin{longtable}{|p{3.5cm}|m{8cm}|}
  \hline
- \multicolumn{2}{|c|}{\emph{USE CASE 10}} \\
+ \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 10}} \\
+  % do not write anything here
+ \endfirsthead
+ % do not write anything here
+ \endhead
+ % do not write anything here
+ \endfoot
+ % do not write anything here
+ \endlastfoot
  \hline
  Name & VisualizeBestFarmers\\
  \hline
@@ -493,13 +1000,28 @@ Like every evening, Dalbir accesses \verb|DREAM| for downloading the daily plan 
      \item The data must be shown in less than 1 second.
  \end{itemize}\\
  \hline
-\end{tabular}
+\end{longtable}
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[scale=0.5]{sequence_diagrams/VisualizeBestFarmers}
+    \caption{Sequence diagram for the VisualizeBestFarmers use case}
+\end{figure}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 11%%%%%%%%%%%%%%%%%%%%%%%
 
 \centering
-\begin{tabular}{|p{3.5cm}|m{8cm}|}
+\begin{longtable}{|p{3.5cm}|m{8cm}|}
  \hline
- \multicolumn{2}{|c|}{\emph{USE CASE 11}} \\
+ \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 11}} \\
+  % do not write anything here
+ \endfirsthead
+ % do not write anything here
+ \endhead
+ % do not write anything here
+ \endfoot
+ % do not write anything here
+ \endlastfoot
  \hline
  Name & VisualizeForecasts\\
  \hline
@@ -527,13 +1049,27 @@ Like every evening, Dalbir accesses \verb|DREAM| for downloading the daily plan 
      \item The Telengana government website is assumed not to change in a backwards-incompatible manner without notice.
  \end{itemize}\\
  \hline
-\end{tabular}
+\end{longtable}
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[scale=0.5]{sequence_diagrams/VisualizeForecasts}
+    \caption{Sequence diagram for the VisualizeForecasts use case}
+\end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 12%%%%%%%%%%%%%%%%%%%%%%%
 
 \centering
-\begin{tabular}{|p{3.5cm}|m{8cm}|}
+\begin{longtable}{|p{3.5cm}|m{8cm}|}
  \hline
- \multicolumn{2}{|c|}{\emph{USE CASE 12}} \\
+ \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 12}} \\
+  % do not write anything here
+ \endfirsthead
+ % do not write anything here
+ \endhead
+ % do not write anything here
+ \endfoot
+ % do not write anything here
+ \endlastfoot
  \hline
  Name & VisualizeFarmerSuggestions\\
  \hline
@@ -555,14 +1091,22 @@ Like every evening, Dalbir accesses \verb|DREAM| for downloading the daily plan 
  \hline
  Special requirements & None.\\
  \hline
-\end{tabular}
+\end{longtable}
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 13%%%%%%%%%%%%%%%%%%%%%%%
 
 \centering
-\begin{tabular}{|p{3.5cm}|m{8cm}|}
+\begin{longtable}{|p{3.5cm}|m{8cm}|}
  \hline
- \multicolumn{2}{|c|}{\emph{USE CASE 13}} \\
+ \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 13}} \\
+  % do not write anything here
+ \endfirsthead
+ % do not write anything here
+ \endhead
+ % do not write anything here
+ \endfoot
+ % do not write anything here
+ \endlastfoot
  \hline
  Name & GetWeatherForecasts\\
  \hline
@@ -586,75 +1130,8 @@ Like every evening, Dalbir accesses \verb|DREAM| for downloading the daily plan 
      \item The Telengana government website is assumed not to change in a backwards-incompatible manner without notice.
  \end{itemize}\\
  \hline
-\end{tabular}
+\end{longtable}
 \newpage
-%%%%%%%%%%%%%%%%%%IMAGES%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{figure}[h]
-    \centering
-    \includegraphics[scale=0.75]{sequence_diagrams/InsertProblems}
-    \caption{Sequence diagram for the InsertProblems use case}
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[scale=0.75]{sequence_diagrams/InsertProductions}
-    \caption{Sequence diagram for the InsertProductions use case}
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[scale=0.60]{sequence_diagrams/RegisterAgronomist}
-    \caption{Sequence diagram for the RegisterAgronomist use case}
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[scale=0.60]{sequence_diagrams/RegisterAgronomist}
-    \caption{Sequence diagram for the RegisterFarmer use case}
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[scale=0.75]{sequence_diagrams/VisitFarm}
-    \caption{Sequence diagram for the VisitFarm use case}
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[scale=0.75]{sequence_diagrams/GenerateDailyPlan}
-    \caption{Sequence diagram for the GenerateDailyPlan use case}
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[scale=0.75]{sequence_diagrams/GetSoilSensorsData}
-    \caption{Sequence diagram for the GetSoilSensorsData use case}
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[scale=0.75]{sequence_diagrams/GetWaterIrrigationSystemData}
-    \caption{Sequence diagram for the GetWaterIrrigationSystemData use case}
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-	\includegraphics[scale=0.5]{sequence_diagrams/VisualizeAggregateData}
-    \caption{Sequence diagram for the VisualizeAggregateData use case}
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-	\includegraphics[scale=0.5]{sequence_diagrams/VisualizeBestFarmers}
-    \caption{Sequence diagram for the VisualizeBestFarmers use case}
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-	\includegraphics[scale=0.5]{sequence_diagrams/VisualizeForecasts}
-    \caption{Sequence diagram for the VisualizeForecasts use case}
-\end{figure}
-
 \raggedright
 \subsection{Performance Requirements}
 \subsection{Design Constraints}
