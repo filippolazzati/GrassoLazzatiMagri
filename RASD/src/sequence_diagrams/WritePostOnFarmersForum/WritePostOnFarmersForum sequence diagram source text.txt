@@ -1,0 +1,22 @@
+title WritePostOnFarmersForum
+activate Farmer
+Farmer ->> Dream: enterForumSection()
+activate Dream
+Dream -->>Farmer: forum view
+Farmer ->> Dream: selectDiscussionThread(discussionThread)
+Dream -->>Farmer: thread view
+Farmer ->> Dream: createPost(text)
+alt non empty text
+Dream ->* Post: create
+Dream -> DiscussionThread: insertPost(post)
+activate DiscussionThread
+deactivateafter DiscussionThread
+Dream -->>Farmer: confirm
+else empty text
+Dream -->>Farmer: error message
+end alt
+Dream ->* Post: create
+Dream -> DiscussionThread: insertPost(post)
+activate DiscussionThread
+deactivateafter DiscussionThread
+Dream -->>Farmer: confirm
