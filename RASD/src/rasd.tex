@@ -76,27 +76,25 @@ Consequently, the goals of this project are:
 \hline
 G1\label{G1} & The \verb|policy makers| are able to identify the best-performing farmers and the worst-performing farmers\footnote{See section \ref{Abbreviations}}.\\
   \hline
-G2\label{G3} & The \verb|policy makers| are able to understand whether the initiatives involving agronomists and best-performing farmers have a good impact on the work of the farmers.\\
+G2\label{G2} & The \verb|policy makers| are able to understand whether the initiatives involving agronomists and best-performing farmers have a good impact on the work of the farmers.\\
 \hline
-G3\label{G4} & \color{red}The \verb|policy makers| receive high-level reports about the impact of some environmental factors and the volume of production of the farmers.\\
+G3\label{G3} & The \verb|farmers| visualize weather forecasts regarding their piece of land.\\
   \hline
-G4\label{G5} & The \verb|farmers| visualize weather forecasts regarding their piece of land.\\
+G4\label{G4} & The \verb|farmers| receive personalized suggestions about crops to plant and fertilizers to use.\\
   \hline
-G5\label{G6} & The \verb|farmers| receive personalized suggestions about crops to plant and fertilizers to use.\\
+G5\label{G5} & The \verb|farmers| ask for and receive help from agronomists and other farmers.\\
   \hline
-G6\label{G7} & The \verb|farmers| ask for and receive help from agronomists and other farmers.\\
+G6\label{G6} & The \verb|agronomists| can plan farm visits based on the farmers performances.\\
   \hline
-G7\label{G8} & The \verb|agronomists| can plan farm visits based on the farmers performances.\\
+  G7\label{G7} & The \verb|farmers| can interact with other farmers exchanging opinions about agriculture.\\
   \hline
-  G8\label{G9} & The \verb|farmers| can interact with other farmers exchanging opinions about agriculture.\\
+  G8\label{G8} & The \verb|agronomists| visualize weather forecasts regarding the area they are responsible of.\\
   \hline
-  G9\label{G9} & The \verb|agronomists| visualize weather forecasts regarding the area they are responsible of.\\
-  \hline
-  G10\label{G9} & The \verb|agronomists| are able to identify the best-performing farmers and the worst-performing farmers\footnotemark[1].\\
+  G9\label{G9} & The \verb|agronomists| are able to identify the best-performing farmers and the worst-performing farmers\footnotemark[1].\\
   \hline
   \end{longtable}
 \subsection{Scope}
-\verb|DREAM| is a software system that has to work in a \textit{World}\footnote{The world is the portion of the real-world affected by the machine. See section \ref{Abbreviations}} in which the following phenomena occur:
+\verb|DREAM| is a software system that has to work in a \textit{World}\footnote{The world is the portion of the real-world affected by the machine. See section \ref{Abbreviations}} where the following phenomena occur\footnote{Here World-only phenomena are listed, that is the World phenomena which are not shared with the Machine. If W is the set of World phenomena and M is the set of Machine phenomena, here elements of the (W - M) set are listed.}:
 \rowcolors{2}{gray!15}{gray!35}
 \begin{longtable}[c]{|m{0.75cm}|m{11cm}|}
  \hline
@@ -144,35 +142,33 @@ G7\label{G8} & The \verb|agronomists| can plan farm visits based on the farmers 
  \hline
  WP11\label{WP11} & A farmer during the day YYYY/MM/DD plants an area A of product PR.\\
  \hline
-  WP11\label{WP11} & A farmer during the day YYYY/MM/DD seeds an area A of product PR.\\
+  WP12\label{WP11} & A farmer during the day YYYY/MM/DD seeds an area A of product PR.\\
  \hline
- WP12\label{WP12} & A farmer during the day YYYY/MM/DD harvests a quantity of K kgs of product PR.\\
+ WP13\label{WP12} & A farmer during the day YYYY/MM/DD harvests a quantity of K kgs of product PR.\\
  \hline
- WP13\label{WP13} & A farmer during the day YYYY/MM/DD uses a quantity FQ of fertilizer on a plant P.\\
+ WP14\label{WP13} & A farmer during the day YYYY/MM/DD uses a quantity FQ of fertilizer on a plant P.\\
  \hline
- WP14\label{WP14} & A farmer manually irrigates one of his fields.\\
+ WP15\label{WP14} & A farmer manually irrigates one of his fields.\\
  \hline
- WP15\label{WP15} & A farmer faces a problem during his work.\\
+ WP16\label{WP15} & A farmer faces a problem during his work.\\
  \hline
  %%%%%%%%%%%%%%%%%%%%%%%%% policy makers %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  \multicolumn{2}{|c|}{\cellcolor{yellow!30}policy makers phenomena}
 \hline
- WP18\label{WP18} & A policy maker is given a password by the Telangana administration.\\
- \hline
-  WP19\label{WP19} & \color{yellow}A policy maker establishes a plan for agriculture in Telengana.\\
+ WP17\label{WP18} & A policy maker is given a password by the Telangana administration.\\
  \hline
  %%%%%%%%%%%%%%%%%%%%%%%% agronomists %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  \multicolumn{2}{|c|}{\cellcolor{yellow!30}agronomists phenomena}
  \hline
- WP20\label{WP20} & An agronomist is given a password by the Telangana administration.\\
+ WP18\label{WP20} & An agronomist is given a password by the Telangana administration.\\
  \hline
- WP21\label{WP21} & An agronomist visits a farm.\\
+ WP19\label{WP21} & An agronomist visits a farm.\\
  \hline
-  WP22\label{WP22} & An agronomist is responsible for an area A of terrains.\\
+  WP20\label{WP22} & An agronomist is responsible for an area A of terrains.\\
  \hline
  \end{longtable}
  \newpage
- The shared phenomena are:
+ The shared phenomena\footnote{Shared phenomena are the intersection between World phenomena W and Machine phenomena M: W\cap  M} are:
  \rowcolors{2}{gray!15}{gray!35}
  \begin{longtable}[c]{|m{0.75cm}|m{11cm}|}
  \hline
@@ -224,107 +220,108 @@ G7\label{G8} & The \verb|agronomists| can plan farm visits based on the farmers 
  %%%%%%%%%%%%%%%%%%%%%%%%%%water irrigation system%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \multicolumn{2}{|c|}{\cellcolor{yellow!30}water irrigation system phenomena}
   \hline
-  SP21 & The water irrigation system  sensor of a terrain TT measures that a quantity WI of water  has been spread during the day YYYY/MM/DD.\\
+  SP14 & The water irrigation system  sensor of a terrain TT measures that a quantity WI of water  has been spread during the day YYYY/MM/DD.\\
  \hline
  %%%%%%%%%%%%%%%%%%%%%%%%%%%% farmers%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  \multicolumn{2}{|c|}{\cellcolor{yellow!30}farmers phenomena}
   \hline
- SP14 & A farmer inserts in \verb|DREAM| his personal data (name, surname, contacts).\\
+  SP15 & A farmer creates an account.\\
  \hline
- SP15 & A farmer inserts in \verb|DREAM| the location and the area of the plot of land that he owns/is responsible of.\\
+  SP16 & A farmer logs in.\\
  \hline
- SP16 & A farmer inserts in \verb|DREAM| that in his piece of land, an area A is devoted to the cultivation of product P.\\
+ SP17 & A farmer inserts in \verb|DREAM| his personal data (name, surname, contacts).\\
  \hline
- SP17 & A farmer creates an account.\\
+ SP18 & A farmer inserts in \verb|DREAM| the location and the area of the plot of land that he owns/is responsible of.\\
  \hline
- SP17 & A farmer logs in.\\
+ SP19 & A farmer inserts in \verb|DREAM| that in his piece of land, an area A is devoted to the cultivation of product P.\\
  \hline
- SP18 & A farmer inserts in \verb|DREAM| that during the day YYYY/MM/DD  he has sowed an area A of product PR.\\
+ SP20 & A farmer inserts in \verb|DREAM| that during the day YYYY/MM/DD  he has sowed an area A of product PR.\\
   \hline
- SP18 & A farmer inserts in \verb|DREAM| that during the day YYYY/MM/DD  he has planted an area A of product PR.\\
+ SP21 & A farmer inserts in \verb|DREAM| that during the day YYYY/MM/DD  he has planted an area A of product PR.\\
  \hline
- SP19 & A farmer inserts in \verb|DREAM| that during the day YYYY/MM/DD he has harvested a quantity of K kgs of product PR.\\
+ SP22 & A farmer inserts in \verb|DREAM| that during the day YYYY/MM/DD he has harvested a quantity of K kgs of product PR.\\
  \hline
- SP20 & A farmer inserts in \verb|DREAM| during the day YYYY/MM/DD  that he has used a quantity FQ of fertilizer on a plant P.\\
+ SP23 & A farmer inserts in \verb|DREAM| during the day YYYY/MM/DD  that he has used a quantity FQ of fertilizer on a plant P.\\
  \hline
- SP22 & A farmer inserts in DREAMS that that during the day YYYY/MM/DD he has manually irrigated a piece of land PL with a quantity of water WI.\\
+ SP24 & A farmer inserts in DREAMS that that during the day YYYY/MM/DD he has manually irrigated a piece of land PL with a quantity of water WI.\\
  \hline
- SP23 & A farmer visualizes the weather forecasts relative to its land location.\\
+ SP25 & A farmer visualizes the weather forecasts relative to its farm's location.\\
  \hline
- SP24 & A farmer visualizes a suggestion regarding a crop to plant or a fertilizer to use in its land.\\
+ SP26 & A farmer visualizes a suggestion regarding a crop to plant or a fertilizer to use in its land.\\
  \hline
- SP26 & A farmer inserts into DREAMS data regarding a problem he has/he faced.\\
+ SP27 & A farmer inserts into DREAMS data regarding a problem he has or he faced.\\
  \hline
- SP27 & A farmer issues a request for help to an agronomist.\\
+ SP28 & A farmer issues a request for help to an agronomist.\\
  \hline
- SP28 & A farmer issues a request for help to another farmer.\\
+ SP29 & A farmer issues a request for help to another farmer.\\
  \hline
- SP29 & A farmer responds to a request for help received by another farmer.\\
+ SP30 & A farmer responds to a request for help received by another farmer.\\
  \hline
- SP30 & A farmer shares a post on the discussion forum.\\
+ SP31 & A farmer shares a post on the discussion forum.\\
  \hline
- SP30 & A farmer creates a new discussion thread on the forum.\\
+ SP32 & A farmer creates a new discussion thread on the forum.\\
  \hline
-  SP30 & A farmer receives the notification of the visit of an agronomist.\\
+  SP33 & A farmer receives the notification of the visit of an agronomist.\\
  \hline
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%% policy makers %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  \multicolumn{2}{|c|}{\cellcolor{yellow!30}policy makers phenomena}
   \hline
- SP32 & A policy maker logs in.\\
+ SP34 & A policy maker logs in.\\
  \hline
- SP33 & \verb|DREAM| shows statistics regarding farmers (type of products, amount produced, fertilizers, watering, location…).\\
+ SP35 & \verb|DREAM| shows statistics regarding farmers (type of products, amount produced, fertilizers, watering, location…).\\
  \hline
- SP34 & \verb|DREAM| shows a list of the best-performing farmers.\\
+ SP36 & \verb|DREAM| shows a list of the best-performing farmers.\\
  \hline
- SP35 & \verb|DREAM| shows a list of the worst-performing farmers.\\
+ SP37 & \verb|DREAM| shows a list of the worst-performing farmers.\\
  \hline
- SP36 & \verb|DREAM| shows correlations between agronomists and good farmers interventions and farmers statistics\\
+ SP38 & \verb|DREAM| shows correlations between agronomists and good farmers interventions and farmers statistics\\
  \hline
- SP37 &  A policy maker selects a farmer from a list of best performing farmers and saves it as well performing farmer .\\
+ SP39 &  A policy maker selects a farmer from a list of best performing farmers and saves it as well performing farmer .\\
  \hline
- SP38 & A policy maker selects a farmer from a list of worst performing farmers and saves it as badly performing farmer .\\
+ SP40 & A policy maker selects a farmer from a list of worst performing farmers and saves it as badly performing farmer .\\
  \hline
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%% agronomists %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  \multicolumn{2}{|c|}{\cellcolor{yellow!30}agronomists phenomena}
   \hline
- SP39 & An agronomists logs in in the \verb|DREAM| system.\\
+ SP41 & An agronomists logs in in the \verb|DREAM| system.\\
  \hline
- SP40 & An agronomist inserts the area A of terrains he is responsible of into the \verb|DREAM| system.\\
+ SP42 & An agronomist inserts the area A of terrains he is responsible of into the \verb|DREAM| system.\\
  \hline
- SP42 & An agronomist receives a request for help from a farmer.\\
+ SP43 & An agronomist receives a request for help from a farmer.\\
  \hline
- SP43 & An agronomist replies to a request for help from a farmer.\\
+ SP44 & An agronomist replies to a request for help from a farmer.\\
  \hline
- SP44 & An agronomist visualizes the weather forecast for the area he is responsible of.\\
+ SP45 & An agronomist visualizes the weather forecast for the area he is responsible of.\\
  \hline
- SP & An agronomist visualizes a list of the best-performing farmers in the area he is responsible of.\\
+ SP46 & An agronomist visualizes a list of the best-performing farmers in the area he is responsible of.\\
  \hline
- SP & \verb|DREAM| computes a daily plan  for an agronomist to visit the farms he is responsible of.\\
+ SP47 & \verb|DREAM| computes a daily plan  for an agronomist to visit the farms he is responsible of.\\
  \hline
- SP & An agronomist updates his daily plan for visiting farms.\\
+ SP48 & An agronomist updates his daily plan for visiting farms.\\
  \hline
- SP & At the end of a work day, an agronomist confirms the execution of his daily plan for visiting farms.\\
+ SP49 & At the end of a work day, an agronomist confirms the execution of his daily plan for visiting farms.\\
  \hline
- SP & At the end of a work day, an agronomist specifies a deviation for his daily plan for visiting farms.\\
+ SP50 & At the end of a work day, an agronomist specifies a deviation for his daily plan for visiting farms.\\
  \hline
- SP & An agronomist inserts into the system information regarding a visit to a farm.\\
+ SP51 & An agronomist inserts into the system information regarding a visit to a farm.\\
  \hline
  \end{longtable}
 
 \subsection{Definitions, Acronyms, Abbreviations}\label{Abbreviations}
 \begin{itemize}
     \item WW = sunny | partially cloudy |  cloudy | foggy  |  rainy | stormy | tornado | hurricane
-    \item DR = N | W | S | E | NW | NE | SE | SW 
+    \item DR = North | West | South | East | North-West | North-East | South-East | South-West 
     \item best-performing farmer := the definition of best-performing farmer takes into account also external factors, like resilience towards climatic adverse events.
     \item worst-performing farmer := the definition of best-performing farmer takes into account also external factors, like resilience towards climatic adverse events.
-    \item World\footnote{{tMichael Jackson. 1995. The world and the machine. In Proceedings of the 17th
+    \item World\footnote{{Michael Jackson. 1995. The world and the machine. In Proceedings of the 17th
+    \item TSDPS: Telangana State Development Planning Society
 international conference on Software engineering (ICSE '95). Association for
 Computing Machinery, New York, NY, USA, 283–292.
 DOI:https://doi.org/10.1145/225014.225041}} = portion of the real-world
 affected by the machine.
 \item Machine\footnotemark[10] = the portion of system to be developed.
-\item weather report...
-\item forecast...
+\item weather report: historical meteorological data (so, referred to the past)
+\item weather forecast: predicted meteorological data (so, referred to the future) 
 \end{itemize}
 \subsection{Revision history}
 \subsection{Reference Documents}
@@ -441,13 +438,13 @@ a raw daily plan about which farmers they should visit.
  \endlastfoot
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \hline
-  D1 & we know the location of the sensors.\\
+  D1 & The location of the sensors is known to the \verb|DREAM| system.\\
   \hline
-   D2 & we know the location of the water irrigation system.\\
+   D2 & The location of the water irrigation systems is known to the \verb|DREAM| system .\\
   \hline
-  D3 & TSDPS (Telengana State Develompent Planning Society) provides weather forecasts and reports which can be accessed by \verb|DREAM|.\\
+  D3 & The TSDPS provides weather forecasts and reports which can be accessed by \verb|DREAM|.\\
   \hline
-  D4 & The weather report provide sufficiently accurate data.\\
+  D4 & The weather reports provide sufficiently accurate data.\\
   \hline
   D5 & The water irrigation system provides data to the DREAM with a sufficiently accurate precision.\\
   \hline
@@ -467,11 +464,11 @@ a raw daily plan about which farmers they should visit.
  \hline
   D13 & Each policy maker has the competences for properly accessing the \verb|DREAM| system and using it.\\
   \hline
-  D14 & Every policy maker is given a password – associated to his e-mail – by the Telengana agriculture department, and such account is known to \verb|DREAM|.\\
+  D14 & Every policy maker is given a password – associated to his e-mail – by the Telangana agriculture department, and such account is known to \verb|DREAM|.\\
   \hline
   D15 & Each agronomist owns a device connected to the Internet network and with a browser installed.\\
   \hline
-  D16 & The agronomists are given a password – associated to their mail – by the Telengana agriculture department and such account is known to \verb|DREAM|.\\
+  D16 & The agronomists are given a password – associated to their mail – by the Telangana agriculture department and such account is known to \verb|DREAM|.\\
   \hline
   D17 & Each agronomist has the competences for properly accessing the \verb|DREAM| system and using it.\\
    \hline
@@ -503,69 +500,73 @@ Carrol, Scenario-based Design, Wiley, 1995]} and finally it abstracts from detai
  \endlastfoot
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \hline
-  R1\label{R} & \verb|DREAM| collects and accesses data like soil moisture, weather reports (temperature, ...), water used for irrigation with a timestamp and the concerned area;\\
+  R1\label{R} & \verb|DREAM| collects soil moisture data from the soil moisture sensors;\\
   \hline
-R2\label{R} & \verb|DREAM| collects feedbacks of agronomists about farmers and problems faced by farmers with a timestamp and the concerned farmer;\\
+  R2\label{R} & \verb|DREAM| accesses weather reports data provided by the TSDPS system;\\
   \hline
-R3\label{R} & DREAM collects data about farmers, like volume of production, fertilizers adopted, ... with the concerned farmer and the relative period;\\
+  R3\label{R} & \verb|DREAM| collects watering data from the water irrigation system;\\
   \hline
-R4\label{R} & DREAM shall store the area of the farm of each farmer;\\
+R4\label{R} & \verb|DREAM| shall allow agronomists to insert feedback about the farmers they visited;\\
   \hline
-R5\label{R} & DREAM can make use of different criteria (namely, which data like soil moisture... use to compare farmers) and/or combinations of them to rank farmers;\\
+R5\label{R} & \verb|DREAM| shall allow farmers to insert the location and the area of their plot of land;\\
+\hline
+R6\label{R} & \verb|DREAM| shall allow farmers to insert the type of products they grow in a certain area of their farms;\\
+\hline
+R7\label{R} & \verb|DREAM| shall allow farmers to insert data about their sowing activity;\\
+\hline
+R8\label{R} & \verb|DREAM| shall allow farmers to insert data about their planting activity;\\
   \hline
-R6\label{R} & DREAM allows policy makers to choose the criteria to use for ranking and, potentially, some associated weights (for combinations of them);\\
+  R9\label{R} & \verb|DREAM| shall allow farmers to insert data about their harvesting activity;\\
   \hline
-R7\label{R} & DREAM allows policy makers to choose the period and the area to consider for ranking the farmers;\\
+  R10\label{R} & \verb|DREAM| shall allow farmers to insert data about the irrigation of their plantations;\\
   \hline
-R8\label{R} & DREAM can show a list of farmers with the corresponding rankings and allow policy makers to mark them as best or worst-performing.\\
+  R11\label{R} & \verb|DREAM| shall allow farmers to insert descriptions of problems they face\\
   \hline
-  R9\label{R} & DREAM shall store the initiatives involving agronomists and best-performing farmers currently adopted, along with the farmers and agronomists involved and the period of the initiative;\\
+R12\label{R} & \verb|DREAM| can use different criteria (namely, productivity in terms of harvested quantity over sowed quantity, productivity in presence of adverse meteorological events, productivity in presence of drought, and so on) and/or combinations of them to rank farmers;\\
   \hline
-R10\label{R} & DREAM can compare different periods of farmers work according to the production volume, the fertilizers adopted, ...;\\
+R13\label{R} & \verb|DREAM| shall allow policy makers to choose the criteria to use for ranking farmers and the associated weights (for combinations of them);\\
   \hline
-R11\label{R} & DREAM can compare different periods of farmers work according to environmental factors (e.g. data in weather reports, soil moisture, ...);\\
+R14\label{R} & \verb|DREAM| shall allow policy makers to choose the time period and the area to consider for ranking the farmers;\\
   \hline
-R12\label{R} & DREAM allows policy makers to choose the old period to compare with, and according to which initiative decision;\\
+R15\label{R} & \verb|DREAM| is able to show a list of farmers ordered with respect to the provided ranking criteria\\
   \hline
-R13\label{R} & DREAM can show the impact of a certain initiative during a certain period.\\
+  R16\label{R} & \verb|DREAM| allows policy makers to mark a farmer as best-performing or worst-performing\\
   \hline
-  R14\label{R} & DREAM can apply some machine learning techniques to understand the correlation among environmental factors, fertilisers adopted and crops planted with the volume of production of the farmers;\\
+R17\label{R} & \verb|DREAM| can compare different time periods of a farmer work according to various production criteria (e.g. production volume, fertilizers adopted, fraction of harvested plants over sowed ones, etc);\\
   \hline
-R15\label{R} & DREAM can show reports about the correlation among environmental factors and the volume of production of the farmers.\\
+R18\label{R} & \verb|DREAM| can compare different time periods of a  farmer work with respect to environmental factors (e.g. weather reports data, soil moisture, ...);\\
   \hline
-R16\label{R} & \verb|DREAM| allows farmers to choose the date of the forecasts to visualize;\\
+R19\label{R} & \verb|DREAM| allows policy makers to choose an initiative taken by an agronomist or a farmer to help a farmer - i.e., visit to the farm or reply to a question - and two time periods of the farmer to compare the two time periods;\\
   \hline
-R17\label{R} & \verb|DREAM| is able to connect to the Telengana government website to fetch forecasts for the chosen date;\\
+R20\label{R} & \verb|DREAM| can show the impact of a certain initiative taken by an agronomist or a farmer to help a farmer - i.e., visit to the farm or reply to a question - during a certain time period.\\
   \hline
-R18\label{R} & DREAM can show a map with the forecast.\\
+  R21\label{R} & \verb|DREAM| is able to find correlations among environmental factors, fertilisers adopted and crops planted with the volume of production of the farmers;\\
   \hline
-R19\label{R} & DREAM shall store the area each agronomist is responsible of;\\
+R22\label{R} & \verb|DREAM| allows farmers to choose the date of the forecasts to visualize;\\
   \hline
-R20\label{R} & \verb|DREAM| allows agronomists to choose the date of the forecasts to visualize;\\
+R23\label{R} & \verb|DREAM| is able to connect to the Telangana government website to fetch forecasts for the chosen date;\\
   \hline
-R21\label{R} & DREAM can use the trained machine learning algorithms to make predictions about the crops to plant and fertilizers to use given certain weather forecasts;\\
+R24\label{R} & \verb|DREAM| can show weather forecast data for a certain location and date.\\
   \hline
-R22\label{R} & DREAM can show the results of predictions about crops to plant and fertilizers to use to the farmers.\\
+R25\label{R} & \verb|DREAM| shall allow agronomists to insert the area they are responsible of;\\
   \hline
-R23\label{R} & DREAM allows the farmers to choose whether asking for help to an agronomists or to other farmers;\\
+R26\label{R} & \verb|DREAM| shall allow agronomists to choose the date of the weather forecasts to visualize;\\
   \hline
-R24\label{R} & DREAM allows the farmers to insert the a request for help with a justification;\\
+R27\label{R} & \verb|DREAM| can make predictions about the crops to plant and fertilizers to use given certain weather forecasts;\\
   \hline
-R25\label{R} & DREAM notifies other farmers/agronomists of the requests of help from other farmers;\\
+R28\label{R} & \verb|DREAM| allows farmers to choose the (best-performing) farmer or agronomist who to issue a request;\\
   \hline
-R26\label{R} & DREAM allows other farmers/agronomists to insert a message of response to the farmers who have made a request for help;\\
+R29\label{R} & \verb|DREAM| allows the farmers to send a request to a best-performing farmer or agronomist;\\
   \hline
-R27\label{R} & DREAM sends responses of help to the farmers who asked for help;\\
+R30\label{R} & \verb|DREAM| notifies (best-performing) farmers and agronomists of the requests of help from other farmers;\\
   \hline
-R28\label{R} & DREAM deletes notifications of requests for help when a response has been received.\\
+R31\label{R} & \verb|DREAM| allows best-performing farmers and agronomists to insert a message of response to the farmers who have made a request for help to them;\\
   \hline
-R29\label{R} & DREAM allows the farmers to initiate a new thread in the forum;\\
+R32\label{R} & \verb|DREAM| sends the response to the farmer who issued the corresponding request;\\
   \hline
-R30\label{R} & DREAM allows the farmers to add an answer to a thread in the forum;\\
+R33\label{R} & \verb|DREAM|EAM allows farmers to initiate a new thread in the forum;\\
   \hline
-R31\label{R} & DREAM allows the farmers to close threads in the forum;\\
-  \hline
-R32\label{R} & DREAM allows a farmer to initiate a private chat to another farmer found in the forum.\\
+R34\label{R} & \verb|DREAM|AM allows the farmers to add a post to a thread in the forum;\\
   \hline
 R33\label{R} & DREAM allows agronomists to choose the criteria to use for ranking and, potentially, some associated weights (for combinations of them);\\
   \hline
