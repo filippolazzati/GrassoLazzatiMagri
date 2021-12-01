@@ -79,7 +79,7 @@ G1\label{G1} & The \verb|policy makers| are able to identify the best-performing
   \hline
 G2\label{G2} & The \verb|policy makers| are able to understand whether the initiatives involving agronomists and best-performing farmers have a good impact on the work of the farmers.\\
 \hline
-G3\label{G3} & The \verb|farmers| visualize weather forecasts regarding their piece of land.\\
+G3\label{G3} & \verb|Farmers| visualize weather forecasts regarding their piece of land.\\
   \hline
 G4\label{G4} & The \verb|farmers| receive personalized suggestions about crops to plant and fertilizers to use.\\
   \hline
@@ -91,7 +91,7 @@ G6\label{G6} & The \verb|agronomists| can plan farm visits based on the farmers 
   \hline
   G8\label{G8} & The \verb|agronomists| visualize weather forecasts regarding the area they are responsible of.\\
   \hline
-  G9\label{G9} & The \verb|agronomists| are able to identify the best-performing farmers and the worst-performing farmers\footnotemark[1].\\
+  G9\label{G9} & The \verb|agronomists| are able to identify the best-performing farmers and the worst-performing farmers\footnotemark[1] in their area of responsibility.\\
   \hline
   \end{longtable}
 \subsection{Scope}
@@ -479,7 +479,7 @@ a raw daily plan about which farmers they should visit.
   \hline
   D9 & All the data the farmers insert is correct.\\
   \hline
-  D10 & The farmers answer to help requests when they find one on the system.\\
+  D10 & (Best-performing) farmers answer to help requests sent to them.\\
   \hline
   D11 & When a farmer does something to a certain area (for example, applies a fertilizer or harvests), he covers the whole area.\\
   \hline
@@ -494,10 +494,11 @@ a raw daily plan about which farmers they should visit.
   D16 & The agronomists are given a password – associated to their mail – by the Telangana agriculture department and such account is known to \verb|DREAM|.\\
   \hline
   D17 & Each agronomist has the competences for properly accessing the \verb|DREAM| system and using it.\\
+  
    \hline
   D18 & All the data the agronomists insert is correct.\\
   \hline
-  D19 & The agronomists reply to help requests issued by farmers.\\
+  D19 & Agronomists reply to help requests issued by farmers.\\
   \hline
   \end{longtable}
 \section{Specific requirements}
@@ -584,47 +585,50 @@ R19\label{R} & \verb|DREAM| can show the impact of a certain initiative taken by
   \hline
   R20\label{R} & \verb|DREAM| is able to find correlations among environmental factors, fertilisers adopted and crops planted with the volume of production of the farmers;\\
   \hline
-R21\label{R} & \verb|DREAM| allows farmers to choose the date of the forecasts to visualize;\\
+  R21\label{R} & \verb|DREAM| is able to send suggestions to farmers about fertilizers to use; \\
   \hline
-R22\label{R} & \verb|DREAM| is able to connect to the Telangana government website to fetch forecasts for the chosen date;\\
+  R22\label{R} & \verb|DREAM| is able to send suggestions to farmers about crops to plant; \\ 
   \hline
-R23\label{R} & \verb|DREAM| can show weather forecast data for a certain location and date.\\
+ 
+R23\label{R} & \verb|DREAM| allows farmers to choose the date of the forecasts to visualize;\\
   \hline
-R24\label{R} & \verb|DREAM| shall allow agronomists to insert the area they are responsible of;\\
+R24\label{R} & \verb|DREAM| is able to connect to the Telangana government website to fetch forecasts for the chosen date;\\
   \hline
-R25\label{R} & \verb|DREAM| shall allow agronomists to choose the date of the weather forecasts to visualize;\\
+R25\label{R} & \verb|DREAM| can show weather forecast data for a certain location and date.\\
   \hline
-R26\label{R} & \verb|DREAM| can make predictions about the crops to plant and fertilizers to use given certain weather forecasts;\\
+R26\label{R} & \verb|DREAM| shall allow agronomists to insert the area they are responsible of;\\
   \hline
-R27\label{R} & \verb|DREAM| allows farmers to choose the (best-performing) farmer or agronomist who to issue a request;\\
+R27\label{R} & \verb|DREAM| shall allow agronomists to choose the date of the weather forecasts to visualize;\\
   \hline
-R28\label{R} & \verb|DREAM| allows the farmers to send a request to a best-performing farmer or agronomist;\\
+R28\label{R} & \verb|DREAM| allows farmers to choose the (best-performing) farmer or agronomist (assigned to his area) who to issue a request;\\
   \hline
-R29\label{R} & \verb|DREAM| notifies (best-performing) farmers and agronomists of the requests of help from other farmers;\\
+R29\label{R} & \verb|DREAM| allows the farmers to send a request to a best-performing farmer or agronomist;\\
   \hline
-R30\label{R} & \verb|DREAM| allows best-performing farmers and agronomists to insert a message of response to the farmers who have made a request for help to them;\\
+R30\label{R} & \verb|DREAM| notifies (best-performing) farmers and agronomists of the requests of help from other farmers;\\
   \hline
-R31\label{R} & \verb|DREAM| sends the response to the farmer who issued the corresponding request;\\
+R31\label{R} & \verb|DREAM| allows best-performing farmers and agronomists to insert a message of response to the farmers who have made a request for help to them;\\
   \hline
-R32\label{R} & \verb|DREAM| allows farmers to initiate a new thread in the forum;\\
+R32\label{R} & \verb|DREAM| sends the response to the farmer who issued the corresponding request;\\
   \hline
-R33\label{R} & \verb|DREAM| allows the farmers to add a post to a thread in the forum;\\
+R33\label{R} & \verb|DREAM| allows farmers to initiate a new thread in the forum;\\
   \hline
-R34\label{R} & \verb|DREAM| is able to generate a daily plan of visits for each agronomist evenly distributing (with exceptions to bad-performing farmers) over the year the number of visits to each farmer;\\
+R34\label{R} & \verb|DREAM| allows the farmers to add a post to a thread in the forum;\\
   \hline
-R35\label{R} & \verb|DREAM| enforces that every farmer is assigned a visit in the daily plan of an agronomist at least twice a year;\\
+R35\label{R} & \verb|DREAM| is able to generate a daily plan of visits for each agronomist evenly distributing (with exceptions to bad-performing farmers) over the year the number of visits to each farmer;\\
   \hline
-R36\label{R} & \verb|DREAM| enforces that no agronomist in a certain area is assigned more than twice of the visits than an agronomist of the same area;
+R36\label{R} & \verb|DREAM| enforces that every farmer is assigned a visit in the daily plan of an agronomist at least twice a year;\\
+  \hline
+R37\label{R} & \verb|DREAM| enforces that no agronomist in a certain area is assigned more than twice of the visits than an agronomist of the same area;
     \hline
-R37\label{R} & \verb|DREAM| enforces that the daily plan of agronomists includes more visits to worst-performing farmers than to other ones;\\
+R38\label{R} & \verb|DREAM| enforces that the daily plan of agronomists includes more visits to worst-performing farmers than to other ones;\\
   \hline
-R38\label{R} & \verb|DREAM| allows agronomists to accept or modify -i.e.: remove, add or move a visit - the automatically generated daily plan;\\
+R39\label{R} & \verb|DREAM| allows agronomists to accept or modify -i.e.: remove, add or move a visit - the automatically generated daily plan;\\
   \hline
-R39\label{R} & \verb|DREAM| allows agronomists to confirm a daily plan at the end of the working day; \\
+R40\label{R} & \verb|DREAM| allows agronomists to confirm a daily plan at the end of the working day; \\
   \hline
- R40\label{R} & \verb|DREAM| allows agronomists to specify deviations -i.e.: remove, add or move a visit- from a daily plan at the end of the working day; \\
+ R41\label{R} & \verb|DREAM| allows agronomists to specify deviations -i.e.: remove, add or move a visit- from a daily plan at the end of the working day; \\
   \hline
-R41\label{R} & \verb|DREAM| is able to notify farmers involved by a visit of an agronomist.\\
+R42\label{R} & \verb|DREAM| is able to notify farmers involved by a visit of an agronomist.\\
   \hline
   \end{longtable}
   \newpage
@@ -637,11 +641,11 @@ This section is about showing that the previously listed requirements and domain
  \label{rg mapping}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  \hline
- \multicolumn{11}{|c|}{\cellcolor{white}$R \wedge D \vDash G$}
+ \multicolumn{10}{|c|}{\cellcolor{white}$R \wedge D \vDash G$}
  % do not write anything here
  \endfirsthead
  \hline
-  \cellcolor{yellow!30} & \cellcolor{white}G1 & \cellcolor{white}G2 & \cellcolor{white}G3 & \cellcolor{white}G4 & \cellcolor{white}G5 & \cellcolor{white}G6 & \cellcolor{white}G7 & \cellcolor{white}G8 & \cellcolor{white}G9 & \cellcolor{white}G10 \\
+  \cellcolor{yellow!30} & \cellcolor{white}G1 & \cellcolor{white}G2 & \cellcolor{white}G3 & \cellcolor{white}G4 & \cellcolor{white}G5 & \cellcolor{white}G6 & \cellcolor{white}G7 & \cellcolor{white}G8 & \cellcolor{white}G9  \\
  \endhead
  % do not write anything here
  \endfoot
@@ -649,129 +653,129 @@ This section is about showing that the previously listed requirements and domain
  \endlastfoot
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  \hline
-  \cellcolor{yellow!30} & \cellcolor{white}G1 & \cellcolor{white}G2 & \cellcolor{white}G3 & \cellcolor{white}G4 & \cellcolor{white}G5 & \cellcolor{white}G6 & \cellcolor{white}G7 & \cellcolor{white}G8 & \cellcolor{white}G9 & \cellcolor{white}G10 \\
+  \cellcolor{yellow!30} & \cellcolor{white}G1 & \cellcolor{white}G2 & \cellcolor{white}G3 & \cellcolor{white}G4 & \cellcolor{white}G5 & \cellcolor{white}G6 & \cellcolor{white}G7 & \cellcolor{white}G8 & \cellcolor{white}G9  \\
  \hline
- D1 &   &   &   &   &   &   &   &   &   &   \\
+ D1 &X   &X   &   & X  &   &   &   &   &      \\
  \hline
- D2 &   &   &   &   &   &   &   &   &   &   \\
+ D2 &X   & X  &   &  X &   &   &   &   &      \\
  \hline
- D3 &   &   &   &   &   &   &   &   &   &   \\
+ D3 &X   &  X & X  &  X &   &   &   &   &      \\
  \hline
- D4 &   &   &   &   &   &   &   &   &   &   \\
+ D4 &X   &   X&   & X  &    &   &   &   &      \\
  \hline
- D5 &   &   &   &   &   &   &   &   &   &   \\
+ D5 &X   & X  &   & X  &   &   &   &   &      \\
  \hline
- D6 &   &   &   &   &   &   &   &   &   &   \\
+ D6 &X   & X  &   & X  &   &   &   &   &      \\
  \hline
- D7 &   &   &   &   &   &   &   &   &   &   \\
+ D7 &X   & X  & X  & X  & X  & X  &   &   &      \\
  \hline
- D8 &   &   &   &   &   &   &   &   &   &   \\
+ D8 &X   & X  & X  & X  & X  & X  &   &   &      \\
  \hline
- D9 &   &   &   &   &   &   &   &   &   &   \\
+ D9 &X   & X  & X  & X  & X  & X  &   &   &      \\
  \hline
- D10 &   &   &   &   &   &   &   &   &   &   \\
+ D10 &   &   &   &   & X  &   &   &   &     \\
  \hline
- D11 &   &   &   &   &   &   &   &   &   &   \\
+ D11 &X   & X  &   & X  &   &   &   &   &      \\
  \hline
- D12 &   &   &   &   &   &   &   &   &   &   \\
+ D12 &X   & X  &   &   &   &   &   &   &      \\
  \hline
- D13 &   &   &   &   &   &   &   &   &   &   \\
+ D13 &X   & X  &   &   &   &   &   &   &      \\
  \hline
- D14 &   &   &   &   &   &   &   &   &   &   \\
+ D14 &X   & X  &   &   &   &   &   &   &      \\
  \hline
- D15 &   &   &   &   &   &   &   &   &   &   \\
+ D15 &X   & X  &   &   &X   & X  &   &   &      \\
  \hline
- D16 &   &   &   &   &   &   &   &   &   &   \\
+ D16 &X   & X  &   &   & X  & X  &   &   &      \\
  \hline
- D17 &   &   &   &   &   &   &   &   &   &   \\
+ D17 &X   & X  &   &   & X  & X  &   &   &      \\
  \hline
- D18 &   &   &   &   &   &   &   &   &   &   \\
+ D18 &X   & X  &   &   & X  & X  &   &   &      \\
  \hline
- D19 &   &   &   &   &   &   &   &   &   &   \\
+ D19 &   &   &   &   & X  &   &   &   &      \\
  \hline
- R1 & X & X & X &   & X &   & X &   &   & X \\
+ R1 & X & X &  & X  &  &   & X &   &    \\
  \hline
- R2 & X & X & X &   & X &   & X &   &   & X \\
+ R2 & X & X &  & X  &  &   & X &   &    X \\
  \hline
- R3 & X & X & X &   & X &   & X &   &   & X \\
+ R3 & X & X &  & X  &  &   & X &   &    X \\
  \hline
- R4 & X & X & X & X & X &   & X &   &   & X \\
+ R4 & X & X &  &  &  &   & X &   &    X \\
  \hline
- R5 & X &   &   &   &   &   & X &   &   & X \\
+ R5 & X & X  & X  & X  & X  & X  & X &   &    X \\
  \hline
- R6 & X &   &   &   &   &   &   &   &   &   \\
+ R6 & X & X  &   & X  &   &   &   &   &      \\
  \hline
- R7 & X &   &   &   &   &   &   &   &   &   \\
+ R7 & X & X  &   & X  &   &   &   &   &      \\
  \hline
- R8 & X &   &   &   &   &   &   &   &   &   \\
+ R8 & X & X  &   & X  &   &   &   &   &     \\
  \hline
- R9 &   & X &   &   &   &   &   &   &   &   \\
+ R9 &X   & X &   &  X &   &   &   &   &      \\
  \hline
- R10 &   & X & X &   &   &   &   &   &   &   \\
+ R10 &X   & X &  & X  &   &   &   &   &     \\
  \hline
- R11 &   & X & X &   &   &   &   &   &   &   \\
+ R11 &X   & X &  &   &   &   &   &   &      \\
  \hline
- R12 &   & X &   &   &   &   &   &   &   &   \\
+ R12 &X   &  &   &   &   &   &   &   &      \\
  \hline
- R13 &   & X &   &   &   &   &   &   &   &   \\
+ R13 &X   &  &   &   &   &   &   &   &      \\
  \hline
- R14 &   &   & X &   & X &   &   &   &   &   \\
+ R14 & X  &   &  &   &  &   &   &   &      \\
  \hline
- R15 &   &   & X &   &   &   &   &   &   &   \\
+ R15 & X  &   &  &   & X  & X  &   &   &      \\
  \hline
- R16 &   &   &   & X &   &   &   &   &   &   \\
+ R16 &   & X  &   &  &   &   &   &   &      \\
  \hline
- R17 &   &   &   & X & X &   &   &   & X &   \\
+ R17 &   & X  &   &  &  &   &   &   & X    \\
  \hline
- R18 &   &   &   & X &   &   &   &   & X &   \\
+ R18 &   & X  &   &  &   &   &   &   & X    \\
  \hline
- R19 &   &   &   &   &   &   & X &   & X &   \\
+ R19 &   & X  &   &   &   &   & X &   & X    \\
  \hline
- R20 &   &   &   &   &   &   &   &   & X &   \\
+ R20 &   &   &   & X  &   &   &   &   & X    \\
  \hline
- R21 &   &   &   &   & X &   &   &   &   &   \\
+ R21 &   &   &   & X  &   &   &   &   & X    \\
  \hline
- R22 &   &   &   &   & X &   &   &   &   &   \\
+ R22 &   &   &   & X  &   &   &   &   & X    \\
  \hline
- R23 &   &   &   &   &   & X &   &   &   &   \\
+ R23 &   &   & X  &   &  &   &   &   &      \\
  \hline
- R24 &   &   &   &   &   & X &   &   &   &   \\
+ R24 &   &   & X  & X  &  &   &   &   &      \\
  \hline
- R25 &   &   &   &   &   & X &   &   &   &   \\
+ R25 &   &   & X  &   &   &  &   &   &      \\
  \hline
- R26 &   &   &   &   &   & X &   &   &   &   \\
+ R26 &   &   &   &   & X  & X &   &   &      \\
  \hline
- R27 &   &   &   &   &   & X &   &   &   &   \\
+ R27 &   &   &   &   &   &  &   &   &      \\
  \hline
- R28 &   &   &   &   &   & X &   &   &   &   \\
+ R28 &   &   &   &   & X  &  &   &   &      \\
  \hline
- R29 &   &   &   &   &   &   &   & X &   &   \\
+ R29 &   &   &   &   & X  &  &   &   &      \\
  \hline
- R30 &   &   &   &   &   &   &   & X &   &   \\
+ R30 &   &   &   &   & X  &  &   &   &      \\
  \hline
- R31 &   &   &   &   &   &   &   & X &   &   \\
+ R31 &   &   &   &   & X  &   &   & X &      \\
  \hline
- R32 &   &   &   &   &   &   &   & X &   &   \\
+ R32 &   &   &   &   & X  &   &   & X &      \\
  \hline
- R33 &   &   &   &   &   &   & X &   &   & X \\
+ R33 &   &   &   &   &   &   &   & X &      \\
  \hline
- R34 &   &   &   &   &   &   & X &   &   & X \\
+ R34 &   &   &   &   &   &   &   & X &      \\
  \hline
- R35 &   &   &   &   &   &   & X &   &   & X \\
+ R35 &   &   &   &   &   & X  & X &   &    X \\
  \hline
- R36 &   &   &   &   &   &   & X &   &   &   \\
+ R36 &   &   &   &   &   & X  & X &   &    X \\
  \hline
- R37 &   &   &   &   &   &   & X &   &   &   \\
+ R37 &   &   &   &   &   & X  & X &   &    X \\
  \hline
- R38 &   &   &   &   &   &   & X &   &   &   \\
+ R38 &   &   &   &   &   & X  & X &   &      \\
  \hline
- R39 &   &   &   &   &   &   & X &   &   &   \\
+ R39 &   &   &   &   &   & X  & X &   &      \\
  \hline
- R40 &   &   &   &   &   &   & X &   &   &   \\
+ R40 &   &   &   &   &   & X  & X &   &      \\
  \hline
- R41 &   &   &   &   &   &   & X &   &   &   \\
+ R41 &   &   &   &   &   & X  & X &   &      \\
  \hline
- R42 &   &   &   &   &   &   & X &   &   &   \\
+ R42 &   &   &   &   &   &  X & X &   &      \\
  \hline
 \end{longtable}
 Now an explanation of why a certain goal is entailed by certain requirements and certain domain assumptions is provided.
@@ -844,141 +848,232 @@ Now an explanation of why a certain goal is entailed by certain requirements and
   
 \end{itemize}
 
-In order to achieve this goal, \verb|DREAM| must be able to collect all the data that may be correlated to the performances of a farmer (R1, R2, R3, R4); moreover, some criteria to assign weights to the various factors have to be chosen (R5, R6, R7). Finally, \verb|DREAM| must be able to show the results to the user (R8).
+In order to achieve this goal, \verb|DREAM| must be able to collect all the data that may be related to the performances of farmers (R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11); moreover, it must be able to order farmers according to specified criteria - possibly restricting the scope of ordering spatially or temporally - (R12, R13, R14). Finally, policy makers and agronomists are able to mark farmers as best- or worst- performing (R15).
+Data used by \verb|DREAM| to rate the farmers should be correct.
+\newline
 
 \vspace{5mm}
 \textbf{G2: The policy makers are able to understand whether the initiatives involving agronomists and best-performing farmers have a good impact on the work of the farmers.}
 \begin{itemize}
-    \item R1 DREAM collects and accesses data like soil moisture, weather reports (temperature, ...), water used for irrigation with a timestamp and the concerned area;
+    \item R1: \verb|DREAM| collects soil moisture data from the soil moisture sensors;
+    \item R2: \verb|DREAM| accesses weather reports data provided by the TSDPS system;
 
-    \item R2 DREAM collects feedbacks of agronomists about farmers and problems faced by farmers with a timestamp and the concerned farmer;
+    \item R3: \verb|DREAM| collects watering data from the water irrigation system;
 
-    \item R3 DREAM collects data about farmers, like volume of production, fertilizers adopted, ... with the concerned farmer and the relative period;
+    \item R4: \verb|DREAM| shall allow agronomists to insert feedback about the farmers they visited;
 
-    \item R4 DREAM shall store the area of the farm of each farmer;
+    \item R5: \verb|DREAM| shall allow farmers to insert the location and the area of their plot of land;
 
-    \item R9 DREAM shall store the initiatives involving agronomists and best-performing farmers currently adopted, along with the farmers and agronomists involved and the period of the initiative;
+    \item R6: \verb|DREAM| shall allow farmers to insert the type of products they grow in a certain area of their farms;
 
-    \item R10 DREAM can compare different periods of farmers work according to the production volume, the fertilizers adopted, ...;
+    \item R7: \verb|DREAM| shall allow farmers to insert data about their sowing activity;
 
-    \item R11 DREAM can compare different periods of farmers work according to environmental factors (e.g. data in weather reports, soil moisture, ...);
+    \item R8: \verb|DREAM| shall allow farmers to insert data about their planting activity;
+    
+    \item R9: \verb|DREAM| shall allow farmers to insert data about their harvesting activity;
+    
+    \item R10: \verb|DREAM| shall allow farmers to insert data about the irrigation of their plantations;
+    
+    \item R11: \verb|DREAM| shall allow farmers to insert descriptions of problems they face;
 
-    \item R12 DREAM allows policy makers to choose the old period to compare with, and according to which initiative decision;
+    \item R16: \verb|DREAM| can compare different time periods of a farmer work according to various production criteria (e.g. production volume, fertilizers adopted, fraction of harvested plants over sowed ones, etc);
+  
+    \item R17: \verb|DREAM| can compare different time periods of a  farmer work with respect to environmental factors (e.g. weather reports data, soil moisture, ...);
 
-    \item R13 DREAM can show the impact of a certain initiative during a certain period.
+    \item R18: \verb|DREAM| allows policy makers to choose an initiative taken by an agronomist or a farmer to help a farmer - i.e., visit to the farm or reply to a question - and two time periods of the farmer to compare the two time periods;
+
+    \item R19: \verb|DREAM| can show the impact of a certain initiative taken by an agronomist or a farmer to help a farmer - i.e., visit to the farm or reply to a question - during a certain time period.
+    
+    \item D1: The location of the sensors is known to the \verb|DREAM| system;
+    
+    \item D2: The location of the water irrigation systems is known to the \verb|DREAM| system;
+    
+    \item D3: The TSDPS provides weather forecasts and reports which can be accessed by \verb|DREAM|;
+    
+    \item D4: The weather reports provide sufficiently accurate data;
+    
+    \item D5: The water irrigation system provides data with a sufficiently accurate precision;
+    
+    \item D6: Soil moisture sensors provide data with a sufficiently accurate precision;
+    
+    \item D7: Each farmer owns at least one device connected to Internet;
+    
+    \item D8: Each farmer has the competences for properly accessing the \verb|DREAM| system and registering to it;
+    
+    \item D9: All the data the farmers insert is correct;
+    
+    \item D11: When a farmer does something to a certain area (for example, applies a fertilizer or harvests), he covers the whole area;
+    
+    \item D12: Each policy maker owns a personal computer, connected to the Internet network and with a browser installed;
+    
+    \item D13: Each policy maker has the competences for properly accessing the \verb|DREAM| system and using it;
+    
+    \item D14: Every policy maker is given a password – associated to his e-mail – by the Telangana agriculture department, and such account is known to \verb|DREAM|.
+  
+    \item D15: Each agronomist owns a device connected to the Internet network and with a browser installed.
+  
+    \item D16: The agronomists are given a password – associated to their mail – by the Telangana agriculture department and such account is known to \verb|DREAM|.
+  
+    \item D17: Each agronomist has the competences for properly accessing the \verb|DREAM| system and using it.
+   
+    \item D18: All the data the agronomists insert is correct.
 \end{itemize}
-Goal G2 is achieved by forcing \verb|DREAM| to collect all the data that may be involved in correlations between initiatives and impact on work (R1, R2, R3, R4, R9); furthermore, \verb|DREAM| must be able to compare different periods of farmers work (R10, R11) according to the choice of the policy maker (R12) and to show the results (R13).
+
+Goal G2 is achieved \verb|DREAM| collecting all the data that may be involved in correlations between initiatives and impact on work (R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11); furthermore, \verb|DREAM| must be able to compare different periods of farmers work (R16, R17) according to the choice of the policy maker (R18) and to show the results (R19).
+Data used by \verb|DREAM| regarding the farmers' work, the agronomists' interventions and the natural phenomena influencing agriculture (weather, soil moisture, water irrigation) should be correct for the goal to be achieved.
 
 \vspace{5mm}
-\textbf{G3 The policy makers receive high-level reports about the impact of some environmental factors and the volume of production of the farmers.}
+
+\textbf{G3 Farmers visualize weather forecasts regarding their piece of land.}
 \begin{itemize}
-    \item R1 DREAM collects and accesses data like soil moisture, weather reports (temperature, ...), water used for irrigation with a timestamp and the concerned area;
+    \item R5: \verb|DREAM| shall allow farmers to insert the location and the area of their plot of land;
 
-    \item R2 DREAM collects feedbacks of agronomists about farmers and problems faced by farmers with a timestamp and the concerned farmer;
-
-    \item R3 DREAM collects data about farmers, like volume of production, fertilizers adopted, ... with the concerned farmer and the relative period;
-
-    \item R4 DREAM shall store the area of the farm of each farmer;
-
-    \item R10 DREAM can compare different periods of farmers work according to the production volume, the fertilizers adopted, ...;
-
-    \item R11 DREAM can compare different periods of farmers work according to environmental factors (e.g. data in weather reports, soil moisture, ...);
-
-    \item R14 DREAM can apply some machine learning techniques to understand the correlation among environmental factors, fertilisers adopted and crops planted with the volume of production of the farmers;
-
-    \item R15 DREAM can show reports about the correlation among environmental factors and the volume of production of the farmers.
+    \item R23: \verb|DREAM| allows farmers to choose the date of the forecasts to visualize;
+  
+    \item R24: \verb|DREAM| is able to connect to the Telangana government website to fetch forecasts for the chosen date;
+  
+    \item R25: \verb|DREAM| can show weather forecast data for a certain location and date.
+    
+    \item D3: The TSDPS provides weather forecasts and reports which can be accessed by \verb|DREAM|.
+    
+    \item D7: Each farmer owns at least one device connected to Internet;
+    
+    \item D8: Each farmer has the competences for properly accessing the \verb|DREAM| system and registering to it;
+    
+    \item D9: All the data the farmers insert is correct;
 \end{itemize}
-This goal is reached by making \verb|DREAM| able to apply data analisys techniques (R14) to the relevant data (R1, R2, R3, R4); such data must be compared by the system (R10, R11) and the results must be shown (R15).
+In order to achieve this goal, \verb|DREAM| must fetch the forecasts (R22) according to the area of the farmer (R5) and the selected date (R21) and it must be able to show the results (R23).
 
 \vspace{5mm}
-\textbf{G4 The farmers visualize weather forecasts regarding their piece of land.}
+\textbf{G4 The farmers receive personalized suggestions about crops to plant and fertilizers to use.}
 \begin{itemize}
-    \item R4 DREAM shall store the area of the farm of each farmer;
+    \item R1: \verb|DREAM| collects soil moisture data from the soil moisture sensors;
+    \item R2: \verb|DREAM| accesses weather reports data provided by the TSDPS system;
 
-    \item R16 \verb|DREAM| allows farmers to choose the date of the forecasts to visualize;
+    \item R3: \verb|DREAM| collects watering data from the water irrigation system;
 
-    \item R17 \verb|DREAM| is able to connect to the Telengana government website to fetch forecasts for the chosen date;
+    \item R5: \verb|DREAM| shall allow farmers to insert the location and the area of their plot of land;
 
-    \item R18 DREAM can show a map with the forecast.
+    \item R6: \verb|DREAM| shall allow farmers to insert the type of products they grow in a certain area of their farms;
+
+    \item R7: \verb|DREAM| shall allow farmers to insert data about their sowing activity;
+
+    \item R8: \verb|DREAM| shall allow farmers to insert data about their planting activity;
+    
+    \item R9: \verb|DREAM| shall allow farmers to insert data about their harvesting activity;
+    
+    \item R10: \verb|DREAM| shall allow farmers to insert data about the irrigation of their plantations;
+    
+    \item R20: \verb|DREAM| is able to find correlations among environmental factors, fertilisers adopted and crops planted with the volume of production of the farmers;
+ 
+    \item R21: \verb|DREAM| is able to send suggestions to farmers about fertilizers to use;
+    
+    \item R22: \verb|DREAM| is able to send suggestions to farmers about crops to plant; 
+ 
+    \item R24: \verb|DREAM| is able to connect to the Telangana government website to fetch forecasts for the chosen date;
+    
+    \item D1: The location of the sensors is known to the \verb|DREAM| system;
+    
+    \item D2: The location of the water irrigation systems is known to the \verb|DREAM| system;
+    
+    \item D3: The TSDPS provides weather forecasts and reports which can be accessed by \verb|DREAM|;
+    
+    \item D4: The weather reports provide sufficiently accurate data;
+    
+    \item D5: The water irrigation system provides data with a sufficiently accurate precision;
+    
+    \item D6: Soil moisture sensors provide data with a sufficiently accurate precision;
+    
+    \item D7: Each farmer owns at least one device connected to Internet;
+    
+    \item D8: Each farmer has the competences for properly accessing the \verb|DREAM| system and registering to it;
+    
+    \item D9: All the data the farmers insert is correct;
+    
+    \item D11: When a farmer does something to a certain area (for example, applies a fertilizer or harvests), he covers the whole area;
 \end{itemize}
-In order to achieve this goal, \verb|DREAM| must fetch the forecasts (R17) according to the area of the farmer (R4) and the selected date (R16) and it must be able to show the results (R18).
+Goal G4 requires that all the relevant data is known to \verb|DREAM| (R1, R2, R3, R5, R6, R7, R8, R9, R10), that \verb|DREAM| is able to retrieve weather forecasts (R24) and that \verb|DREAM| is able to find correlations among the production of the farmers, environmental factors and fertilizers using past data (R20) in order to make predictions for the future, provided to farmers in the form of suggestions (R21, R22).
 
 \vspace{5mm}
-\textbf{G5 The farmers receive personalized suggestions about crops to plant and fertilizers to use.}
+\textbf{G5 The farmers ask for and receive help from agronomists and other farmers.}
 \begin{itemize}
-    \item R1 \verb|DREAM| collects and accesses data like soil moisture, weather reports (temperature, ...), water used for irrigation with a timestamp and the concerned area;
+    \item R5: \verb|DREAM| shall allow farmers to insert the location and the area of their plot of land;
+    
+    \item R15: \verb|DREAM| allows policy makers and agronomists to mark a farmer as best-performing or worst-performing;
+    
+    \item R26: \verb|DREAM| shall allow agronomists to insert the area they are responsible of;
+  
+    \item R28: \verb|DREAM| allows farmers to choose the (best-performing) farmer or agronomist (assigned to his area) who to issue a request;
+  
+    \item R29: \verb|DREAM| allows the farmers to send a request to a best-performing farmer or agronomist;
+    
+    \item R30: \verb|DREAM| notifies (best-performing) farmers and agronomists of the requests of help from other farmers;
 
-    \item R2 \verb|DREAM| collects feedbacks of agronomists about farmers and problems faced by farmers with a timestamp and the concerned farmer;
+    \item R31: \verb|DREAM| allows best-performing farmers and agronomists to insert a message of response to the farmers who have made a request for help to them;
 
-    \item R3 DREAM collects data about farmers, like volume of production, fertilizers adopted, ... with the concerned farmer and the relative period;
+    \item R32: \verb|DREAM| sends the response to the farmer who issued the corresponding request;
+    
+    \item D7: Each farmer owns at least one device connected to Internet;
+    
+    \item D8: Each farmer has the competences for properly accessing the \verb|DREAM| system and registering to it;
+    
+    \item D9: All the data the farmers insert is correct;
+    
+    \item D10: (Best-performing) farmers answer to help requests sent to them;
+    
+    \item D15: Each agronomist owns a device connected to the Internet network and with a browser installed;
 
-    \item R4 DREAM shall store the area of the farm of each farmer;
+    \item D16: The agronomists are given a password – associated to their mail – by the Telangana agriculture department and such account is known to \verb|DREAM|;
 
-    \item R17 \verb|DREAM| is able to connect to the Telengana government website to fetch forecasts for the chosen date;
+    \item D17: Each agronomist has the competences for properly accessing the \verb|DREAM| system and using it;
+  
+    \item D18: All the data the agronomists insert is correct;
+  
+    \item D19: Agronomists reply to help requests issued by farmers;
 
-    \item R14 DREAM can apply some machine learning techniques to understand the correlation among environmental factors, fertilisers adopted and crops planted with the volume of production of the farmers;
-
-    \item R21 DREAM can use the trained machine learning algorithms to make predictions about the crops to plant and fertilizers to use given certain weather forecasts;
-
-    \item R22 DREAM can show the results of predictions about crops to plant and fertilizers to use to the farmers.
-
-    \item \color{red}(what about agronomists' suggestions?).
 \end{itemize}
-Goal G5 requires that all the relevant data is known to \verb|DREAM| (R1, R2, R3, R4), that \verb|DREAM| is able to retrieve weather forecasts (R17) and that \verb|DREAM| is able to train some algorithms using past data (R14) in order to make predictions for the future (R21). Of course the system must be able to show the results (R22).
+In order to achieve this goal, the system shall be able to identify the possible targets of help requests - best-performing farmers or agronomist assigned to the area of the requesting farmer - (R5, R15, R26), and to connect who asks for help to who replies (R28, R29, R30, R31, R32).
 
 \vspace{5mm}
-\textbf{G6 The farmers ask for and receive help from agronomists and other farmers.}
+\textbf{G6 The agronomists can plan farm visits based on the farmers performances.}
 \begin{itemize}
-    \item R23 DREAM allows the farmers to choose whether asking for help to an agronomists or to other farmers;
+    \item R5: \verb|DREAM| shall allow farmers to insert the location and the area of their plot of land;
+    
+    \item R15: \verb|DREAM| allows policy makers and agronomists to mark a farmer as best-performing or worst-performing;
+    
+    \item R26: \verb|DREAM| shall allow agronomists to insert the area they are responsible of;
+    
+    \item R35: \verb|DREAM| is able to generate a daily plan of visits for each agronomist evenly distributing (with exceptions to bad-performing farmers) over the year the number of visits to each farmer;
 
-    \item R24 DREAM allows the farmers to insert the a request for help with a justification;
+    \item R36: \verb|DREAM| enforces that every farmer is assigned a visit in the daily plan of an agronomist at least twice a year;
 
-    \item R25 DREAM notifies other farmers/agronomists of the requests of help from other farmers;
+    \item R37: \verb|DREAM| enforces that no agronomist in a certain area is assigned more than twice of the visits than an agronomist of the same area;
 
-    \item R26 DREAM allows other farmers/agronomists to insert a message of response to the farmers who have made a request for help;
+    \item R38: \verb|DREAM| enforces that the daily plan of agronomists includes more visits to worst-performing farmers than to other ones;
 
-    \item R27 DREAM sends responses of help to the farmers who asked for help;
+    \item R39: \verb|DREAM| allows agronomists to accept or modify -i.e.: remove, add or move a visit - the automatically generated daily plan;
 
-    \item R28 DREAM deletes notifications of requests for help when a response has been received.
+    \item R40: \verb|DREAM| allows agronomists to confirm a daily plan at the end of the working day; 
+
+    \item R41: \verb|DREAM| allows agronomists to specify deviations -i.e.: remove, add or move a visit- from a daily plan at the end of the working day; 
+
+    \item R42: \verb|DREAM| is able to notify farmers involved by a visit of an agronomist.
+    
+    \item D7: Each farmer owns at least one device connected to Internet;
+    
+    \item D8: Each farmer has the competences for properly accessing the \verb|DREAM| system and registering to it;
+    
+    \item D9: All the data the farmers insert is correct;
+    
+    \item D15: Each agronomist owns a device connected to the Internet network and with a browser installed;
+
+    \item D16: The agronomists are given a password – associated to their mail – by the Telangana agriculture department and such account is known to \verb|DREAM|;
+
+    \item D17: Each agronomist has the competences for properly accessing the \verb|DREAM| system and using it;
+  
+    \item D18: All the data the agronomists insert is correct;
 \end{itemize}
-The system must be able to establish a connection among those who ask for help and those who can answer (R23, R24, R25, R26, R27). When a request has been satisfied, the request cannot be answered anymore (R28).
-
-\vspace{5mm}
-\textbf{G7 The agronomists can plan farm visits based on the farmers performances.}
-\begin{itemize}
-    \item R19 DREAM shall store the area each agronomist is responsible of;
-
-    \item R1 \verb|DREAM| collects and accesses data like soil moisture, weather reports (temperature, ...), water used for irrigation with a timestamp and the concerned area;
-
-    \item R2 \verb|DREAM| collects feedbacks of agronomists about farmers and problems faced by farmers with a timestamp and the concerned farmer;
-
-    \item R3 DREAM collects data about farmers, like volume of production, fertilizers adopted, ... with the concerned farmer and the relative period;
-
-    \item R4 DREAM shall store the area of the farm of each farmer;
-
-    \item R5 DREAM can make use of different criteria (namely, which data like soil moisture... use to compare farmers) and/or combinations of them to rank farmers;
-
-    \item R33 DREAM allows agronomists to choose the criteria to use for ranking and, potentially, some associated weights (for combinations of them);
-
-    \item R34 DREAM allows agronomists to choose the period and the area to consider for ranking the farmers;
-
-    \item R35 DREAM can show a list of farmers with the corresponding rankings and allow agronomists to mark them as best or worst-performing;
-
-    \item R36 DREAM shall store all the dates of the visits received by a certain farmer, and the agronomist who performed the visit;
-
-\item R37 DREAM is able to generate a daily plan of visits for each agronomist evenly distributing (with exceptions to bad-performing farmers) over the year the number of visits to each farmer;
-
-\item R38 DREAM is able to generate a daily plan of visits for each agronomist forcing every farmer to be visited at least twice a year;
-
-\item R39 DREAM is able to generate a daily plan of visits for each agronomist such that farmers with lower rankings are visited more often than those with higher rankings;
-
-\item R40 DREAM allows the agronomists to accept or modify the autogenerated daily plan;
-
-\item R41 DREAM is able to check whether the modifies to a daily plan added by an agronomist are acceptable;
-
-\item R42 DREAM is able to notify the farmers involved by a visit of an agronomist.
-\end{itemize}
-In order to achieve this goal, \verb|DREAM| must be able to rank the various farmers (all the requirements of G10, namely R1, R2, R3, R5, R33, R34, R35) of the area of the agronomist (R4, R19) and remember how many times every farmer has been visited (R36). Then, \verb|DREAM| is required to be able to generate a proposal of daily plan (R37, R38, R39) which can be modified or accepted by the agronomist (R40, R41). Finally, \verb|DREAM| must be able to notify the involved farmer of the meeting (R42).
+In order to achieve this goal, \verb|DREAM| must be able to identify farmers belonging to the area of the agronomist (R5, R26) and among them the ones who are not performing well, that are the ones marked as worst-performing by policy makers and agronomists (R15). Then, \verb|DREAM| must be able to generate a proposal of daily plan (R35, R36, R37, R38) which can be modified or accepted by the agronomist (R39, R40, R41). Finally, \verb|DREAM| must be able to notify the involved farmer of the meeting (R42).
 
 \vspace{5mm}
 \textbf{G8 The farmers can interact with other farmers exchanging opinions about agriculture.}
