@@ -1,0 +1,22 @@
+title GetSoilSensorsData
+
+participant DREAM
+participant Soil sensor
+
+activate DREAM
+activate Soil sensor
+loop i < 3 && data is not arrived
+DREAM->Soil sensor:request_data()
+DREAM<<--Soil sensor: answer
+end
+deactivate Soil sensor
+alt data is arrived
+activate DREAM
+DREAM->DREAM: store_data()
+deactivate DREAM
+else data is not arrived
+activate DREAM
+DREAM->DREAM:sensor_not_reachable()
+deactivate DREAM
+end
+deactivate DREAM
