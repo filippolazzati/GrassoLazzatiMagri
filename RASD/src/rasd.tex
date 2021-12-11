@@ -524,8 +524,14 @@ The following software interfaces are required to make \verb|DREAM| work properl
 \subsubsection{Communication interfaces}
 As far as the communication interfaces are concerned, \verb|DREAM| uses:
 \begin{enumerate}
+    \color{red}
     \item the HTTP protocol at the application layer (layer 7 of the stack) to exchange information (web pages) with the clients (users’ devices) and to access the data offered by the Telangana’s government systems;
-    \item specific protocols, such as MQTT\footnote{\url{https://mqtt.org/}.} for communication to the sensor hub.
+    COMUNICAZION FRA CLIENT E SERVER DI DREAM NON VA IN RASD, POICHÉ NEL RASD IL SISTEMA È VISTO DALL'ESTERNO, SENZA GUARDARE I SUOI COMPONENTI INTERNI
+    \color{black}
+    \item specific protocols, such as MQTT\footnote{\url{https://mqtt.org/}.} for communication to the sensor hub. 
+    \color{red}
+    siamo sicuri? mqtt è publish-subscribe, probabilmente verrà usato fra i sensori e l'hub; noi con l'hub potremmo usare TCP
+    \color{black}
 \end{enumerate}
 
 \subsection{Functional Requirements}
@@ -770,7 +776,7 @@ This section is about showing that the previously listed requirements and domain
  R31 &   &   &   &   & X  &  &   &   &      \\
  \hline
  R32 &   &   &   &   & X  &  &   &   &      \\
- \hine
+ \hline
  R33 &   &   &   &   & X  &  &   &   &      \\
  \hline
  R34 &   &   &   &   & X  &   &   &  &      \\
@@ -796,10 +802,10 @@ This section is about showing that the previously listed requirements and domain
  R44 &   &   &   &   &   & X  &  &   &      \\
  \hline
  R45 &   &   &   &   &   &  X &  &   &      \\
+ \hline
  R46 &   &   &   &   &   &  X &  &   &      \\
  \hline
  R47 &   &   &   &   &   & X  &  &   &      \\
- \hline
  \hline
 \end{longtable}
 Now an explanation of why a certain goal is entailed by certain requirements and certain domain assumptions is provided.
@@ -1274,11 +1280,13 @@ The next day, Ikbal opens again the “Forum” section of the \verb|DREAM| webs
 %\paragraph{Use case 1 - InsertProblems}
 %\begin{center} %leave it to start the table at newline
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 1%%%%%%%%%%%%%%%%%%%%%%%
 \rowcolors{2}{blue!15}{blue!25}
+\centering
 \begin{longtable}{|p{3.5cm}|m{8cm}|}
  \hline
  \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 1}} \\
- % do not write anything here
+  % do not write anything here
  \endfirsthead
  % do not write anything here
  \endhead
@@ -1287,45 +1295,48 @@ The next day, Ikbal opens again the “Forum” section of the \verb|DREAM| webs
  % do not write anything here
  \endlastfoot
  \hline
- Name & InsertProblems\\
+ Name & RegisterFarmer\\
  \hline
  Actor & Farmer\\
  \hline
- Entry condition & The farmer faces a problem and decides to communicate it on \verb|DREAM|\\
+ Entry condition & The farmer does not have an account and wants to enrol in the \verb|DREAM| system.\\
  \hline
  Event flow & \begin{enumerate}
-    \item The farmer accesses the system through its username and password;
-    \item in the homepage, the farmer selects from the menu the item "insert problem";
-    \item the farmer selects the kind of problem, when it occurred and how much it lasted;
-    \item the farmer gives a brief description of the problem;
-    \item the farmer selects whether he likes to meet as soon as possible an agronomist;
-    \item the farmer clicks on the "send" button;
-    \item \verb|DREAM| automatically detects where is the farm from the account of the farmer;
-    \item \verb|DREAM| stores the data and eventually takes into account the request of a meeting with an agronomist.
-    \color{red}
-    7 E 8 DA TOGLIERE?
-    \color{black}
+    \item The farmer accesses to the \verb|DREAM| landing page;
+    \item \verb|DREAM| shows a form for logging in and a button "Sign Up Farmer".
+    \item The farmer selects the "Sign Up Farmer" button.
+    \item \verb|DREAM| shows a form to insert the farmer's personal data -name, surname, birthdate-, his/her e-mail, a password and the location of his/her farm.
+    \item The farmer inserts his name, surname, birthdate, e-mail, password and the location of his/her farm.
+    \item The farmer clicks on the "Sign Up" button.
+    \item \verb|DREAM| sends an e-mail to the inserted e-mail address, containing a confirm link to complete the enrolling.
+    \item \verb|DREAM| shows a message advising the farmer to check his e-mail and click on the confirm link. 
+    \item The farmer clicks on the confirm link sent in the e-mail.
  \end{enumerate}\\
  \hline
- Exit condition & The problem is saved in the \verb|DREAM| database and, if requested, an agronomist is scheduled to meet the farmer in the next days. The farmer is notified about the meeting.\\
+ Exit condition & \verb|DREAM| shows a confirm of having created the account correctly and a link to the farmer's homepage.\\
  \hline
  Exceptions & \begin{itemize}
-     \item If the kind of problem is not present, the farmer can add it by its own.
-     \item In case no agronomist can be scheduled for the current week, the farmer is notified about the problem and an agronomist will be found for the next week.
+     \item If the e-mail inserted by the farmer is already a used one in the \verb|DREAM| system, an error message is shown.
+     \item If one of the data inserted by the farmer is empty, an error message is shown.
+     \item If the password is shorter than 10 characters, an error message is shown.
+     \item If the farmer 24 hours after having inserted his data has not clicked on the confirm link, the signing up process is canceled and if the farmer clicks on the link an error message is shown.
  \end{itemize}\\
  \hline
- Special requirements & \begin{itemize}
-     \item The availability of an agronomist is checked in less than 3 second;
-     \item the page is refreshed in less than 1 second.
+ Special requirements &
+ \begin{itemize}
+     \item The e-mail with the confirm link should be sent by \verb|DREAM| in less than 5 seconds.
+     \item After the farmer has clicked on the confirm link, the confirm message should be shown in less than 3 seconds.
  \end{itemize}\\
  \hline
 \end{longtable}
+
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.75]{sequence_diagrams/InsertProblems}
-    \caption{Sequence diagram for the InsertProblems use case}
+    \includegraphics[scale=0.60]{sequence_diagrams/RegisterAgronomist}
+    \caption{Sequence diagram for the RegisterFarmer use case}
 \end{figure}
-%%%%%%%%%%%TABLE 2%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 2%%%%%%%%%%%%%%%%%%%%%%%
 
 \centering
 \begin{longtable}{|p{3.5cm}|m{8cm}|}
@@ -1340,43 +1351,35 @@ The next day, Ikbal opens again the “Forum” section of the \verb|DREAM| webs
  % do not write anything here
  \endlastfoot
  \hline
- Name & InsertProductionData\\
+ Name & RegisterAgronomist\\
  \hline
- Actor & Farmer\\
+ Actor & Agronomist\\
  \hline
- Entry condition & The farmer gets the results of a crop\\
+ Entry condition & The agronomist logs in the \verb|DREAM| system for the first time.\\
  \hline
  Event flow & \begin{enumerate}
-    \item The farmer accesses the system through its username and password;
-    \item in the homepage, the farmer selects from the menu the item "insert productions";
-    \item the farmer inserts the picked product, when it was planted, the volume planted, the volume picked;
-    \item the farmer optionally gives a brief description of the harvest or an observation he made;
-    \item the farmer clicks on the "send" button;
-    \item \verb|DREAM| automatically detects where is the farm from the account of the farmer;
-    \item \verb|DREAM| stores the data.
-    \color{red}
-    TOGLIERE 6 E 7?
-    Inoltre qui sembra che un farmer possa inserire i dati riguardanti la sua attività solamente al momento del raccolto, mentre secondo me avrebbe più senso se potesse inserire in ogni momento cosa ha seminato/piantato/fertilizzato/irrigato/raccolto
-    \color{black}
+    
  \end{enumerate}\\
  \hline
- Exit condition & The data is saved in the \verb|DREAM| database and the farmer is notified.\\
+ Exit condition & The agronomist is shown the agronomist's homepage of the \verb|DREAM| system.\\
  \hline
  Exceptions & \begin{itemize}
-     \item If the kind of product is not present, the farmer can add it by its own.
+     \item If the agronomist inserts an empty name, surname or birthdate, an error is shown.
+     \item If the agronomist does not select the area which he/she is assigned to, an error is shown.
  \end{itemize}\\
  \hline
  Special requirements & \begin{itemize}
-     \item the page is refreshed in less than 1 second.
+     \item After clicking on the "Done" button, the agronomist must be shown the homepage in less than 3 seconds.
  \end{itemize}\\
  \hline
 \end{longtable}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.75]{sequence_diagrams/InsertProductions}
-    \caption{Sequence diagram for the InsertProductions use case}
+    \includegraphics[scale=0.60]{sequence_diagrams/RegisterAgronomist}
+    \caption{Sequence diagram for the RegisterAgronomist use case}
 \end{figure}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 3%%%%%%%%%%%%%%%%%%%%%%%
 
 \centering
@@ -1392,47 +1395,37 @@ The next day, Ikbal opens again the “Forum” section of the \verb|DREAM| webs
  % do not write anything here
  \endlastfoot
  \hline
- Name & RegisterAgronomist\\
+ Name & LogIn\\
  \hline
- Actor & Agronomist\\
+ Actor & User (either a Farmer, an Agronomist or a Policy Maker)\\
  \hline
- Entry condition & The agronomist does not have an account.\\
+ Entry condition & The user is not logged in the system and wants to log in.\\
  \hline
  Event flow & \begin{enumerate}
-    \item The agronomist goes to the \verb|DREAM| homepage;
-    \item the agronomist selects "create account", then "create agronomist account";
-    \item the agronomist inserts his e-mail and devises a password;
-    \item the system verifies the e-mail of the agronomist;
-    \item the agronomist inserts personal data like name, surname, date of birth, specialization;
-    \item the agronomist selects the area where he will work;
-    \item the agronomist clicks on "done";
-    \item \verb|DREAM| verifies the identity of the agronomist;
-    \item the agronomist is notified that he can begin to work.
+    \item The user accesses to the \verb|DREAM| landing page.
+    \item \verb|DREAM| shows a form for logging in.
+    \item The user inserts his/her e-mail, password and selects his role (either farmer, agronomist or policy maker).
+    \item The user clicks on the "Log In" button. 
  \end{enumerate}\\
  \hline
- Exit condition & The agronomist's account is saved in the \verb|DREAM| database and the identity of the agronomist has been verified.\\
+ Exit condition & The user is logged in and is shown the homepage of the \verb|DREAM| system.\\
  \hline
  Exceptions & \begin{itemize}
-     \item If the e-mail is already used, the agronomist is forced to change it;
-     \item If the password is too short, the agronomist is forced to change it;
-     \item if the identity of the agronomist cannot be verified, a mail notifying the error is sent to the agronomist.
+     \item If the credentials inserted by the user are not correct, an error message is shown on the landing page and the log in is not allowed.
  \end{itemize}\\
  \hline
  Special requirements & \begin{itemize}
-     \item the identity must be verified within 3 days.
+     \item After clicking on the "Log In" button, the user must be shown the homepage in less than 3 seconds.
  \end{itemize}\\
  \hline
 \end{longtable}
 
-\color{red}
-Da cambiare perché abbiamo detto che la password c'è già; potremmo semplicemente limitare questo use case all'inserimento dell'area (o forse anche nome cognome?)
-\color{black}
-
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.60]{sequence_diagrams/RegisterAgronomist}
-    \caption{Sequence diagram for the RegisterAgronomist use case}
+    \caption{Sequence diagram for the LogIn use case}
 \end{figure}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 4%%%%%%%%%%%%%%%%%%%%%%%
 
 \centering
@@ -1448,47 +1441,39 @@ Da cambiare perché abbiamo detto che la password c'è già; potremmo sempliceme
  % do not write anything here
  \endlastfoot
  \hline
- Name & RegisterFarmer\\
+ Name & ViewProductionData\\
  \hline
  Actor & Farmer\\
  \hline
- Entry condition & The farmer does not have an account.\\
+ Entry condition & The farmer is logged in the \verb|DREAM| system and wants to visualize his/her past production data.\\
  \hline
  Event flow & \begin{enumerate}
-    \item The farmer goes to the \verb|DREAM| homepage;
-    \item the farmer selects "create account", then "create farmer account";
-    \item the farmer inserts his e-mail and devises a password;
-    \item the system verifies the e-mail of the farmer;
-    \item the farmer inserts personal data like name, surname, date of birth, location of the farm;
-    \item the farmer clicks on "done";
-    \item the farmer is notified that the account has been created.
+    \item The farmer selects the "My Production" entry in the homepage.
+    \item \verb|DREAM| shows a list of production data items, each one containing a date and the corresponding activities performed by the farmer in that date -seeding, planting, fertilizing, watering and harvesting- with the relative details, the comments about these activities inserted by the farmer and eventually the problems inserted by the farmer relative to that date; a "Insert Production Data" button and a "Select Dates" form.
+    \item The farmer inserts in the "Select Dates" form the start and end date for which he/she wants to visualize his production data.
+    \item The farmer clicks on the "Select Dates" button.
  \end{enumerate}\\
  \hline
- Exit condition & The farmer's account is saved in the \verb|DREAM| database and the existence of the farm has been verified.\\
+ Exit condition & The user is shown a list of production data relative to the dates between the start and end dates - included - inserted.\\
  \hline
  Exceptions & \begin{itemize}
-     \item If the e-mail is already used, the farmer is forced to change it;
-     \item If the password is \color{red}too short \color{black}, the farmer is forced to change it.
+     \item If no production data are relative to the inserted start and and dates, a warning message is shown.
  \end{itemize}\\
  \hline
- Special requirements &  \\
+ Special requirements & \begin{itemize}
+     \item After clicking on the "My Production" button, the user must be shown the view in less than 3 seconds.
+     \item After clicking on the "Select Dates" button, the user must be shown the view in less than 3 seconds.
+ \end{itemize}\\
  \hline
 \end{longtable}
-
-\color{red}
-mancano corrispondenti requirements -> da aggiungere
-toglierei la verifica dell'esistenza della farm (se proprio vogliamo occuparci di questo problema potremmo dare la possibilità agli agronomist di eliminare un farmer con tutti i suoi dati se quando lo visita la prima volta si accorge che non esiste)
-\color{black}
 
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.60]{sequence_diagrams/RegisterAgronomist}
-    \caption{Sequence diagram for the RegisterFarmer use case}
+    \caption{Sequence diagram for the ViewProductionData use case}
 \end{figure}
 
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 5%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%TABLE 5%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \centering
 \begin{longtable}{|p{3.5cm}|m{8cm}|}
@@ -1503,49 +1488,48 @@ toglierei la verifica dell'esistenza della farm (se proprio vogliamo occuparci d
  % do not write anything here
  \endlastfoot
  \hline
- Name & VisitFarm\\
+ Name & InsertProductionData\\
  \hline
- Actor & Agronomist, Farmer\\
+ Actor & Farmer\\
  \hline
- Entry condition & The agronomist is scheduled to visit a farm. The farmer and the agronomist have been informed of the meeting. The time of the meeting occurs.\\
+ Entry condition & The farmer wants to insert some data about his/her production activity. He/she is already logged in the \verb|DREAM| system.\\
  \hline
  Event flow & \begin{enumerate}
-    \item The agronomist is scheduled to visit a certain farm at a certain time;
-    \item the farmer is notified about the meeting;
-    \item the agronomist accesses \verb|DREAM|;
-    \item the agronomist selects "insert farm data";
-    \item the agronomist selects the farm and inserts data with a comment;
-    \item the agronomist clicks on "done";
-    \item \verb|DREAM| stores the data.
+    \item In the homepage, the farmer selects from the menu the item "My Production".
+    \item \verb|DREAM| shows a list of production data items and a "Insert Production Data" button.
+    \item The farmer clicks on the "Insert Production Data" button.
+    \item \verb|DREAM| shows a form that allows the farmer to insert the date which the production data are referred to; for each of his plantations, the actions -seeding, planting, fertilizing, watering, harvesting- the farmer performed on one work day and for each action some more details -for seeding, planting and harvesting the quantity of product involved, for fertilizing the type and quantity of the fertilizer used , for watering the amount of water used-; a textual description of the activity performed.
+    \item The farmer inserts the date which the production data are referred to.
+    \item For each product type, the farmer selects the action(s) he performed and the details related to that action(s).
+    \item Optionally, the farmer inserts a brief description of the activity performed or some observations about it.
+    \item The farmer clicks on the "Insert" button.
+    \color{black}
  \end{enumerate}\\
  \hline
- Exit condition & The data about the meeting has been inserted by the agronomist and stored in \verb|DREAM|.
+ Exit condition & The farmer is shown a confirm of having inserted the data into the system together with the data just inserted.\\
  \hline
  Exceptions & \begin{itemize}
-     \item If the farmer does not show up at the meeting, the agronomist specifies so when inserting data about the meeting.
+     \item If the kind of product is not present, the farmer can add the new product together with the area A dedicated to it.
  \end{itemize}\\
  \hline
- Special requirements & None\\
+ Special requirements & \begin{itemize}
+     \item When the farmer clicks on the "Insert" button, the confirm is shown in less than 3 seconds.
+ \end{itemize}\\
  \hline
 \end{longtable}
 
-\color{red}
-notifica visita sia in entry condition che in event flow?
-specificare meglio modifiche alle visite?
-\color{black}
-
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.75]{sequence_diagrams/VisitFarm}
-    \caption{Sequence diagram for the VisitFarm use case}
+    \includegraphics[scale=0.75]{sequence_diagrams/InsertProductions}
+    \caption{Sequence diagram for the InsertProductionData use case}
 \end{figure}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 6%%%%%%%%%%%%%%%%%%%%%%%
 
-\centering
+%%%%%%%%%%%TABLE 6%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \begin{longtable}{|p{3.5cm}|m{8cm}|}
  \hline
  \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 6}} \\
-  % do not write anything here
+ % do not write anything here
  \endfirsthead
  % do not write anything here
  \endhead
@@ -1554,42 +1538,40 @@ specificare meglio modifiche alle visite?
  % do not write anything here
  \endlastfoot
  \hline
- Name & GenerateDailyPlan\\
+ Name & InsertProblems\\
  \hline
- Actor & Agronomist, Farmer\\
+ Actor & Farmer\\
  \hline
- Entry condition & The next day is a working day and the agronomist accesses the system.\\
+ Entry condition & The farmer faces a problem and decides to communicate it on \verb|DREAM|. He/she is already logged in the \verb|DREAM| system.\\
  \hline
  Event flow & \begin{enumerate}
-    \item The agronomist receives a daily plan for the following day;
-    \item if it is ok for the agronomist, he clicks on  "accept", otherwise he clicks on "change it";
-    \item the agronomist selects some changes, then he clicks on "accept";
-    \item \verb|DREAM| checks if the new daily plan is acceptable;
-    \item the farmer is notified about the meeting.
+    \item From the homepage, the farmer selects from the menu the item "Insert Problem".
+    \item \verb|DREAM| shows a form to insert a problem
+    \item The farmer selects the kind of problem among a list of available ones, when the problem occurred and how much it lasted.
+    \item The farmer gives a brief description of the problem.
+    \item The farmer selects whether he likes to meet as soon as possible an agronomist.
+    \item The farmer clicks on the "Insert" button.
+    \color{black}
  \end{enumerate}\\
  \hline
- Exit condition & The daily plan has been confirmed and the farmer has been notified.\\
+ Exit condition & The farmer is shown the problem he inserted with a confirm of having successfully inserted it into the system.
+ If the farmer requested a visit from an agronomist, an agronomist assigned to the area of the farmer is scheduled the visit in his daily plan during the following days and the farmer is notified about the date and time of the visit.\\
  \hline
  Exceptions & \begin{itemize}
-     \item In case the agronomist does not accept the daily plan, the farmers are not notified about the meeting;
-     \item if the daily plan is not acceptable, an error is notified to the agronomist, who has to re-accept (or re-change) the schedule until \verb|DREAM| accepts it;
+     \item If the kind of problem is not present, the farmer can add it by its own.
+     \item In case no agronomist can be scheduled for the current week, the farmer is notified about the problem and an agronomist will be found for the next week.
  \end{itemize}\\
  \hline
- Special requirements &\begin{itemize}
-     \item Every farmer must be visited at least twice a year;
-     \item bad performing farmers must be visited more times than the others.
+ Special requirements & \begin{itemize}
+     \item After the farmer clicks on the "send" button, the problem is inserted in the system (and the visit of the agronomist is scheduled, if requested) in less than 3 seconds.
  \end{itemize}\\
  \hline
 \end{longtable}
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.75]{sequence_diagrams/GenerateDailyPlan}
-    \caption{Sequence diagram for the GenerateDailyPlan use case}
+    \includegraphics[scale=0.75]{sequence_diagrams/InsertProblems}
+    \caption{Sequence diagram for the InsertProblems use case}
 \end{figure}
-
-\color{red}
-specificare meglio le modifiche? aggiungere qui il fatto che gli agronomist possono vedere i dati dei farmer che visitano?
-\color{black}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 7%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -1606,36 +1588,40 @@ specificare meglio le modifiche? aggiungere qui il fatto che gli agronomist poss
  % do not write anything here
  \endlastfoot
  \hline
- Name & GetSoilSensorsData\\
+ Name & AcceptDailyPlan\\
  \hline
- Actor & SoilSensors\\
+ Actor & Agronomist\\
  \hline
- Entry condition & \color{red}A timer has expired.\\
- \hline \color{black}
+ Entry condition & The agronomist is logged in the \verb|DREAM| system and wants to visualize the daily plan for the next working day, which he has not accepted yet.\\
+ \hline
  Event flow & \begin{enumerate}
-    \item \verb|DREAM| asks the soil sensors for some data;
-    \item the soil sensors answer with the data;
-    \item \color{red}\verb|DREAM| stores the data in its database.\color{black}
+    \item The agronomist accesses the "Daily Plan" area from the homepage.
+    \item \verb|DREAM| shows a list of 7 dates, starting with the present day and including only working days.
+    \item The agronomist selects the date of his/her next working day.
+    \item \verb|DREAM| shows the daily plan of the agronomist for the selected date: it is a list of visits to farms. For each visit, the name and surname of the farmer, the location of the farm, the starting hour of the visit are shown; and there are a "Farm Details" button (view UC8 for more details), a "Move" button (view UC9 for more details) and a "Delete" button (view UC10 for more details). Moreover, an "Add Visit" button (view UC11 for more details) and a "Accept Daily Plan" button are present.
+    \item After possibly visualizing details about the farms to visit (UC8) or modifying the daily plan (UC9, UC10, UC11), the agronomist clicks on the "Accept Daily Plan button"
  \end{enumerate}\\
  \hline
- Exit condition & \verb|DREAM| has stored in its database the data coming from the sensors.\\
+ Exit condition & The agronomist is shown the daily plan for the selected date without the "Move", "Delete", "Add Visit" and "Accept Daily Plan" buttons, and all the farmers involved in the visits in the accepted daily plan are notified about the visit.\\
  \hline
  Exceptions & \begin{itemize}
-     \item In case a sensor is not reachable, \verb|DREAM| stores that the data of that sensor at that time is not available because "the sensor is not reachable".
+     \item If the agronomist has modified the daily plan and the daily plan is not acceptable, the daily plan is shown to the agronomist with all the buttons to modify it, together with an error message.
  \end{itemize}\\
  \hline
  Special requirements &\begin{itemize}
-     \item The sensor must answer in less than 5 seconds; \color{red} non è un requirement di dream \color{black}
-     \item \verb|DREAM| must try to contact the sensor 3 times before giving up.
+     \item When selecting the daily plan date, the agronomist must be shown the daily plan in less than 3 seconds.
  \end{itemize}\\
  \hline
 \end{longtable}
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.75]{sequence_diagrams/GetSoilSensorsData}
-    \caption{Sequence diagram for the GetSoilSensorsData use case}
+    \includegraphics[scale=0.75]{sequence_diagrams/GenerateDailyPlan}
+    \caption{Sequence diagram for the AcceptDailyPlan use case}
 \end{figure}
 
+\color{red}
+NB: Nello use case diagram (che dobbiamo ricordarci di aggiornare), questo use case include anche quelli per le modifiche al daily plan. Farei un solo sequence diagram che include tutti questi use case (perché gli altri sono molto semplici).
+\color{black}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 8%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -1652,28 +1638,299 @@ specificare meglio le modifiche? aggiungere qui il fatto che gli agronomist poss
  % do not write anything here
  \endlastfoot
  \hline
+ Name & ViewDetailsOfFarmToVisit\\
+ \hline
+ Actor & Agronomist\\
+ \hline
+ Entry condition & The agronomist is logged in the \verb|DREAM| system and is visualizing the daily plan of a certain work day. He/She wants to see more details about a farm present in the daily plan.\\
+ \hline
+ Event flow & \begin{enumerate}
+    \item The agronomist clicks on the "Farm Details" button relative to a farm to visit.
+    \item \verb|DREAM| shows a list of production data items and a list of problems inserted by the farmer owning the farm to visit, starting from the day after the last visit of the agronomist (or from the subscription of the farmer into the system, if the agronomist has never visited the farmer) until the present day.
+ \end{enumerate}\\
+ \hline
+ Exit condition & The agronomist can read the details about the farmer, and clicking on a "Back" button, returning to the daily plan view.\\
+ \hline
+ Exceptions & \begin{itemize}
+     \item If there are no production data relative to the farm, a message is shown.
+     \item If there are no problems relative to the farm, a message is shown.
+ \end{itemize}\\
+ \hline
+ Special requirements &\begin{itemize}
+     \item When selecting the "Farm Details" button, the agronomist must be shown the farm details in less than 3 seconds.
+ \end{itemize}\\
+ \hline
+\end{longtable}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.75]{sequence_diagrams/GenerateDailyPlan}
+    \caption{Sequence diagram for the ViewDetailsOfFarmToVisit use case}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 9%%%%%%%%%%%%%%%%%%%%%%%
+
+\centering
+\begin{longtable}{|p{3.5cm}|m{8cm}|}
+ \hline
+ \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 9}} \\
+  % do not write anything here
+ \endfirsthead
+ % do not write anything here
+ \endhead
+ % do not write anything here
+ \endfoot
+ % do not write anything here
+ \endlastfoot
+ \hline
+ Name & MoveVisitInDailyPlan\\
+ \hline
+ Actor & Agronomist\\
+ \hline
+ Entry condition & The agronomist is logged in the \verb|DREAM| system and is visualizing the daily plan of a certain work day. He/She wants to move a visit from a starting hour to another one, either because the work day is ended and he/she performed the visit in a different hour than the selected one or because he/she wants to modify the daily plan for a future work day before accepting it.\\
+ \hline
+ Event flow & \begin{enumerate}
+    \item The agronomist clicks on the "Move" button relative to a certain visit.
+    \item \verb|DREAM| shows an input field for inserting the starting hour of the visit and an "Insert" button.
+    \item The agronomist inserts the starting hour of the visit.
+    \item The agronomist clicks on the "Insert" button.
+ \end{enumerate}\\
+ \hline
+ Exit condition & The agronomist is shown the daily plan of the work day, exactly like it was before the update, except for the fact that the starting date of the selected visit has been updated with the inserted one\\
+ \hline
+ Exceptions & \begin{itemize}
+     \item If the inserted starting date is outside the working hours of the agronomist, the daily plan is not updated and an error message is shown.
+ \end{itemize}\\
+ \hline
+ Special requirements &\begin{itemize}
+     \item When selecting the "Insert" button, the agronomist must be shown the updated daily plan in less than 3 seconds.
+ \end{itemize}\\
+ \hline
+\end{longtable}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.75]{sequence_diagrams/GenerateDailyPlan}
+    \caption{Sequence diagram for the MoveVisitInDailyPlan use case}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 10%%%%%%%%%%%%%%%%%%%%%%%
+
+\centering
+\begin{longtable}{|p{3.5cm}|m{8cm}|}
+ \hline
+ \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 10}} \\
+  % do not write anything here
+ \endfirsthead
+ % do not write anything here
+ \endhead
+ % do not write anything here
+ \endfoot
+ % do not write anything here
+ \endlastfoot
+ \hline
+ Name & DeleteVisitFromDailyPlan\\
+ \hline
+ Actor & Agronomist\\
+ \hline
+ Entry condition & The agronomist is logged in the \verb|DREAM| system and is visualizing the daily plan of a certain work day. He/She wants to delete a visit, either because the work day is ended and he/she did not perform the visit or because he/she wants to modify the daily plan for a future work day before accepting it.\\
+ \hline
+ Event flow & \begin{enumerate}
+    \item The agronomist clicks on the "Delete" button relative to a certain visit.
+ \end{enumerate}\\
+ \hline
+ Exit condition & The agronomist is shown the daily plan of the work day, exactly like it was before the update, except for the fact that the selected visit has been deleted.\\
+ \hline
+ Exceptions & - \\
+ \hline
+ Special requirements &\begin{itemize}
+     \item When selecting the "Delete" button, the agronomist must be shown the updated daily plan in less than 3 seconds.
+ \end{itemize}\\
+ \hline
+\end{longtable}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.75]{sequence_diagrams/GenerateDailyPlan}
+    \caption{Sequence diagram for the DeleteVisitFromDailyPlan use case}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 11%%%%%%%%%%%%%%%%%%%%%%%
+
+\centering
+\begin{longtable}{|p{3.5cm}|m{8cm}|}
+ \hline
+ \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 11}} \\
+  % do not write anything here
+ \endfirsthead
+ % do not write anything here
+ \endhead
+ % do not write anything here
+ \endfoot
+ % do not write anything here
+ \endlastfoot
+ \hline
+ Name & AddVisitToDailyPlan\\
+ \hline
+ Actor & Agronomist\\
+ \hline
+ Entry condition & The agronomist is logged in the \verb|DREAM| system and is visualizing the daily plan of a certain work day. He/She wants to add a visit to the plan, either because the work day is ended and he/she performed a visit which was not planned or because he/she wants to modify the daily plan for a future work day before accepting it.\\
+ \hline
+ Event flow & \begin{enumerate}
+    \item The agronomist clicks on the "Add Visit" button.
+    \item \verb|DREAM| shows a list of all farmers in the area of the agronomist and an input field for the starting hour of the visit.
+    \item The agronomist selects a farmer from the list of farmers.
+    \item The agronomist inserts a starting hour for the visit.
+    \item The agronomist clicks on the "Add" button.
+ \end{enumerate}\\
+ \hline
+ Exit condition & The agronomist is shown the daily plan of the work day, exactly like it was before the update, except for the fact that the new visit has been added.\\
+ \hline
+ Exceptions & \begin{itemize}
+     \item If the inserted starting date is outside the working hours of the agronomist, the daily plan is not updated and an error message is shown.
+ \end{itemize}\\
+ \hline
+ Special requirements &\begin{itemize}
+     \item When selecting the "Add" button, the agronomist must be shown the updated daily plan in less than 3 seconds.
+ \end{itemize}\\
+ \hline
+\end{longtable}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.75]{sequence_diagrams/GenerateDailyPlan}
+    \caption{Sequence diagram for the AddVisitToDailyPlan use case}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 12%%%%%%%%%%%%%%%%%%%%%%%
+
+\centering
+\begin{longtable}{|p{3.5cm}|m{8cm}|}
+ \hline
+ \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 12}} \\
+  % do not write anything here
+ \endfirsthead
+ % do not write anything here
+ \endhead
+ % do not write anything here
+ \endfoot
+ % do not write anything here
+ \endlastfoot
+ \hline
+ Name & ConfirmDailyPlan\\
+ \hline
+ Actor & Agronomist\\
+ \hline
+ Entry condition & The working day of an agronomist has ended - more precisely, it is passed at least half an hour from the starting hour of the last visit planned for the agronomist  - and the agronomist, who is already logged in the system, wants to confirm the daily plan of the day, possibly specifying some deviations.\\
+ \hline
+ Event flow & \begin{enumerate}
+    \item The agronomist accesses the "Daily Plan" area from the homepage.
+    \item \verb|DREAM| shows a list of 7 dates, starting with the present day and including only working days.
+    \item The agronomist selects the date of the present work day.
+    \item \verb|DREAM| shows the daily plan of the agronomist for the present work day. For each visit, the name and surname of the farmer, the location of the farm, the starting hour of the visit are shown; and there are a "Farm Details" button (view UC8 for more details), a "Move" button (view UC9 for more details), a "Delete" button (view UC10 for more details) and an input field for inserting a report about the visit. Moreover, an "Add Visit" button (view UC11 for more details) and a "Confirm Daily Plan" button are present.
+    \item The agronomist writes the reports for all the visits performed.
+    \item After possibly visualizing details about the farms to visit (UC8) or modifying the daily plan (UC9, UC10, UC11), the agronomist clicks on the "Confirm Daily Plan button"
+ \end{enumerate}\\
+ \hline
+ Exit condition & The agronomist is shown the daily plan for the present work day without the "Move", "Delete", "Add Visit", "Insert Report" and "Confirm Daily Plan" buttons. \\
+ \hline
+ Exceptions & \begin{itemize}
+     \item If the agronomist does not insert the report (UC13) for one of the performed visits, an error message is shown and the system does not let the agronomist confirm the plan.
+     \item If the agronomist does not confirm the daily plan during the present day, the "Daily Plan" page will contain in the list of dates for the daily plans also the date of the unconfirmed daily plan, together with a message warning the agronomist to confirm the daily plan.
+ \end{itemize}\\
+ \hline
+ Special requirements & After having selected the "Confirm Daily Plan" button, the agronomist must be shown the daily plan in less than 3 seconds.\\
+ \hline
+\end{longtable}
+
+\color{red}
+Anche questo use case ne include altri. (da considerare in use case diagram).
+\color{black}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.75]{sequence_diagrams/VisitFarm}
+    \caption{Sequence diagram for the ConfirmDailyPlan use case}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 13%%%%%%%%%%%%%%%%%%%%%%%
+
+\centering
+\begin{longtable}{|p{3.5cm}|m{8cm}|}
+ \hline
+ \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 13}} \\
+  % do not write anything here
+ \endfirsthead
+ % do not write anything here
+ \endhead
+ % do not write anything here
+ \endfoot
+ % do not write anything here
+ \endlastfoot
+ \hline
+ Name & GetSoilSensorsData\\
+ \hline
+ Actor & SoilSensorsHub\\
+ \hline
+ Entry condition & It is 06:00, or 14:00, or 22:00 \footnote{All times are referred to the UTC+5:30 time zone, which is the one used in India}.\\
+ \hline 
+ Event flow & \begin{enumerate}
+    \item \verb|DREAM| sends the SoilSensorsrHub a request for data about soil moisture.
+    \item The SoilSensorsHub replies with a list of <sensorId, currentSoilMoisture> items, one for each sensor managed by the hub.
+ \end{enumerate}\\
+ \hline
+ Exit condition & \verb|DREAM| will send the next request to the SoilSensorsHub in 8 hours.\\
+ \hline
+ Exceptions & \begin{itemize}
+     \item In case the SoilSensorsHub is not reachable, \verb|DREAM| retries to contact it 3 times, with an interval of 30 minutes between them; if after the third try the SoilSensorsHub has not been contacted successfully yet, \verb|DREAM| will contact it in 6:30 hours (that is, at the next scheduled time for contact the SoilSensorsHub).
+ \end{itemize}\\
+ \hline
+ Special requirements & -\\
+ \hline
+\end{longtable}
+
+\color{red}
+Da rivedere: non riesco a trovare nel documento ogni quanto volevamo chiedere i dati dei sensori e ho ipotizzato fosse 3 volte al giorno. Oltretutto c'é un hub solo per tutti i sensori di Telangana (allora non sono sicura sarebbe esattamente un hub) o è DREAM che chiede a tutti gli hub dei vari sensori uno ad uno?
+Usiamo sensorId o sensorLocation per identificare il sensore? Tutte queste cose poi le scriverei nella parte di software interfaces con i sistemi esterni.
+\color{black}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.75]{sequence_diagrams/GetSoilSensorsData}
+    \caption{Sequence diagram for the GetSoilSensorsData use case}
+\end{figure}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 14%%%%%%%%%%%%%%%%%%%%%%%
+
+\centering
+\begin{longtable}{|p{3.5cm}|m{8cm}|}
+ \hline
+ \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 14}} \\
+  % do not write anything here
+ \endfirsthead
+ % do not write anything here
+ \endhead
+ % do not write anything here
+ \endfoot
+ % do not write anything here
+ \endlastfoot
+ \hline
  Name & GetWaterIrrigationSystemData\\
  \hline
  Actor & WaterIrrigationSystem\\
  \hline
- Entry condition & \color{red}A timer has expired.\color{black}\\
+ Entry condition & It is 00:00. \footnote{Time referred to the UTC+5:30 time zone}\\
  \hline
  Event flow & \begin{enumerate}
-    \item \verb|DREAM| asks the water irrigation system for some data;
-    \item the water irrigation system answers with the data;
-    \item \color{red} \verb|DREAM| stores the data in its database. \color{black}
+    \item \verb|DREAM| requests the WaterIrrigationSystem for the data relative to the day which has just ended.
+    \item The WaterIrrigationSystem replies with a list of <deviceId, waterUsedAmount> items, one for each water irrigation device managed by the WaterIrrigationSystem.
  \end{enumerate}\\
  \hline
- Exit condition & \verb|DREAM| has stored in its database the data coming from the water irrigation system.\\
+ Exit condition & \verb|DREAM| will send the next request to the WaterIrrigationSystem in 24 hours.\\
  \hline
  Exceptions & \begin{itemize}
-     \item In case the water irrigation system is not reachable, \verb|DREAM| stores that the data of the water irrigation system at that time is not available because "the water irrigation system is not reachable".
+     \item In case the WaterIrrigationSystem is not reachable, \verb|DREAM| retries to contact it 3 times, with an interval of 30 minutes between them; if after the third try the WaterIrrigationSystem has not been contacted successfully yet, \verb|DREAM| will contact the next day at 00:00.
  \end{itemize}\\
  \hline
  Special requirements &\begin{itemize}
-     \item The water irrigation system must answer in less than 5 seconds;
-     \color{red} non è un requisito di dream \color{black}
-     \item \verb|DREAM| must try to contact the sensor 3 times before giving up.
+     -
  \end{itemize}\\
  \hline
 \end{longtable}
@@ -1683,6 +1940,9 @@ specificare meglio le modifiche? aggiungere qui il fatto che gli agronomist poss
     \caption{Sequence diagram for the GetWaterIrrigationSystemData use case}
 \end{figure}
 
+\color{red}
+Da rivedere: anche qui non riesco a trovare dove abbiamo scritto ogni quanto contattiamo il water irrigation system, ipotizzo una volta al giorno. Anche qui, contattiamo un server centralizzato che ci dice i dati di tutto o più sistemi locali? Poi se abbiamo detto che il server/hub per i soil sensors e il water irrigation system è lo stesso, dovremmo cambiare i nomi agli actor di questi due use cases. Anche qui, deviceId o location?
+\color{black}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 9%%%%%%%%%%%%%%%%%%%%%%%
 
