@@ -1358,7 +1358,10 @@ The next day, Ikbal opens again the “Forum” section of the \verb|DREAM| webs
  Entry condition & The agronomist logs in the \verb|DREAM| system for the first time.\\
  \hline
  Event flow & \begin{enumerate}
-    
+    \item \verb|DREAM| shows a form for inserting the agronomist's personal and working data (name, surname, birthdate, optionally a specialization) and the area he is reponsible of.
+    \item The agronomist inserts his personal and working data.
+    \item The agronomist selects the area he is responsible of.
+    \item The agronomist clicks on the "Done" button.
  \end{enumerate}\\
  \hline
  Exit condition & The agronomist is shown the agronomist's homepage of the \verb|DREAM| system.\\
@@ -1944,12 +1947,12 @@ Usiamo sensorId o sensorLocation per identificare il sensore? Tutte queste cose 
 Da rivedere: anche qui non riesco a trovare dove abbiamo scritto ogni quanto contattiamo il water irrigation system, ipotizzo una volta al giorno. Anche qui, contattiamo un server centralizzato che ci dice i dati di tutto o più sistemi locali? Poi se abbiamo detto che il server/hub per i soil sensors e il water irrigation system è lo stesso, dovremmo cambiare i nomi agli actor di questi due use cases. Anche qui, deviceId o location?
 \color{black}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 9%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 15%%%%%%%%%%%%%%%%%%%%%%%
 
 \centering
 \begin{longtable}{|p{3.5cm}|m{8cm}|}
  \hline
- \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 9}} \\
+ \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 15}} \\
   % do not write anything here
  \endfirsthead
  % do not write anything here
@@ -1959,76 +1962,38 @@ Da rivedere: anche qui non riesco a trovare dove abbiamo scritto ogni quanto con
  % do not write anything here
  \endlastfoot
  \hline
- Name & VisualizeAggregateData\\
+ Name & VisualizeBestAndWorstFarmers\\
  \hline
- Actor & PolicyMaker\\
+ Actor & Policy Maker, TSDPSSystem\\
  \hline
- Entry condition & A policy maker accesses the platform and enters the \emph{Aggregate Data} section.\\
+ Entry condition & The policy maker is logged in the system and wants to visualize best and worst performing farmers according to some certain criteria.\\
  \hline
  Event flow & \begin{enumerate}
-    \item The policy maker accesses the system;
-    \item the policy maker selects the \emph{Aggregate Data} menu item;
-    \item the policy maker chooses the date range they wish to analyze;
-    \item \verb|DREAM| generates aggregate statistics for all areas in the database;
-    \item \verb|DREAM| shows the data to the user.
+    \item From the homepage, the policy maker accesses the Farms section.
+    \item \verb|DREAM| shows a form for selecting one or more criteria to rank the farmers, for - optionally - inserting some weights associated to these criteria, for - optionally - inserting the number N of best farmers and the number M of worst farmers to display according to the selected criterion,  for - optionally - selecting the area of the farmers to consider and for - optionally - selecting the time period to consider for ranking the farmers.
+    \item The policy maker selects one or more criteria to rank the farmers among the list of available ones.
+    \item Optionally, the policy maker inserts some weights associated to the selected criteria.
+    \item Optionally, the policy maker inserts the number N of best farmers to display.
+    \item Optionally, the policy maker inserts the number M of worst farmers to display.
+    \item Optionally, the policy maker selects the area where the farms to rank should be located.
+    \item Optionally, the policy maker inserts the start and end date of the period to consider for ranking the farmers.
+    \item The policy maker clicks on the "Rank" button.
+    \item Depending on the criteria selected, \verb|DREAM| may fetch from the TSDPSSystem some data from the weather reports (view UC23 for more details)
  \end{enumerate}\\
  \hline
- Exit condition & The user finishes analyzing the data.\\
+ Exit condition & If no limits on the number of farmers to display were inserted, \verb|DREAM| shows a list of all farmers (belonging to the selected area, if there was one) ordered according to the selected criteria, together with a "Mark As Best-Performing" button for each farmer in the first half of the list and a "Mark As Worst-Performing" button in the second half of the list. \newline
+ If limits on the farmers to display were specified, \verb|DREAM| shows the list of the first N farmers and the list of the last M farmers according to the selected criteria (and belonging to the selected area, if there was one). For each farmer in the first list, there is a "Mark As Best-Performing" button; for each farmer in the latter list, there is a "Mark As Worst-Performing" button.
+ \newline
+ In both cases, if farmer was already marked as best- or worst-performing, the "Mark As Best-Performing" and "Mark As Worst-Performing" are not present, and there is a flag that shows that they are already marked, and a button "Unmark".
+ \newline
+ Moreover, for each farmer there is a "FarmDetails" button. By clicking on it, the policy maker can see a table with monthly seeded, planted, watered, fertilized and harvested amounts for each crop grown in the farm.\\
  \hline
  Exceptions & \begin{itemize}
-     \item If the system has not yet collected any data for the specified period, a warning is returned.
+    \item If there are no data in the system about farmers that respect the constraints selected by the policy maker (area and time period), a warning message is displayed.
  \end{itemize}\\
  \hline
  Special requirements &\begin{itemize}
-     \item The data generation must be completed in less than 3 seconds.
- \end{itemize}\\
- \hline
-\end{longtable}
-
-\begin{figure}[H]
-    \centering
-	\includegraphics[scale=0.5]{sequence_diagrams/VisualizeAggregateData}
-    \caption{Sequence diagram for the VisualizeAggregateData use case}
-\end{figure}
-
-\color{red} DA TOGLIERE? \color{black}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 10%%%%%%%%%%%%%%%%%%%%%%%
-
-\centering
-\begin{longtable}{|p{3.5cm}|m{8cm}|}
- \hline
- \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 10}} \\
-  % do not write anything here
- \endfirsthead
- % do not write anything here
- \endhead
- % do not write anything here
- \endfoot
- % do not write anything here
- \endlastfoot
- \hline
- Name & VisualizeBestFarmers\\
- \hline
- Actor & Agronomist\\
- \hline
- Entry condition & An agronomist accesses the platform and enters the \emph{Farms} section.\\
- \hline
- Event flow & \begin{enumerate}
-    \item The agronomist accesses the system;
-    \item the agronomist selects the \emph{Farms} menu item;
-    \item optionally, the agronomist chooses how the farms should be ranked (e.g. most productive, most resilient to bad weather, ...);
-    \item \verb|DREAM| shows a list of the best farms ordered according to the selected parameter.
- \end{enumerate}\\
- \hline
- Exit condition & \color{red}The user finishes analyzing the data.\color{black}\\
- \hline
- Exceptions & \begin{itemize}
-     \item If the system has not yet collected any data in the agronomist's area, a warning is shown.
- \end{itemize}\\
- \hline
- Special requirements &\begin{itemize}
-     \item The data must be shown in less than 1 second.
+     \item After the policy maker clicks on the "Rank" button, the lists should be shown in at most 10 seconds.
  \end{itemize}\\
  \hline
 \end{longtable}
@@ -2036,16 +2001,19 @@ Da rivedere: anche qui non riesco a trovare dove abbiamo scritto ogni quanto con
 \begin{figure}[H]
     \centering
 	\includegraphics[scale=0.5]{sequence_diagrams/VisualizeBestFarmers}
-    \caption{Sequence diagram for the VisualizeBestFarmers use case}
+    \caption{Sequence diagram for the VisualizeBestAndWorstFarmers use case}
 \end{figure}
 
 \color{red} gli agronomist possono vedere solo i best performig farmers o anche i worst? possono marcarli? \color{black}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 11%%%%%%%%%%%%%%%%%%%%%%%
+
+The use case for the agronomist is almost equivalent to this one; the only difference is that an agronomist is not allowed to choose the area of the farmers to consider, as the farmers he/she can visualize are only the ones located in the area where the agronomist is assigned to (event 7 not present).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 16%%%%%%%%%%%%%%%%%%%%%%%
 
 \centering
 \begin{longtable}{|p{3.5cm}|m{8cm}|}
  \hline
- \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 11}} \\
+ \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 16}} \\
   % do not write anything here
  \endfirsthead
  % do not write anything here
@@ -2055,31 +2023,254 @@ Da rivedere: anche qui non riesco a trovare dove abbiamo scritto ogni quanto con
  % do not write anything here
  \endlastfoot
  \hline
- Name & VisualizeForecasts\\
+ Name & MarkBestPerformingFarmer\\
  \hline
- Actor & Agronomist \color{red} aggiungiamo telangana website? \color{black}\\
+ Actor & User (Policy Maker or Agronomist), Farmer\\
  \hline
- Entry condition & An agronomist accesses the platform and enters the \emph{Weather Forecasts} section.\\
+ Entry condition & The user is logged in the system and is visualizing a list of farmers ranked according to some criteria he/she has chosen. He/she wants to mark a certain farmer as best-performing.\\
  \hline
  Event flow & \begin{enumerate}
-    \item The agronomist accesses the system;
-    \item the agronomist selects the \emph{Weather Forecasts} menu item;
-    \item the agronomist chooses the date for which forecasts should be shown;
-    \item \verb|DREAM| connects to the Telangana government website to fetch forecasts for the chosen date;
-    \item \verb|DREAM| shows a map with the forecast.
+    \item The user clicks on the "Mark As Best-Performing" button related to a certain farmer.
+    \item \verb|DREAM| shows the user a confirm of having marked the farmer as best-performing.
+    \item \verb|DREAM| sends the farmer a notification about the fact he/she was selected as best-performing
  \end{enumerate}\\
  \hline
- Exit condition & \color{red} The user finishes analyzing the data. \color{black}\\
+ Exit condition &  When policy makers and agronomists of the area of the farmer will visualize the farmer in a list in the "Farms" section, he/she will be shown as best-performing.
+ If the farmer was never marked as best-performing, the homepage of the farmer now displays a "My Replies" section, as other farmers are able to ask him/her questions.\\
+ \hline
+ Exceptions & -\\
+ \hline
+ Special requirements &\begin{itemize}
+     \item After the policy maker clicks on the "Mark As Best-Performing" button, the confirm should be shown and the notification should be sent in less than 10 seconds.
+ \end{itemize}\\
+ \hline
+\end{longtable}
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[scale=0.5]{sequence_diagrams/VisualizeBestFarmers}
+    \caption{Sequence diagram for the MarkBestPerformingFarmer use case}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 17%%%%%%%%%%%%%%%%%%%%%%%
+
+\centering
+\begin{longtable}{|p{3.5cm}|m{8cm}|}
+ \hline
+ \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 17}} \\
+  % do not write anything here
+ \endfirsthead
+ % do not write anything here
+ \endhead
+ % do not write anything here
+ \endfoot
+ % do not write anything here
+ \endlastfoot
+ \hline
+ Name & MarkWorstPerformingFarmer\\
+ \hline
+ Actor & User (Policy Maker or Agronomist)\\
+ \hline
+ Entry condition & The user is logged in the system and is visualizing a list of farmers ranked according to some criteria he/she has chosen. He/she wants to mark a certain farmer as worst-performing.\\
+ \hline
+ Event flow & \begin{enumerate}
+    \item The user clicks on the "Mark As Worst-Performing" button related to a certain farmer.
+    \item \verb|DREAM| shows the user a confirm of having marked the farmer as worst-performing.
+ \end{enumerate}\\
+ \hline
+ Exit condition &  When policy makers and agronomists of the area of the farmer will visualize the farmer in a list in the "Farms" section, he/she will be shown as best-performing.
+ Visits to the marked farmer by agronomists will be scheduled more often until he/she is marked as worst-performing.\\
+ \hline
+ Exceptions & -\\
+ \hline
+ Special requirements &\begin{itemize}
+     \item After the policy maker clicks on the "Mark As Worst-Performing" button, the confirm should be shown in less than 10 seconds.
+ \end{itemize}\\
+ \hline
+\end{longtable}
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[scale=0.5]{sequence_diagrams/VisualizeBestFarmers}
+    \caption{Sequence diagram for the MarkWorstPerformingFarmer use case}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 18%%%%%%%%%%%%%%%%%%%%%%%
+
+\centering
+\begin{longtable}{|p{3.5cm}|m{8cm}|}
+ \hline
+ \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 18}} \\
+  % do not write anything here
+ \endfirsthead
+ % do not write anything here
+ \endhead
+ % do not write anything here
+ \endfoot
+ % do not write anything here
+ \endlastfoot
+ \hline
+ Name & UnmarkBestPerformingFarmer\\
+ \hline
+ Actor & User (Policy Maker or Agronomist), Farmer\\
+ \hline
+ Entry condition & The user is logged in the system and is visualizing a list of farmers ranked according to some criteria he/she has chosen. He/she wants to unmark a best-performing farmer.\\
+ \hline
+ Event flow & \begin{enumerate}
+    \item The user clicks on the "Unmark" button related to a best-performing farmer.
+    \item \verb|DREAM| shows the user a confirm of having unmarked the farmer.
+    \item \verb|DREAM| sends the farmer a notification about the fact he/she has been unmarked.
+ \end{enumerate}\\
+ \hline
+ Exit condition &  When policy makers and agronomists of the area of the farmer will visualize the farmer in a list in the "Farms" section, he/she will no more be shown as best-performing.
+ Other farmers are not able anymore to send questions to the farmer - the My Replies section in the homepage of the farmer stays there, to display past replies.\\
+ \hline
+ Exceptions & -\\
+ \hline
+ Special requirements &\begin{itemize}
+     \item After the policy maker clicks on the "Unmark" button, the confirm should be shown and the notification should be sent in less than 10 seconds.
+ \end{itemize}\\
+ \hline
+\end{longtable}
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[scale=0.5]{sequence_diagrams/VisualizeBestFarmers}
+    \caption{Sequence diagram for the UnmarkBestPerformingFarmer use case}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 19%%%%%%%%%%%%%%%%%%%%%%%
+
+\centering
+\begin{longtable}{|p{3.5cm}|m{8cm}|}
+ \hline
+ \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 19}} \\
+  % do not write anything here
+ \endfirsthead
+ % do not write anything here
+ \endhead
+ % do not write anything here
+ \endfoot
+ % do not write anything here
+ \endlastfoot
+ \hline
+ Name & AnalyzeImpactOfInitiative\\
+ \hline
+ Actor & Policy Maker, TSDPSSystem\\
+ \hline
+ Entry condition & The policy maker is logged in the system and wants to analyze the impact of an initiative - i.e., visit to the farm or reply to a question - on the production of a certain farmer.\\
+ \hline
+ Event flow & \begin{enumerate}
+    \item From the homepage, the policy maker accesses the "Initiatives Analysis" section.
+    \item \verb|DREAM| shows a list of initiatives - either visit to a farm or reply to a question of a farmer -, and some input fields to filter the initiatives according to the type (visit or reply), the date, the area of the farmer, the agronomist or best-performing farmer involved.
+    \item The policy maker selects one of the initiatives.
+    \item \verb|DREAM| fetches weather reports data from the TSDPS system
+ \end{enumerate}\\
+ \hline
+ Exit condition &  \verb|DREAM| shows details about the initiative and indicators comparing the farmer production data 30 days before and 30 days after the initiative, such as percent difference between the production volume or percent difference between the amount harvested over the amount seeded for each crop, resilience to adverse meteorological events. Moreover, there are two input fields to change the time scope for computing the indicators.\\
+ \hline
+ Exceptions & -\\
+ \hline
+ Special requirements &\begin{itemize}
+     \item After the policy maker selects the initiative, the result should be shown in less than 10 seconds.
+ \end{itemize}\\
+ \hline
+\end{longtable}
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[scale=0.5]{sequence_diagrams/VisualizeBestFarmers}
+    \caption{Sequence diagram for the AnalyzeImpactOfInitiative use case}
+\end{figure}
+
+\color{red}
+includes GetWeatherReport
+\color{black}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 20%%%%%%%%%%%%%%%%%%%%%%%
+
+\centering
+\begin{longtable}{|p{3.5cm}|m{8cm}|}
+ \hline
+ \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 20}} \\
+  % do not write anything here
+ \endfirsthead
+ % do not write anything here
+ \endhead
+ % do not write anything here
+ \endfoot
+ % do not write anything here
+ \endlastfoot
+ \hline
+ Name & UnmarkWorstPerformingFarmer\\
+ \hline
+ Actor & User (Policy Maker or Agronomist), Farmer\\
+ \hline
+ Entry condition & The user is logged in the system and is visualizing a list of farmers ranked according to some criteria he/she has chosen. He/she wants to unmark a worst-performing farmer.\\
+ \hline
+ Event flow & \begin{enumerate}
+    \item The user clicks on the "Unmark" button related to a worst-performing farmer.
+    \item \verb|DREAM| shows the user a confirm of having unmarked the farmer.
+ \end{enumerate}\\
+ \hline
+ Exit condition &  When policy makers and agronomists of the area of the farmer will visualize the farmer in a list in the "Farms" section, he/she will no more be shown as worst-performing.\\
+ \hline
+ Exceptions & -\\
+ \hline
+ Special requirements &\begin{itemize}
+     \item After the policy maker clicks on the "Unmark" button, the confirm should be shown in less than 10 seconds.
+ \end{itemize}\\
+ \hline
+\end{longtable}
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[scale=0.5]{sequence_diagrams/VisualizeBestFarmers}
+    \caption{Sequence diagram for the UnmarkWorstPerformingFarmer use case}
+\end{figure}
+
+\color{red}
+Ci starebbe uno state diagram per questa cosa dei best e worst performing farmers.
+\color{black}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 21%%%%%%%%%%%%%%%%%%%%%%%
+
+\centering
+\begin{longtable}{|p{3.5cm}|m{8cm}|}
+ \hline
+ \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 21}} \\
+  % do not write anything here
+ \endfirsthead
+ % do not write anything here
+ \endhead
+ % do not write anything here
+ \endfoot
+ % do not write anything here
+ \endlastfoot
+ \hline
+ Name & VisualizeWeatherForecasts\\
+ \hline
+ Actor & User (either Farmer or Agronomist), TSDPSSystem \\
+ \hline
+ Entry condition & The user is logged in the system and wants to visualize the weather forecast for the area of his/her farm (if he/she is a farmer) or the area he/she is assigned to (if he/she is an agronomist).\\
+ \hline
+ Event flow & \begin{enumerate}
+    \item From the homepage, the user accesses the WeatherForecasts section.
+    \item \verb|DREAM| shows an input field for inserting the date for which the forecasts should be shown, and if the user is an agronomist, the list of the mandals in the area he/she is responsible of.
+    \item If the user is an agronomist, he/she selects the mandal in his area for which he/she wants to visualize the forecasts. 
+    \item The user selects the date for which he/she wants to visualize the forecasts.
+    \item \verb|DREAM| fetches from the TSDPSSystem the weather forecast for the selected date and for the chosen mandal (if the user is an agronomist) or for the mandal of the farmer's farm (if the user is a farmer) (view UC23 for more details).
+ \end{enumerate}\\
+ \hline
+ Exit condition & \verb|DREAM| shows a table containing the weather forecasts for the chosen date and mandal. \\
  \hline
  Exceptions & \begin{itemize}
-     \item If the Telangana government website is currently unreachable, an error is shown to the user.
-     \item If no weather data is available for the chosen date, an error is shown to the user.
+     \item If the Telangana government website is currently unreachable, an error message is shown to the user.
+     \item If no weather data is available for the chosen date, an error message is shown to the user.
  \end{itemize}\\
  \hline
  Special requirements &\begin{itemize}
-     \item The Telangana government website must serve requests in less than 5 seconds;
-     \item The Telangana government website is assumed not to change in a backwards-incompatible manner without notice.
-     \color{red} non sono requisiti \color{black}
+     \item The weather forecasts should be shown in less than 10 seconds.
  \end{itemize}\\
  \hline
 \end{longtable}
@@ -2087,14 +2278,19 @@ Da rivedere: anche qui non riesco a trovare dove abbiamo scritto ogni quanto con
 \begin{figure}[H]
     \centering
 	\includegraphics[scale=0.5]{sequence_diagrams/VisualizeForecasts}
-    \caption{Sequence diagram for the VisualizeForecasts use case}
+    \caption{Sequence diagram for the VisualizeWeatherForecasts use case}
 \end{figure}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 12%%%%%%%%%%%%%%%%%%%%%%%
+
+\color{red}
+Rivedere domain assumption per questo (previsioni date per mandal).
+Use case includes GetWeatherForecasts.
+\color{black}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 22%%%%%%%%%%%%%%%%%%%%%%%
 
 \centering
 \begin{longtable}{|p{3.5cm}|m{8cm}|}
  \hline
- \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 12}} \\
+ \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 22}} \\
   % do not write anything here
  \endfirsthead
  % do not write anything here
@@ -2104,34 +2300,37 @@ Da rivedere: anche qui non riesco a trovare dove abbiamo scritto ogni quanto con
  % do not write anything here
  \endlastfoot
  \hline
- Name & VisualizeFarmerSuggestions\\
+ Name & VisualizeFarmerSuggestions, TSDPSSystem\\
  \hline
  Actor & Farmer\\
  \hline
- Entry condition & A farmer wants to check if there are any suggestions for them.\\
+ Entry condition & The farmer is logged into the system and wants to check if there are any suggestions for him/her.\\
  \hline
  Event flow & \begin{enumerate}
-    \item The farmer accesses the system;
-    \item the farmer accesses the \emph{Suggestions} section;
-    \item \verb|DREAM| automatically shows suggestions for the farmer.
+    \item From the homepage, the farmer accesses the Suggestions section;
+    \item \verb|DREAM| retrieves weather forecasts and reports necessary for computing the suggestions from the TSDPSSystem (view UC23 for more details).
+    \item \verb|DREAM| shows a list of suggestions for the farmer.
  \end{enumerate}\\
  \hline
  Exit condition & The farmer views the list of suggestions.\\
  \hline
  Exceptions & \begin{itemize}
-     \item If there are no suggestions for the farmer, a notice is shown.
+     \item If there are no suggestions for the farmer, a message is shown.
  \end{itemize}\\
  \hline
- Special requirements & None.\\
+ Special requirements & The farmer should be shown the suggestions in less than 20 seconds.\\
  \hline
 \end{longtable}
-\newpage
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 13%%%%%%%%%%%%%%%%%%%%%%%
+\color{red}
+Use case includes GetWeatherForecasts.
+\color{black}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 23%%%%%%%%%%%%%%%%%%%%%%%
 
 \centering
 \begin{longtable}{|p{3.5cm}|m{8cm}|}
  \hline
- \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 13}} \\
+ \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 23}} \\
   % do not write anything here
  \endfirsthead
  % do not write anything here
@@ -2143,38 +2342,33 @@ Da rivedere: anche qui non riesco a trovare dove abbiamo scritto ogni quanto con
  \hline
  Name & GetWeatherForecasts\\
  \hline
- Actor & OuterWeatherSource\\
+ Actor & TSDPSSystem\\
  \hline
- Entry condition & Either (a) a user requests weather data; or (b) \verb|DREAM| needs to access weather information for statistical purposes.\\
+ Entry condition & Either (a) a user requests weather data; or (b) \verb|DREAM| needs to access weather forecasts for computing suggestions for some farmer.\\
  \hline
  Event flow & \begin{enumerate}
-    \item \verb|DREAM| connects to the Telangana government website to fetch the required forecasts;
-    \item \color{red} The data is stored and analyzed as needed. \color{black}
+    \item \verb|DREAM| requests the TSDPSSystem the needed weather forecast 
+    \item The TSDPSSystem replies with the required weather forecasts 
  \end{enumerate}\\
  \hline
- Exit condition & The weather forecast data is collected by the system.\\
+ Exit condition & The weather forecast are available to the \verb|DREAM| system.\\
  \hline
  Exceptions & \begin{itemize}
-     \item If the Telangana government website is currently unreachable, the process is aborted and an error is returned.
+     \item If the TSDPSSystem is currently unreachable, the process is aborted and an error is returned to the user.
  \end{itemize}\\
  \hline
- Special requirements &\begin{itemize}
-    \color{red}
-     \item The Telangana government website must serve requests in less than 5 seconds;
-     \item The Telangana government website is assumed not to change in a backwards-incompatible manner without notice.
-     \color{black}
- \end{itemize}\\
+ Special requirements & - \\
  \hline
 \end{longtable}
 
-\color{red} lo teniamo o lo assimiliamo a visualize forecasts (UC11)? \color{black}
+The interaction is analogous for retrieving weather reports.
 
-%%%%%%%%%%%TABLE 14%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%TABLE 24%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \centering
 \begin{longtable}{|p{3.5cm}|m{8cm}|}
  \hline
- \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 13}} \\
+ \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 24}} \\
   % do not write anything here
  \endfirsthead
  % do not write anything here
@@ -2248,12 +2442,12 @@ The request is present in the list in the "My Replies" section of the Expert, sh
     \caption{Sequence diagram for the InsertProductions use case}
 \end{figure}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 15%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 25%%%%%%%%%%%%%%%%%%%%%%%
 
 \centering
 \begin{longtable}{|p{3.5cm}|m{8cm}|}
  \hline
- \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 15}} \\
+ \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 25}} \\
   % do not write anything here
  \endfirsthead
  % do not write anything here
@@ -2288,12 +2482,12 @@ The Farmer visualizes the list of messages in the thread – which is empty – 
  \hline
 \end{longtable}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 16%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%TABLE 26%%%%%%%%%%%%%%%%%%%%%%%
 
 \centering
 \begin{longtable}{|p{3.5cm}|m{8cm}|}
  \hline
- \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 16}} \\
+ \multicolumn{2}{|c|}{\cellcolor{white}\emph{USE CASE 26}} \\
   % do not write anything here
  \endfirsthead
  % do not write anything here
@@ -2448,27 +2642,6 @@ UC16: CreateFarmersForumThread &
 \end{longtable}
 
 \color{red}
-Requirements senza use cases:
-\begin{itemize}
-    \item R2: \verb|DREAM| accesses weather reports data provided by the TSDPS system;
-    
-    \item R18: \verb|DREAM| allows policy makers and agronomists to mark a farmer as best-performing or worst-performing;
-    
-    \item R19: \verb|DREAM| can compare different time periods of a farmer work according to various production criteria (e.g. production volume, fertilizers adopted, fraction of harvested plants over sowed ones, etc);
-  
-    \item R20: \verb|DREAM| can compare different time periods of a  farmer work with respect to environmental factors (e.g. weather reports data, soil moisture, ...);
-
-    \item R21: \verb|DREAM| allows policy makers to choose an initiative taken by an agronomist or a farmer to help a farmer - i.e., visit to the farm or reply to a question - and two time periods of the farmer to compare the two time periods;
-
-    \item R22: \verb|DREAM| can show the impact of a certain initiative taken by an agronomist or a farmer to help a farmer - i.e., visit to the farm or reply to a question - during a certain time period.
-    
-    \item R26: \verb|DREAM| allows farmers to choose the date of the forecasts to visualize;
-    
-    \item R46: \verb|DREAM| allows agronomists to visualize data about farmers to visit - such as name, surname and location of the farm -  and their production since their last visit to the farm;
-    
-    \item R47: \verb|DREAM| allows agronomists to visualize the problems inserted by a farmer to be visited since their last visit to the farm
-\end{itemize}
-\color{black}
 
 \newpage
 \raggedright
