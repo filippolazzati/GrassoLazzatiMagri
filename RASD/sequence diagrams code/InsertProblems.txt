@@ -2,25 +2,19 @@ title InsertProblems
 
 participant Farmer
 participant DREAM
+participant Agronomist
 activate Farmer
-Farmer->DREAM:request_login_page()
-activate DREAM
-Farmer<<--DREAM:login page
-deactivate DREAM
-opt page received
-Farmer->DREAM:login()
-activate DREAM
-Farmer<<--DREAM:answer
-opt logged in
 Farmer->DREAM:insert_problem()
-Farmer<<--DREAM:inser problem page
-opt page received
-Farmer->DREAM:send()
 activate DREAM
-DREAM->DREAM:check_agronomists_availability()
+Farmer<<--DREAM:insert problem page
 deactivate DREAM
-Farmer<<--DREAM:notification
-end
+opt page received
+Farmer->DREAM: insert_problem_data()
+activate DREAM
+Farmer<<--DREAM:ack
+opt see-agronomist option
+DREAM->Agronomist:schedule_visit()
+DREAM->Farmer: visit information
 deactivate DREAM
 end 
 end 

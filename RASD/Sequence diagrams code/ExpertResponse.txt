@@ -1,0 +1,19 @@
+title ExpertResponse
+participant Expert
+participant DREAM
+participant Farmer
+
+activate Expert
+Expert ->DREAM: my_responses()
+activate DREAM
+DREAM -->>Expert: list of requests
+DREAM<-Expert: send_response()
+DREAM->Farmer: response
+activate Farmer
+opt Farmer connected to Internet
+Farmer-->>DREAM:ack
+deactivate Farmer
+DREAM-->>Expert: confirmation
+end
+deactivate Expert
+deactivate DREAM

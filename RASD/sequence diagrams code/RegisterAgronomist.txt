@@ -3,37 +3,10 @@ title RegisterAgronomist
 participant Agronomist
 participant DREAM
 activate Agronomist
-Agronomist->DREAM:request_login_page()
+Agronomist->DREAM:insert_data()
 activate DREAM
-Agronomist<<--DREAM:login page
+DREAM->DREAM: check()
+opt valid data
+DREAM-->>Agronomist: agronomist's homepage
 deactivate DREAM
-opt page received
-Agronomist->DREAM:create_account()
-activate DREAM
-Agronomist<<--DREAM:create account page
-opt page received
-Agronomist->DREAM:create_agronomist_account()
-Agronomist<<--DREAM:create agronomist account page
-opt page received
-Agronomist->DREAM:create_credentials()
-activate DREAM
-DREAM->DREAM:check_password()
-opt valid password
-Agronomist<<--DREAM:confirm_email()
-Agronomist->DREAM:confirmation()
-deactivate DREAM
-opt e-mail confirmed
-Agronomist<<--DREAM: insert data page
-Agronomist->DREAM: done()
-activate DREAM
-DREAM->DREAM: verify_identity()
-opt identity verified
-deactivate DREAM
-Agronomist<<--DREAM: account created
-end
-deactivate DREAM
-end
-end
-end
-end 
 end 

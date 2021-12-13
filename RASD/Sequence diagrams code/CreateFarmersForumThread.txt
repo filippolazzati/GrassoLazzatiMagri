@@ -1,0 +1,17 @@
+title CreateFarmersForumThread
+participant Farmer
+participant DREAM
+
+activate Farmer
+Farmer ->> DREAM: forum()
+activate DREAM
+DREAM -->>Farmer: list of threads
+opt page received
+Farmer ->> DREAM: new_discussion_thread()
+DREAM -> DREAM: check()
+alt valid title
+DREAM -->>Farmer: confirmation
+else invalid title
+DREAM -->>Farmer: error
+end alt
+end opt

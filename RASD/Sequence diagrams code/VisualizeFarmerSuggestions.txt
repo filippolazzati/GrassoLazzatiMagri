@@ -1,0 +1,19 @@
+title VisualizeFarmerSuggestions
+
+participant Farmer
+participant DREAM
+participant TSDPSSystem
+activate Farmer
+Farmer->DREAM:suggestions()
+activate DREAM
+DREAM->TSDPSSystem: get_weather_forecasts()
+activate TSDPSSystem
+DREAM<<--TSDPSSystem: weather forecasts
+deactivate TSDPSSystem
+DREAM->TSDPSSystem: get_weather_reports()
+activate TSDPSSystem
+DREAM<<--TSDPSSystem: weather reports
+deactivate TSDPSSystem
+Farmer<<--DREAM: list of suggestions
+deactivate Farmer
+deactivate DREAM

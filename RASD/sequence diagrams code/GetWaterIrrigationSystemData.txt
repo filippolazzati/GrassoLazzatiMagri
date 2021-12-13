@@ -1,15 +1,15 @@
 title GetWaterIrrigationSystemData
 
 participant DREAM
-participant Water irrigation system
+participant Hub
 
 activate DREAM
-activate Water irrigation system
+activate Hub
 loop i < 3 && data is not arrived
-DREAM->Water irrigation system:request_data()
-Water irrigation system -->> DREAM: answer
+DREAM->Hub:request_data()
+Hub -->> DREAM: answer
 end
-deactivate Water irrigation system
+deactivate Hub
 alt data is arrived
 activate DREAM
 DREAM->DREAM: store_data()

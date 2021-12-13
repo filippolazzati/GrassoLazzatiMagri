@@ -1,0 +1,20 @@
+title AnalyzeImpactOfInitiative
+
+participant Policy Maker
+participant DREAM
+participant TSDPSSystem
+activate Policy Maker
+Policy Maker->DREAM:analyse_initiatives()
+activate DREAM
+Policy Maker<<--DREAM:initiatives page
+deactivate DREAM
+opt page received
+Policy Maker->DREAM:select_initiative()
+activate DREAM
+DREAM->TSDPSSystem: get_weather_reports()
+activate TSDPSSystem
+DREAM<<--TSDPSSystem: weather reports
+Policy Maker<<--DREAM: statistics
+end
+deactivate Policy Maker
+deactivate DREAM

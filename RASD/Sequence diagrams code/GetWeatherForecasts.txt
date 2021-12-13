@@ -1,0 +1,16 @@
+title GetWeatherForecasts
+
+participant DREAM
+participant TSDPSSystem
+participant User
+
+activate DREAM
+DREAM->TSDPSSystem:get_weather_forecasts()
+alt system available
+activate TSDPSSystem
+DREAM<<--TSDPSSystem:weather forecasts
+deactivate TSDPSSystem
+else system unavailable
+DREAM->User: error()
+end
+deactivate DREAM

@@ -1,15 +1,15 @@
 title GetSoilSensorsData
 
 participant DREAM
-participant Soil sensor
+participant Hub
 
 activate DREAM
-activate Soil sensor
+activate Hub
 loop i < 3 && data is not arrived
-DREAM->Soil sensor:request_data()
-DREAM<<--Soil sensor: answer
+DREAM->Hub:request_data()
+DREAM<<--Hub: answer
 end
-deactivate Soil sensor
+deactivate Hub
 alt data is arrived
 activate DREAM
 DREAM->DREAM: store_data()

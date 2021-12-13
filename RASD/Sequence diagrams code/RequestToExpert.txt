@@ -1,0 +1,21 @@
+title RequestToExpert
+participant Farmer
+participant DREAM
+participant Expert
+
+activate Farmer
+Farmer ->DREAM: my_requests()
+activate DREAM
+DREAM -->>Farmer: list of requests
+DREAM<-Farmer: new_request()
+Farmer<<--DREAM: list of experts
+DREAM<-Farmer: request()
+DREAM->Expert: request
+activate Expert
+opt Expert connected to Internet
+Expert-->>DREAM:ack
+deactivate Expert
+DREAM-->>Farmer: confirmation
+end
+deactivate Farmer
+deactivate DREAM
