@@ -1,0 +1,150 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{color}   %May be necessary if you want to color links
+\usepackage{hyperref}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage[table]{xcolor}
+\usepackage{amssymb}
+\usepackage{minted}
+\setlength{\arrayrulewidth}{0.5mm}
+\setlength{\tabcolsep}{18pt}
+\renewcommand{\arraystretch}{2.5}
+\hypersetup{
+    colorlinks=false, %set true if you want colored links
+    linktoc=all,     %set to all if you want both sections and subsections linked
+    %linkcolor=blue,  %choose some color if you want links to stand out
+}
+
+\title{DREAM - DD}
+\author{Filippo Lazzati}
+%\date{October 2021}
+
+\begin{document}
+\thispagestyle{empty} 
+\begin{titlepage}
+    \begin{center}
+       %\vspace*{2cm}
+       {\Huge \textbf{DREAM}} %%Replace this with the Title of your research
+       \vspace{0.5cm}
+       \\
+    \begin{LARGE}
+        {Data-dRiven PrEdictive FArMing in Telangana}
+        \vspace{1.0cm}
+        \\
+        {\textit{Design Document - DD}}
+        \includegraphics[width=13cm]{logo/polimi.png}
+       \vspace{1.5cm}
+        
+        {Christian Grasso - Filippo Lazzati - Chiara Magri}
+       \vspace{0.5cm}
+       {Year: 2021/2022}
+       
+    \end{LARGE}  
+   \end{center}
+\end{titlepage}
+\newpage
+\tableofcontents %this command creates an index
+\newpage
+
+\section{Introduction}
+A DD\footnote{Design Document. See section \ref{Abbreviations}}, according to the definition provided by the \textbf{IEEE Std 1016™-2009} standard, is \textit{a representation of a software design that is to be used for recording design information, addressing various design concerns, and communicating that information to the design’s stakeholders}. It should be noticed that, in this document, instead of using the abbreviation SDD, which stands for "Software Design Description", is used DD. In other words, a DD is a document that is used by \textit{acquirers, project managers, quality assurance staff, configuration managers, software designers, programmers, testers, and maintainers} to retrieve the specific design information needed by the specific stakeholder.
+\subsection{Purpose}\label{Purpose}
+\verb|DREAM|, the system to-be, aims to help policy makers 
+formulating policies in the field of agriculture.  Moreover, \verb|DREAM| aims to help farmers by putting them in contact with each other so that they can exchange advice and aids. Finally, \verb|DREAM| also schedules the daily work of agronomists and make them visit the worse-performing farmers. These are the main goals of \verb|DREAM| which shall be data-driven, namely it shall intensively exploits data to perform the tasks it is asked to do. The requirements that allow the system to satisfy the goals as well as a detailed list of all the goals are present respectively in \textit{RASD - 3.2 Functional requirements} and in \textit{RASD - 1.1 Purpose}. In this document the focus in on the design, that is on the description of the components and the interaction among them and with external systems through interfaces which compose the system and allow the satisfaction of the requirements and, at the end, of the goals.
+\subsection{Scope}
+The system to-be has three major stakeholders: the policy makers, the agronomists and the farmers. The needs that \verb|DREAM| aims to satisfy differ among them, and the main goals of the system have been identified in section\ref{Purpose}. For a detailed description and explanation of the context in which \verb|DREAM| operates the reader should refer to the \textit{RASD - 1.2 Scope} section. In here, we briefly tell about the main design concerns of such stakeholders.\\
+First of all, all of them have goals that, in order to be satisfied, require the storage of a large volume of data (after all, \verb|DREAM| is a data-driven system), and therefore scalable technologies suitable to manage the required amount of information have to be used. Furthermore, the stakeholders are not assumed to be expert in computer science, thus a graphical interface is needed; more specifically, the idea is to implement a web application to facilitate the access to the system to all the users and from any kind of device (computer, smartphone, ...).
+\subsection{Definitions, Acronyms, Abbreviations}\label{Abbreviations}
+This section provides a list of the main abbreviations, acronyms and definitions adopted in the document:
+\begin{itemize}
+    \item Design Document (DD): "An SDD is a representation of a software design to be used for communicating design information to its stakeholders. The requirements for the design languages (notations and other representational schemes) to be used for conformant SDDs are specified.
+This standard is applicable to automated databases and design description languages but can be
+used for paper documents and other means of descriptions".
+\end{itemize}
+\subsection{Revision history}
+\raggedright
+\begin{tabular}{ |c | c |}
+\hline
+ \textit{revision} & \textit{changes} \\ 
+ \hline
+ 1.0 &  initial version\\ 
+ \hline
+\end{tabular}
+\subsection{Reference Documents}
+\begin{itemize}
+    \item \textit{IEEE Std 1016™-2009}, the standard for information technology, systems design, Software Design Descriptions. It describes the "required information content and organization for software design descriptions (SDDs)";
+    \item \textit{ISO/IEC/IEEE 42010}, the standard for architecture description in systems and software engineering, that "addresses the creation, analysis and sustainment of architectures of systems
+through the use of architecture descriptions".
+\end{itemize}
+\subsection{Document Structure}
+This document complies with the SDD\footnote{Software Design Descriptions} standard structure as it is defined in the \textit{IEEE Std 1016™-2009}, sections 4 and 5. Nevertheless, the contents have been ordered in a way that best fits the specific topics of this document and to facilitate the readers in the reading of this DD\footnote{Design Document.}.
+The document is divided in 5 main parts:
+\begin{enumerate}
+\item the first part (to which this section belongs) provides an introduction to the system to-be, \verb|DREAM|, helping in the reading of the following sections;
+\item the second part provides the out-and-out design decisions under which \verb|DREAM| is implemented. This part contains UML\footnote{Unified Modeling Language.} diagrams as well as text descriptions of the components of the system along with their interfaces, and explanations of the selected architectural styles and design patterns and possible other design decisions;
+\item the third part describes the user interface. This part is a continuation of the \textit{RASD - 3.1.1 User Interfaces} section, which enters the details of the design choices;
+\item the fourth part shows how the requirements identified in the \textit{RASD - 3.2 Functional requirements} section have brought to the introduction of a specific component/interface in the system;
+\item the fifth and last part is about a plan to follow for the implementation of the system, namely from which subcomponent to start, which subcomponents can be implemented in parallel, and about a plan for the integration of such subcomponents and also a plan for testing the integration.
+\end{enumerate}
+It should be remarked that the structure of this document does not follow a logic or temporal order, but whoever is interested in the reading can jump from a section to another, because the purpose of it is to be a reference document.
+\section{Architectural design}
+\subsection{Overview}
+\subsection{Component view}
+\includegraphics[width=16.5cm]{diagrams/components_diagram.png}
+\subsection{Deployment view}
+By the definition provided in "The Unified Modeling Language User Guide"\footnote{ISBN: 0-201-57168-4}, a deployment diagram is \textit{a diagram that shows the configuration of run time processing nodes and the components that live on them}. In other words, we represent the topology of processors and devices where our software executes.\\
+The deployment diagram of \verb|DREAM| is the following:
+\newpage
+\includegraphics[trim=5cm 15cm 1cm 10cm,width=16.5cm]{diagrams/deployment_diagram.png}
+\newpage
+Some observations are required:
+\begin{itemize}
+    \item as previously specified, we opt for a 3-tiers architecture, with a web server that contains the whole business logic of the system and a database server with the data;
+    \item some colours have been used for an easier visualization of the tiers;
+    \item for the sake of simplicity, we have decided to represent only 2 possible clients, while the system is designed to support a much larger number;
+    \item the number of web servers is more than one in order to offer faster responses and to scale better with more users;
+    \item according to the amount of data to manage\footnote{see \textit{RASD - 3.3 Performance requirements} for an estimate of the storage capacity required.}, the data might be partitioned in more physical devices; for the sake of simplicity we have represented only one device since the access is hidden behind the DBAL;
+    \item the architecture adopted for a scalable and secure routing of the users' requests to the servers is the FWLB (firewall load balancing), that is a \textit{deployment architecture where multiple firewall systems are placed behind Server Load Balancers}\footnote{\url{https://www.a10networks.com/blog/what-is-firewall-load-balancing-fwlb/}.}.
+\end{itemize}
+\subsection{Runtime view}
+\subsection{Selected architectural styles and patterns}
+According to the definition provided by David Garlan and Mary Shaw\footnote{January 1994, CMUCS-
+94-166, see "An Introduction to Software Architecture"
+at \url{http://www.cs.cmu.edu/afs/cs/project/able/ftp/intro_softarch/intro_softarch.pdf}.}, \textit{an architectural style determines the vocabulary of components and connectors that can be used in instances of that style, together with a set of constraints on how they can be combined}.\\
+\paragraph{Architectural style}
+Given that the tasks that \verb|DREAM| has to achieve can be perfectly reached by implementing the system as a web application, and given that the most wide-spread, standardized and successful architectural style for distributed (web) applications is the client-server one, we have decided to opt for it. As a matter of fact, every time a user (farmer, agronomist or policy maker), namely a client, has to access the system, it sends a request to \verb|DREAM|, or better, to the server of \verb|DREAM|, which processes it and answers with a response. Moreover, our choice features 3 tiers with a thin client.\\
+The main advantages of this choice related to the system we have to design are:
+\begin{itemize}
+    \item \textbf{scalability}: the number of resources can be easily increased when needed; thanks also to the decision of adopting a 3-tiers architecture, the data is apart from the business logic, therefore the storage capacity can be increased without affecting the anything else
+    \item \textbf{accessibility}: the access to the system can be done with every possible device with a browser installed and from every location as long as an Internet connection is available. Despite this characteristic might not seem as important as the others identified in the \textit{RASD}, it is relevant because it provides much flexibility to the users: given their credentials, they can access from everywhere;
+    \item \textbf{security}: users can access only through their credentials; this is a method for access controls and guarantees that only authorized users are granted access.
+\end{itemize}
+\subsection{Other design decisions}
+\paragraph{Relational database}
+We have decided to opt for a relational database because they perfectly match the use case of \verb|DREAM|. As a matter of fact, according to \textit{RASD - 3.3 Performance requirements}, there is not a huge number of relations between the entities of the data, thus a graph database would be counter-productive, because of its characteristic of being schema-less; the system has not strict time requirements, therefore adopting a key-value database would be uselessly expensive; the amount of data to manage is big, but not in the order required for matching the use case of a columnar database; finally, since data has to be pre-processed by \verb|DREAM| before reaching the users (in other words we accept data exiting the database at a low level), then we avoid a document-oriented database (also because it would make us waste a lot of space).
+\paragraph{Database abstraction layer}
+A DBAL is useful way to abstract from the details of the specific technology adopted for the database. It allows to reduce the amount of work required for the implementation of the components to manage the data because it provides APIs that hide the technicalities of the specific database chosen.
+\paragraph{Model view controller}
+The MVC is a software design pattern that allows to design a software application using 3 different main elements:
+\begin{itemize}
+    \item the model, which provides all the methods to access the data of the application;
+    \item the view, which allows to visualize the data in the model and deals with the interaction between the system and the user;
+    \item the controller, which receives the commands of the users and carries them out by modifying the state of the other two components.
+\end{itemize}
+The adoption of the MVC brings many advantages during the implementation phase of \verb|DREAM|. It allows to easily organize large-size web applications, to implement graphical interfaces with less effort, to easily doing planning and maintenance and many others.
+\paragraph{Multi-page application}
+....Christian or Chiara......
+\paragraph{Thin client}
+// to do
+\paragraph{Algorithms}
+.....Some remarkable algorithms.....
+\section{User Interface design}
+\section{Requirements traceability}
+\section{Implementation, integration and test plan}
+\section{Effort spent}
+\section{References}
+\end{document}
