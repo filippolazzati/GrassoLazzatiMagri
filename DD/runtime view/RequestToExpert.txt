@@ -1,0 +1,34 @@
+title RequestToExpert
+
+participant WebApp
+participant HelpRequestService
+participant NotificationService
+participant DBAL
+
+activate WebApp
+WebApp->HelpRequestService: listHelpRequests()
+activate HelpRequestService
+HelpRequestService->DBAL: query(q: string)
+activate DBAL
+HelpRequestService<<--DBAL: HelpRequest[]
+deactivate DBAL
+WebApp<<--HelpRequestService: "my requests" page
+deactivate HelpRequestService
+WebApp->HelpRequestService: listAvailableExperts()
+activate HelpRequestService
+WebApp<<--HelpRequestService: list of experts
+deactivate HelpRequestService
+WebApp->HelpRequestService: createHelpRequest(title: string, content: string)
+activate HelpRequestService
+HelpRequestService->NotificationService:notify(user: User, message: Message)
+activate NotificationService
+opt expert connected to Internet
+HelpRequestService<<--NotificationService: ack
+deactivate NotificationService
+HelpRequestService->DBAL: insert(d: Data)
+activate DBAL
+HelpRequestService<<--DBAL: ack
+deactivate DBAL
+WebApp<<--HelpRequestService: request created
+end
+deactivate HelpRequestService

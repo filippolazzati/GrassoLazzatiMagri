@@ -93,7 +93,7 @@ The document is divided in 5 main parts:
 It should be remarked that the structure of this document does not follow a logic or temporal order, but whoever is interested in the reading can jump from a section to another, because the purpose of it is to be a reference document.
 \section{Architectural design}
 \subsection{Overview}
-\subsection{Component view}
+\subsection{Component view}\label{Component view}
 \includegraphics[width=16.5cm]{diagrams/components_diagram.png}
 \subsection{Deployment view}
 By the definition provided in "The Unified Modeling Language User Guide"\footnote{ISBN: 0-201-57168-4}, a deployment diagram is \textit{a diagram that shows the configuration of run time processing nodes and the components that live on them}. In other words, we represent the topology of processors and devices where our software executes.\\
@@ -111,6 +111,76 @@ Some observations are required:
     \item the architecture adopted for a scalable and secure routing of the users' requests to the servers is the FWLB (firewall load balancing), that is a \textit{deployment architecture where multiple firewall systems are placed behind Server Load Balancers}\footnote{\url{https://www.a10networks.com/blog/what-is-firewall-load-balancing-fwlb/}.}.
 \end{itemize}
 \subsection{Runtime view}
+In this section the interactions among the components (identified at section \ref{Component view}) are shown. In order to make the presentation clearer, the UML notation of sequence diagrams is used.\\ It should be noticed that not all the use cases and scenarios identified in \textit{RASD - 3.2.3 Scenarios} and \textit{RASD - 3.2.4 Use cases} are represented here. We have decided to explicitly describe only the most relevant use cases, since in many occasions the interaction among the components is more or less the same. As a matter of fact, it often occurs that the difference lies only in the function invoked on a specific component; since all the interfaces are well-explained in the rest of this document (see section \ref{Component interfaces}), we opted to avoid this repetition.
+Furthermore, the DBMS component is not represented in any sequence diagram because its interaction with the DBAL is hidden behind the software framework adopted.
+\newpage
+\begin{figure}[H]
+   \centering
+   \includegraphics[scale=0.40]{diagrams/sequence diagrams/RegisterFarmer.png}
+    \caption{Sequence diagram that describes the RegisterFarmer use case.}
+\end{figure}
+This sequence diagram describes the process of registration of a farmer in the system. The farmer invokes the signUp method on the AuthenticationService, which checks the validity of the data (length of the password, ...) and, in case data is valid, it exploits the NotificationService to send an e-mail to the farmer with a link to verify the account. In case the account is verified, the AuthenticationService stores the new account in the database and positively notifies the farmer, otherwise an error is sent.
+
+\newpage
+\begin{figure}[H]
+   \centering
+   \includegraphics[scale=0.60]{diagrams/sequence diagrams/LogIn.png}
+    \caption{Sequence diagram that describes the LogIn use case.}
+\end{figure}
+
+This sequence diagram describes how a user (farmer, agronomist or policy maker) can access to the system. The procedure is rather simple: the WebApp invokes the login method on the AuthenticationService which checks that the inserted credentials do not contain code for an SQL injection attack (in such a case, an error is returned to the WebApp; this branch is not represented in the diagram) and then queries the database (through the DBAL) to check whether a profile associated to the specified credentials actually exists. In such a case, the user logs in, otherwise he receives an error.\\
+OBS.: from now on, checks on the data inserted by the user in order to avoid SQL injection attacks are not mentioned anymore, but they are present every time the user invokes methods of \verb|DREAM| passing arguments (since it is a functionality offered by the software framework adopted, it is not meaningful neither to represent nor to mention it every time).
+
+\newpage
+\begin{figure}[H]
+   \centering
+   \includegraphics[scale=0.60]{diagrams/sequence diagrams/InsertProductionData.png}
+    \caption{Sequence diagram that describes the InsertProductionData use case.}
+\end{figure}
+This sequence diagram describes the procedure through which a Farmer, starting from the home page, can insert production data in the system. According to the corresponding use case, the farmer automatically invokes the readData method when opening the "my productions" page. This call triggers an underlying retrieval of data from the database. Next, the Farmer calls insertData with all the details of the production to insert and, after a check about the validity, the data is inserted into the database and an ack is returned to the WebApp.
+
+\newpage
+\begin{figure}[H]
+   \centering
+   \includegraphics[scale=0.40]{diagrams/sequence diagrams/AcceptDailyPlan.png}
+    \caption{Sequence diagram that describes the AcceptDailyPlan use case.}
+\end{figure}
+This sequence diagram describes the interactions that occur when an agronomist generates and accepts a new daily plan. First of all, the agronomist opens the daily plan page and then he selects the date of his next working day. The DailyPlanService queries the database to retrieve data about the Farmers that he needs to generate a suitable daily plan for the agronomist. In case the daily plan is acceptable to the agronomist, the WebApp invokes the saveDailyPlan method on the DailyPlanService, that stores the new daily plan in the database and then notifies the involved farmer (such interaction is not shown in the diagram).\\
+OBS.: In order to modify the daily plan, specific methods are offered by the DailyPlanService. See section \ref{Component interfaces} for more details (sequence diagrams are omitted for the sake of simplicity).
+
+\newpage
+\begin{figure}[H]
+   \centering
+   \includegraphics[scale=0.60]{diagrams/sequence diagrams/GetSoilSensorsData.png}
+    \caption{Sequence diagram that describes the GetSoilSensorsData use case.}
+\end{figure}
+This sequence diagram describes the process with which \verb|DREAM| retrieves data from the humidity sensors (the process for the water irrigation system is analogue). Every time a timeout expires, the SensorService gets in contact with the Sensor Hub through its interface. If the data arrives, then such data is stored in the database, otherwise the SensorService stores in the database that at that specific timestamp the sensor was not reachable.
+
+\newpage
+\begin{figure}[H]
+   \centering
+   \includegraphics[scale=0.30]{diagrams/sequence diagrams/VisualizeBestAndWorstFarmers.png}
+    \caption{Sequence diagram that describes the VisualizeBestAndWorstFarmers use case.}
+\end{figure}
+This sequence diagram describes the process that leads to the ranking of farmers. The policy maker invokes the rankByWeatherResilience method on the RankService, which exploits the WeatherService to retrieve the weather reports from the TSDPS; moreover, RankService queries the database to retrieve all the data about farmers it needs to rank them, and finally it provides the policy maker the ranking.
+
+\newpage
+\begin{figure}[H]
+   \centering
+   \includegraphics[scale=0.40]{diagrams/sequence diagrams/RequestToExpert.png}
+    \caption{Sequence diagram that describes the RequestToExpert use case.}
+\end{figure}
+This sequence diagram represents the way a farmer can ask for help to an expert (agronomist or best-performing farmer). Starting from the home page, the farmer open the "my requests" page which implies a query to retrieve all the past requests of the farmer. Next, the farmer selects the expert from which he wants to receive some help and invokes the createHelpRequest method on the HelpRequestService. This service exploits the NotificationService to notify the expert, and, in case the the expert is already connected on Internet, an ack is received, the request is inserted in the database and the farmer is positively notified. It should be remarked that if the expert is not available, the system notifies the farmer that the expert will be notified as soon as he accesses \verb|DREAM| (this branch has been omitted for the sake of simplicity).
+
+\newpage
+\begin{figure}[H]
+   \centering
+   \includegraphics[scale=0.40]{diagrams/sequence diagrams/CreateFarmersForumThread.png}
+    \caption{Sequence diagram that describes the CreateFarmersForumThread use case.}
+\end{figure}
+This diagram describes the process of creation of a new discussion thread by a farmer. It invokes the createTopic method on the HelpRequestService and, if the data inserted are valid, the service stores the information in the database and positively notifies the farmer, otherwise an error is shown.
+\newpage
+\subsection{Component interfaces}\label{Component interfaces}
 \subsection{Selected architectural styles and patterns}
 According to the definition provided by David Garlan and Mary Shaw\footnote{January 1994, CMUCS-
 94-166, see "An Introduction to Software Architecture"

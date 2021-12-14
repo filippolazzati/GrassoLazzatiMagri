@@ -1,0 +1,25 @@
+title VisualizeBestAndWorstFarmers
+
+participant WebApp
+participant RankingService
+participant WeatherService
+participant TSDPS
+participant DBAL
+
+activate WebApp
+WebApp->RankingService: rankByWeatherResilience(area: Area, from: DateTime, to: DateTime)
+activate RankingService
+RankingService->WeatherService:getWeatherReports(area: Area, from: DateTime, to: DateTime)
+activate WeatherService
+WeatherService->TSDPS: get weather reports
+activate TSDPS
+WeatherService<<--TSDPS: weather reports
+deactivate TSDPS
+RankingService<<--WeatherService: weather reports
+deactivate WeatherService
+RankingService->DBAL: query(q: string)
+activate DBAL
+RankingService<<--DBAL: farmers data
+deactivate DBAL
+WebApp<<--RankingService: ranking
+deactivate RankingService

@@ -1,0 +1,27 @@
+title RegisterFarmer
+
+participant WebApp
+participant AuthenticationService
+participant NotificationService
+participant DBAL
+
+activate WebApp
+WebApp->AuthenticationService:signup(username: string, password: string, farm: Farm)
+activate AuthenticationService
+opt valid data
+AuthenticationService->NotificationService:sendMail(account: string, title: string, body: string)
+activate NotificationService
+alt mail confirmed
+AuthenticationService<<--NotificationService: ack
+AuthenticationService->DBAL: insert(d: Data)
+activate DBAL
+AuthenticationService<<--DBAL: ack
+deactivate DBAL
+WebApp<<--AuthenticationService: account created
+else mail not confirmed
+AuthenticationService<<--NotificationService: nack
+WebApp<<--AuthenticationService: error
+deactivate NotificationService
+end
+end
+deactivate AuthenticationService

@@ -1,0 +1,156 @@
+DBAL: Database Abstraction Layer - Allows to query the database in an object-oriented style abstracting over the specific database system used.
+- query(q: string)
+- insert(d: Data)
+
+-------------------
+
+SensorService
+It allows for interactions with ambient and soil sensors (humidity sensors, irrigation systems...) through a sensor hub.
+
+- RetrieveSensorData
+-- getHumidityData(area: Area, from: DateTime, to: DateTime): SensorData[]
+   Returns soil humidity data for the specified area in the specified time interval.
+   The items in the returned array contain the specific sensor identifier, the reading value, the date of the reading and the location.
+
+-- getIrrigationSystemData(area: Area, from: DateTime, to: DateTime): SensorData[]
+   Returns irrigation system statistics for the specified area in the specified time interval.
+   The items in the returned array contain the specific sensor identifier, the reading value, the date of the reading and the location.
+
+-------------------
+
+WeatherService
+Allows to read weather forecasts and reports.
+
+- ReadWeatherData
+-- getWeatherReports(area: Area, from: DateTime, to: DateTime): WeatherData[]
+   Returns historic weather reports for the specified area and time interval.
+   The items in the returned array contain the date and time of the report and the weather data.
+
+-- getWeatherForecasts(area: Area, date: DateTime): WeatherData[]
+   Returns weather forecasts for the specified area and the specified date.
+   The items in the returned array contain the time of the report and the weather data.
+   The granularity of the reports varies based on how further in time the specified date is.
+
+-------------------
+
+ProductionDataService
+Handles farmer production data and issues.
+
+- InsertProductionData
+-- insertData(farm: Farm, date: DateTime, data: ProductionData): void
+   Inserts production data for the specified farm and date.
+
+-- insertIssue(farm: Farm, date: DateTime, issue: ProductionIssue): void
+   Inserts a production issue for the specified farm and date.
+
+- ReadProductionData
+-- readData(farm: Farm, from: DateTime, to: DateTime): ProductionData[]
+   Retrieves production data for the specified farm and time interval.
+
+-- readIssues(farm: Farm, from: DateTime, to: DateTime): ProductionIssue[]
+   Reads production issues for the specified farm and time interval.
+
+--------------------
+
+RankingService
+Allows ranking farmers based on various parameters.
+
+- Ranking
+-- rankByProductivity(area: Area, from: DateTime, to: DateTime): Farmer[]
+   Ranks farmers based on productivity, i.e. harvested volume over sowed volume, in the specified interval.
+
+-- rankByWeatherResilience(area: Area, from: DateTime, to: DateTime): Farmer[]
+   Ranks farmers based on weather resilience: the best (highest ranked) farmers are the ones who saw a smaller decrease in production volume in adverse weather conditions.
+
+--------------------
+
+AnalyticsService
+Allows retrieving global analytics for the system.
+
+- Analytics
+-- ???
+
+--------------------
+
+HelpRequestService
+Handling of help request / replies.
+
+- HelpRequest
+-- createHelpRequest(title: string, content: string): HelpRequest
+   Creates a new help request from the current user.
+
+-- listHelpRequests(): HelpRequest[]
+   Retrieves list of open help requests.
+
+-- listAvailableExperts(): Expert[]
+   Retrieves list of available experts.
+
+-- answerHelpRequest(request: HelpRequest, reply: string): void
+   Adds a reply to an open help request.
+
+-- closeHelpRequest(request: HelpRequest)
+   Marks a request as closed / solved.
+
+--------------------
+
+ForumService
+Provides an interface for farmers to interact with the forum.
+
+- Forum
+-- createTopic(title: string, content: string): Topic
+   Creates a new topic in the forum.
+
+-- addComment(topic: Topic, comment: string): Comment
+   Adds a new comment to an open topic
+
+-- closeTopic(topic: Topic)
+   Closes an open topic to prevent any further comments.
+
+--------------------
+
+DailyPlanService
+Service for agronomist daily plans.
+
+- DailyPlan
+-- generateDailyPlan(agronomist: Agronomist, date: DateTime): DailyPlan
+   Generates a new daily plan for the specified agronomist and date.
+
+-- addDailyPlanEntry(plan: DailyPlan, farm: Farm, time: Time): FarmVisit
+   Adds a new visit to the specified daily plan at the specified time.
+
+-- removeDailyPlanEntry(entry: FarmVisit)
+   Removes the specified farm visit from the related daily plan.
+
+-- moveDailyPlanEntry(entry: FarmVisit, time: Time)
+   Updates the time of the specified farm visit.
+
+-- openDailyPlanPage(): void
+   Opens the daily plan page on the WebApp.
+
+-- saveDailyPlan(agronomist: Agronomist, dailyPlan: DailyPlan): void
+   Saves the specified daily plan in the database and calls the NotificationService to notify the involved farmer.
+
+-- getFarmDetails(): Farm
+
+--------------------
+
+NotificationService
+Servce for notifications.
+
+-- notify(user: User, message: Message): void
+   Notifies the specified user withe the specified message.
+
+-- sendMail(account: string, title: string, body: string): void
+   Sends an email to the specified account.
+
+--------------------
+
+AuthenticationService
+Authentication service.
+
+-- login(username: string, password: string): void
+   Logs in the user with the specified username and password.
+   If no such user exists or the password is incorrect, they will be prompted to check their credentials; otherwise, they will be redirected to the correct page based on the type of the user.
+
+-- signup(username: string, password: string, farm: Farm): void
+   Creates a new user account for a farmer.

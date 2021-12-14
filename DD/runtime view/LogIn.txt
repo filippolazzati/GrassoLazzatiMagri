@@ -1,0 +1,22 @@
+title LogIn
+
+participant WebApp
+participant AuthenticationService
+participant DBAL
+
+activate WebApp
+WebApp->AuthenticationService:login(username: string, password: string)
+activate AuthenticationService
+AuthenticationService->DBAL: query(q: string)
+activate DBAL
+alt valid credentials
+AuthenticationService<<--DBAL: ack
+WebApp<<--AuthenticationService: home page
+
+else invalid credentials
+AuthenticationService<<--DBAL: nack
+deactivate DBAL
+WebApp<<--AuthenticationService: error
+end alt
+deactivate AuthenticationService
+deactivate WebApp

@@ -1,0 +1,19 @@
+title CreateFarmersForumThread
+
+participant WebApp
+participant ForumService
+participant DBAL
+
+activate WebApp
+WebApp->ForumService: createTopic(title: string, content: string)
+activate ForumService
+alt valid data
+ForumService->DBAL:insert(d: Data)
+activate DBAL
+ForumService<<--DBAL: ack
+WebApp<<--ForumService: confirmation
+deactivate DBAL
+else invalid data
+WebApp<<--ForumService: error
+end 
+

@@ -1,0 +1,22 @@
+title GetSoilSensorsData
+
+participant SensorService
+participant Sensor Hub
+participant DBAL
+
+activate SensorService
+loop i < 3 && data is not arrived
+SensorService->Sensor Hub: get humidity data
+activate Sensor Hub
+SensorService<<--Sensor Hub: humidity data
+deactivate Sensor Hub
+alt data is received
+SensorService->DBAL: insert(d: Data)
+activate DBAL
+SensorService<<--DBAL: ack
+else data is not reachable
+SensorService->DBAL: insert(d: Data)
+SensorService<<--DBAL: ack
+deactivate DBAL
+end
+end

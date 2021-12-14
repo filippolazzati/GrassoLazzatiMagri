@@ -1,0 +1,34 @@
+title AcceptDailyPlan
+
+participant WebApp
+participant DailyPlanService
+participant DBAL
+participant NotificationService
+
+activate WebApp
+WebApp->DailyPlanService:openDailyPlanPage()
+activate DailyPlanService
+WebApp<<--DailyPlanService: daily plan page
+deactivate DailyPlanService
+WebApp->DailyPlanService: generateDailyPlan(agronomist: Agronomist, date: DateTime)
+activate DailyPlanService
+DailyPlanService->DBAL: query(q: string)
+activate DBAL
+DailyPlanService<<--DBAL: farmers data
+deactivate DBAL
+WebApp<<--DailyPlanService: daily plan details
+deactivate DailyPlanService
+opt acceptable daily plan
+WebApp->DailyPlanService: saveDailyPlan(agronomist: Agronomist, dailyPlan: DailyPlan)
+activate DailyPlanService
+DailyPlanService->DBAL: insert(d: Data)
+activate DBAL
+DailyPlanService<<--DBAL: ack
+deactivate DBAL
+DailyPlanService->NotificationService: notify(user: User, message: Message)
+activate NotificationService
+DailyPlanService<<--NotificationService: ack
+deactivate NotificationService
+WebApp<<--DailyPlanService: ack
+end opt
+deactivate DailyPlanService
