@@ -198,6 +198,8 @@ The main advantages of this choice related to the system we have to design are:
 We have decided to opt for a relational database because they perfectly match the use case of \verb|DREAM|. As a matter of fact, according to \textit{RASD - 3.3 Performance requirements}, there is not a huge number of relations between the entities of the data, thus a graph database would be counter-productive, because of its characteristic of being schema-less; the system has not strict time requirements, therefore adopting a key-value database would be uselessly expensive; the amount of data to manage is big, but not in the order required for matching the use case of a columnar database; finally, since data has to be pre-processed by \verb|DREAM| before reaching the users (in other words we accept data exiting the database at a low level), then we avoid a document-oriented database (also because it would make us waste a lot of space).
 \paragraph{Database abstraction layer}
 A DBAL is useful way to abstract from the details of the specific technology adopted for the database. It allows to reduce the amount of work required for the implementation of the components to manage the data because it provides APIs that hide the technicalities of the specific database chosen.
+\paragraph{Server-side framework}
+For what concerns the application layer, a software framework will be used as a foundation to build upon. In addition to providing an established and streamlined development flow, the framework will provide basic interfaces to work with the HTTP protocol and handle common tasks such as webpage rendering. Additional pre-existing components will also be used to handle other generic tasks such as email sending.
 \paragraph{Model view controller}
 The MVC is a software design pattern that allows to design a software application using 3 different main elements:
 \begin{itemize}
@@ -207,14 +209,39 @@ The MVC is a software design pattern that allows to design a software applicatio
 \end{itemize}
 The adoption of the MVC brings many advantages during the implementation phase of \verb|DREAM|. It allows to easily organize large-size web applications, to implement graphical interfaces with less effort, to easily doing planning and maintenance and many others.
 \paragraph{Multi-page application}
-....Christian or Chiara......
+\verb|DREAM| will be implemented as a multi-page application; that is, every time the user changes the current page - by following a link or performing an action in the application - a request will be made to the server to provide the full content of the new page. \newline
+The rationale for this choice is DREAM being an application which does not require an high degree of interactivity: a multi-page application is sufficient to sastisfy all requirements while being easier to develop and maintain compared to a client-side single-page application (SPA).
 \paragraph{Thin client}
-// to do
-\paragraph{Algorithms}
-.....Some remarkable algorithms.....
+For the same reasons outlined in the above paragraph, we have opted to keep most of the business logic on the server-side (thin client architecture). The server will also handle part of the presentation logic, by serving webpages that already include information relevant to the user without the need to perform further network requests, such as API calls. While this requires an higher load on the server, the use of caching techniques can keep the performance impact to a minimum without requiring extensive resources.
+A minimal amount of client-side logic will be required to handle some user interface related tasks and to perform early validation on user-generated content, in order to reduce unnecessary server load.
+
+\newpage
 \section{User Interface design}
+\newpage
 \section{Requirements traceability}
+\newpage
 \section{Implementation, integration and test plan}
+\subsection{Implementation and integration}
+\setlength{\parskip}{.5em}
+As outlined in the component diagram, there is a fairly small number of dependencies between components; this is due to the fact DREAM is made up of many indipendent features.
+
+\par The first part of the system to bring up is the \textbf{DBMS} along with the \textbf{Database Abstraction Layer}, since basically every other component relies on database access to store and retrieve data. The DBAL component will not be implemented in-house; instead, a robust pre-existing solution provided by the adopted framework will be used.
+
+\par The first component that must be set up is the \textbf{AuthenticationService}, since authentication is required for all other components to function. Again, this being a generic feature, it will be provided by the framework and will only need to be configured for our use case.
+
+\par Subsequently, work on the other backend components can begin and be carried on in parallel, with the exception of the \textbf{RankingService} which requires the development of other services to be complete (namely, the \verb|Weather| and \verb|ProductionData| components). Simultaneously with the development of each component, the required integrations will be performed. As already mentioned, components are loosely coupled, thus a more detailed integration plan would be redundant.
+
+\par As for frontend development, thanks to the specific architecture chosen, it is possible to proceed with development of the web interface immediately after the completion of each component. This is preferable to developing the frontend strictly after the entire backend is ready, as it allows for immediate feedback on the specific feature being developed.
+
+\subsection{Testing}
+Due to the number of indipendent features in the system, it is crucial that \textbf{each component undergoes unit testing}. Testing will begin as soon as the development of each component is complete, and will focus mostly on the business logic, and to a lesser extent to presentation logic.
+
+\par For our specific use case, integration testing is of minor significance, but still required for some specific cases (e.g. the \verb|RankingService| as explained above).
+
+\par After the implementation and integration phase is complete and the system is deemed to be in a production-ready state, \textbf{stress testing} is also required due to the large number of users that will access the system simultaneously. This will be carried forward using specialized external services that allow sending a large number of requests while simulating real user behaviour.
+\newpage
 \section{Effort spent}
+\newpage
 \section{References}
 \end{document}
+
