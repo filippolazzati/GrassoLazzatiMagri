@@ -662,9 +662,16 @@ R43\label{R} & \verb|DREAM| allows agronomists to confirm a daily plan at the en
   \hline
 R45\label{R} & \verb|DREAM| is able to notify farmers involved by a visit of an agronomist;\\
   \hline
-R46\label{R} & \verb|DREAM| allows agronomists to visualize data about farmers to visit - such as name, surname and location of the farm -  and their production since their last visit to the farm;
+R46\label{R} & \verb|DREAM| allows agronomists to visualize data about farmers to visit - such as name, surname and location of the farm -  and their production since their last visit to the farm; \\
 \hline
 R47\label{R} & \verb|DREAM| allows agronomists to visualize the problems inserted by a farmer to be visited since their last visit to the farm;
+\hline
+R48\label{R} & \verb|DREAM| shall allow users to log in the system by using an email and a password;
+\hline
+R49\label{R} & \verb|DREAM| shall allow farmers to visualize data inserted by them about their production;
+\color{red}
+da aggiungere al mapping con i goals
+\color{black}
 \hline
   \end{longtable}
   \newpage
@@ -822,9 +829,12 @@ This section is about showing that the previously listed requirements and domain
  R46 &   &   &   &   &   &  X &  &   &      \\
  \hline
  R47 &   &   &   &   &   & X  &  &   &      \\
+ R48 & X  & X  & X  & X  & X  & X  &X  &  X &   X   \\
  \hline
 \end{longtable}
 Now an explanation of why a certain goal is entailed by certain requirements and certain domain assumptions is provided.
+
+Requirement R48 is mapped with every goal, as in order to allow policy makers, agronomists and farmers to interact with the system, logging in is necessary. This detail is omitted for brevity in the following explanations of the mapping between goals and requirements.
 \vspace{1cm}
 \newline
 \textbf{G1: The policy makers are able to identify the best-performing farmers and the worst-performing farmers.}
@@ -857,6 +867,8 @@ Now an explanation of why a certain goal is entailed by certain requirements and
     \item R17: \verb|DREAM| shall allow policy makers and agronomists to choose the time period and the area to consider for ranking the farmers;
     
     \item R18: \verb|DREAM| allows policy makers and agronomists to mark a farmer as best-performing or worst-performing;
+    
+    \item R48: \verb|DREAM| shall allow users to log in the system by using an email and a password;
     
     \item D1: The location of the sensors is known to the \verb|DREAM| system;
     
@@ -928,7 +940,9 @@ Data used by \verb|DREAM| to rate the farmers should be correct.
 
     \item R21: \verb|DREAM| allows policy makers to choose an initiative taken by an agronomist or a farmer to help a farmer - i.e., visit to the farm or reply to a question - and two time periods of the farmer to compare the two time periods;
 
-    \item R22: \verb|DREAM| can show the impact of a certain initiative taken by an agronomist or a farmer to help a farmer - i.e., visit to the farm or reply to a question - during a certain time period.
+    \item R22: \verb|DREAM| can show the impact of a certain initiative taken by an agronomist or a farmer to help a farmer - i.e., visit to the farm or reply to a question - during a certain time period;
+    
+    \item R48: \verb|DREAM| shall allow users to log in the system by using an email and a password;
     
     \item D1: The location of the sensors is known to the \verb|DREAM| system;
     
@@ -980,6 +994,8 @@ Data used by \verb|DREAM| regarding the farmers' work, the agronomists' interven
   
     \item R28: \verb|DREAM| can show weather forecast data for a certain location and date.
     
+    \item R48: \verb|DREAM| shall allow users to log in the system by using an email and a password;
+    
     \item D3: The TSDPS provides weather forecasts and reports which can be accessed by \verb|DREAM|.
     
     \item D7: Each farmer owns at least one device connected to Internet;
@@ -1017,6 +1033,8 @@ In order to achieve this goal, \verb|DREAM| must fetch the forecasts (R27) accor
     \item R25: \verb|DREAM| is able to send suggestions to farmers about crops to plant; 
  
     \item R27: \verb|DREAM| is able to connect to the Telangana government website to fetch forecasts for the chosen date;
+    
+    \item R48: \verb|DREAM| shall allow users to log in the system by using an email and a password;
     
     \item D1: The location of the sensors is known to the \verb|DREAM| system;
     
@@ -1066,6 +1084,8 @@ Goal G4 requires that all the relevant data is known to \verb|DREAM| (R1, R2, R3
     \item R34: \verb|DREAM| allows best-performing farmers and agronomists to insert a message of response to the farmers who have made a request for help to them;
 
     \item R35: \verb|DREAM| sends the response to the farmer who issued the corresponding request;
+    
+    \item R48: \verb|DREAM| shall allow users to log in the system by using an email and a password;
     
     \item D7: Each farmer owns at least one device connected to Internet;
     
@@ -1119,7 +1139,9 @@ Farmers can ask for help through the \verb|DREAM| system in two ways: by request
     
     \item R46: \verb|DREAM| allows agronomists to visualize data about farmers to visit - such as name, surname and location of the farm -  and their production since their last visit to the farm;
     
-    \item R47: \verb|DREAM| allows agronomists to visualize the problems inserted by a farmer to be visited since their last visit to the farm
+    \item R47: \verb|DREAM| allows agronomists to visualize the problems inserted by a farmer to be visited since their last visit to the farm;
+    
+    \item R48: \verb|DREAM| shall allow users to log in the system by using an email and a password;
     
     \item D7: Each farmer owns at least one device connected to Internet;
     
@@ -1144,6 +1166,8 @@ In order to achieve this goal, \verb|DREAM| must be able to identify farmers bel
   
     \item R37: \verb|DREAM| allows the farmers to add a post to a thread in the forum;
     
+    \item R48: \verb|DREAM| shall allow users to log in the system by using an email and a password;
+    
     \item D7: Each farmer owns at least one device connected to Internet;
     
     \item D8: Each farmer has the competences for properly accessing the \verb|DREAM| system and registering to it;
@@ -1161,6 +1185,8 @@ To achieve goal G7, \verb|DREAM| is required to put in contact different farmers
     \item R29: \verb|DREAM| shall allow agronomists to insert the area they are responsible of;
 
     \item R30: \verb|DREAM| shall allow agronomists to choose the date of the weather forecasts to visualize;
+    
+    \item R48: \verb|DREAM| shall allow users to log in the system by using an email and a password;
     
     \item D3: The TSDPS provides weather forecasts and reports which can be accessed by \verb|DREAM|;
     
@@ -1208,6 +1234,8 @@ Goal G8 imposes that \verb|DREAM| is able to fetch weather forecasts (R27) accor
     \item R18: \verb|DREAM| allows policy makers and agronomists to mark a farmer as best-performing or worst-performing;
     
     \item R29: \verb|DREAM| shall allow agronomists to insert the area they are responsible of;
+    
+    \item R48: \verb|DREAM| shall allow users to log in the system by using an email and a password;
     
     \item D1: The location of the sensors is known to the \verb|DREAM| system;
     
@@ -2605,12 +2633,12 @@ This section shows how the \verb|DREAM| system implements requirements by mappin
 \hline
 UC3: LogIn & 
 \begin{itemize}
-    \item x
+    \item R48: \verb|DREAM| shall allow users to log in the system by using an email and a password;
 \end{itemize}\\
 \hline
 UC4: ViewProductionData & 
 \begin{itemize}
-    \item ..
+    \item \verb|DREAM| shall allow farmers to visualize data inserted by them about their production;
 \end{itemize}\\
 \hline
 UC5: InsertProductionData & 
@@ -2652,7 +2680,7 @@ UC7: AcceptDailyPlan &
 \hline
 UC8: ViewDetailsOfFarmToVisit & 
 \begin{itemize}
-    \item ...
+    \item \verb|DREAM| allows agronomists to visualize data about farmers to visit - such as name, surname and location of the farm -  and their production since their last visit to the farm;
 \end{itemize}\\
 \hline
 UC9: MoveVisitInDailyPlan & 
