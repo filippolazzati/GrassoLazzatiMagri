@@ -33,7 +33,7 @@
        \vspace{0.5cm}
        \\
     \begin{LARGE}
-        {Data-dRiven PrEdictive FArMing in Telengana}
+        {Data-dRiven PrEdictive FArMing in Telangana}
         \vspace{1.0cm}
         \\
         {\textit{Requirement Analysis and Specification Document - RASD}}
@@ -55,15 +55,15 @@
 \listoftables
 \newpage
 \section{Introduction}
-A RASD\footnote{Requirements Analysis and Specification Document. See section \ref{Abbreviations}} is a document that aims to present all the requirements of the system to be developed, explaining the 
+A RASD is a document that aims to present all the requirements of the system to be developed, explaining the 
 domain in which it has to operate. A RASD should work as baseline for the following tasks in software development,
 in particular in project planning, software evaluation and change control. Such document has a wide audience, and hence it has to
 be written as clear as possible.
 \subsection{Purpose}
-The main goal that Telengana’s government wants to achieve with \verb|DREAM| is to help policy makers 
-formulating policies in the field of agriculture. In order to accomplish this objective, Telengana’s 
+The main goal that Telangana’s government wants to achieve with \verb|DREAM| is to help policy makers 
+formulating policies in the field of agriculture. In order to accomplish this objective, Telangana’s 
 government is asking for predictive models for food systems that can drive decisions exploiting huge 
-amount of data. Therefore, \verb|DREAM| must be a software system that gather data from some sensors and from the farmers and the agronomists and performs data analysis over it in order to help policy makers doing their job. Moreover, \verb|DREAM| aims to help farmers by putting them in contact with each other so that they can exchange advices and aids. Finally, \verb|DREAM| also schedules the daily work of agronomists and make them visit the worse-performing farmers.\\
+amount of data. Therefore, \verb|DREAM| must be a software system that gathers data from some sensors and from the farmers and the agronomists and performs data analysis over it in order to help policy makers doing their job. Moreover, \verb|DREAM| aims to help farmers by putting them in contact with each other so that they can exchange advice and aids. Finally, \verb|DREAM| also schedules the daily work of agronomists and their visits to farmers.\\
 Consequently, the goals of this project are:
 \rowcolors{2}{gray!15}{gray!35}
  \begin{longtable}[c]{|m{0.75cm}|m{11cm}|}
@@ -310,17 +310,19 @@ G6\label{G6} & The \verb|agronomists| can plan farm visits based on the farmers 
 \begin{itemize}
     \item WW = sunny | partially cloudy |  cloudy | foggy  |  rainy | stormy | tornado | hurricane
     \item DR = North | West | South | East | North-West | North-East | South-East | South-West 
-    \item best-performing farmer = the definition of best-performing farmer takes into account also external factors, like resilience towards climatic adverse events.
-    \item worst-performing farmer = the definition of best-performing farmer takes into account also external factors, like resilience towards climatic adverse events.
-    \item world\footnote{{Michael Jackson. 1995. The world and the machine. In Proceedings of the 17th
-    \item TSDPS: Telangana State Development Planning Society
-international conference on Software engineering (ICSE '95). Association for
+    \item farmer = citizen of Telangana who works on a piece of land
+    \item agronomist = expert of agriculture in Telangana
+    \item policy-maker = devises policies to regulate the agricultural
+production of Telangana
+    \item best/worst -performing farmer = farmer chosen by a policy-maker (or an agronomist) taking into account its performances
+    \item world\footnote{{Michael Jackson. 1995. The world and the machine. In Proceedings of the 17th international conference on Software engineering (ICSE '95) Association for
 Computing Machinery, New York, NY, USA, 283–292.
 DOI:https://doi.org/10.1145/225014.225041}} = portion of the real-world
 affected by the machine.
-\item machine\footnotemark[10] = the portion of system to be developed.
-\item weather report: historical meteorological data (so, referred to the past)
-\item weather forecast: predicted meteorological data (so, referred to the future) 
+\item TSDPS = Telangana State Development Planning Society
+\item machine = the portion of system to be developed.
+\item weather report = historical meteorological data (so, referred to the past)
+\item weather forecast= predicted meteorological data (so, referred to the future)
 \end{itemize}
 \subsection{Revision history}
 \begin{left}
@@ -359,30 +361,30 @@ The requirements-level class diagram of \verb|DREAM| is:
     \caption{Requirements-level class diagram of DREAM.}
 \end{figure}
 
-The state diagram for the creation of a new help request is:
+The activity diagram for the creation of a new help request is:
 \begin{figure}[H]
     \centering
 	\includegraphics[scale=0.35]{state_machine_diagrams/statediagram1.png}
-    \caption{State diagram for the creation of a new help request.}
+    \caption{Activity diagram for the creation of a new help request.}
 \end{figure}
 
-The state diagram for the generation of a new daily plan is:
+The activity diagram for the generation of a new daily plan is:
 \begin{figure}[H]
     \centering
 	\includegraphics[scale=0.35]{state_machine_diagrams/statediagram2.png}
-    \caption{State diagram for the generation of a new daily plan.}
+    \caption{Activity diagram for the generation of a new daily plan.}
 \end{figure}
-The state diagram for the creation of a new production report is:
+The activity diagram for the creation of a new production report is:
 \begin{figure}[H]
     \centering
 	\includegraphics[scale=0.35]{state_machine_diagrams/statediagram3.png}
-    \caption{State diagram for the creation of a new production report.}
+    \caption{Activity diagram for the creation of a new production report.}
 \end{figure}
 \subsection{Product functions} \label{Product functions}
 In this section, a list of the most important requirements of the system is provided; notice 
 that they are just briefly described, since they will be analysed in-depth in chapter 3.
 \subsubsection{Data collection}
-Just like every data-driven decision, data is essential. \verb |DREAM| must be able to manage different kinds of data coming from different sources:
+\verb |DREAM| must be able to manage different kinds of data coming from different sources:
 \begin{enumerate}
 \item agronomists and farmers insert into the system standard kind of information about the farms they 
 respectively visit and own, but also other kinds of information like, for example, the types of products 
@@ -416,11 +418,8 @@ As previously mentioned, farmers are allowed to open discussion forums on \verb|
 This allows to keep in touch with other people doing the same job and, hence, to ask for advice in case of 
 needing.
 \subsubsection{Request and supply of help}
-There are 4 different ways for a farmer to ask for help: ask for it directly to other farmers, ask in the forum, ask to to
-the agronomists or waiting for the system to recognize him as in trouble. As far as the first option is 
-concerned, the service is provided through a GUI. On the other side, either farmers who are performing 
-well or agronomists may be reached by the system on behalf of other farmers (or of the system itself) for a 
-request of help. Then the system introduces them. It should be remarked that a farmer can contact only 
+There are four different ways for a farmer to ask for help: ask for it directly to other farmers, ask in the forum, ask to
+the agronomists or ask for a visit of an agronomist. It should be remarked that a farmer can contact only 
 agronomists in the same area.
 \subsubsection{Daily plan}
 \verb|DREAM| automatically devises a daily plan for each agronomist consisting in a list of farms that must be visited and provides a possible time schedule for such meetings. Every daily plan must be actively accepted 
@@ -442,7 +441,7 @@ that may be relevant to them;
 \item \textbf{Agronomists}: an agronomist has to find methods for increasing the production and the quality of 
 the harvest. They insert the area they are responsible of and the they receive data about the best 
 performing farmers and weather forecasts. They can answer to farmers’ questions and they receive 
-a raw daily plan about which farmers they should visit.
+a daily plan about which farmers they should visit.
 \end{description}
 \subsection{Assumptions, dependencies and constraints}
 
@@ -507,7 +506,7 @@ a raw daily plan about which farmers they should visit.
 \section{Specific requirements}
 \subsection{External Interface Requirements}
 \subsubsection{User interfaces}
-\verb|DREAM| is provided to the users, namely farmers, agronomists and policy makers, as a webapp, accessible through a browser on the web. Therefore, \verb|DREAM| is not given with a CLI\footnote{Command Line Interface} but only with a GUI\footnote{Graphical User Interface}. The rest of this subsection contains some mockups that show an example of suitable user interface for \verb|DREAM|\footnote{According to the “IEEE 29148-2018 Requirements engineering” document, section 9.6.4.2, “A style guide for the user interface can provide consistent rules for organization, coding and interaction of the user with the system”.}.
+\verb|DREAM| is provided to the users, namely farmers, agronomists and policy makers, as a webapp, accessible through a browser on the web. Therefore, \verb|DREAM| is not given with a CLI\footnote{Command Line Interface} but only with a GUI\footnote{Graphical User Interface}. The rest of this subsection contains some wireframes that show an example of suitable user interface for \verb|DREAM|\footnote{According to the “IEEE 29148-2018 Requirements engineering” document, section 9.6.4.2, “A style guide for the user interface can provide consistent rules for organization, coding and interaction of the user with the system”.}.
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.15]{wireframes/login.png}
@@ -530,7 +529,7 @@ a raw daily plan about which farmers they should visit.
 \end{figure}
 \subsubsection{Hardware interfaces}
 \begin{itemize}
-\item Because \verb|DREAM| is to be implemented as a webapp, every user can access it through the device he prefers, that is personal computers, smartphones, tablets … and the only requirement for the webapp is to be responsive (make the website scale properly to different devices’ sizes). Every device of this kind suffices to achieve the goals.
+\item Because \verb|DREAM| is to be implemented as a webapp, every user can access it through the device he prefers, that is personal computers, smartphones, tablets … and there is no requirement on the size of the device since the webapp has to be responsive (scale properly to different devices’ sizes). Every device of this kind suffices to achieve the goals.
 \item \verb|DREAM| has to interact with various hardware components to gather the data it will use. In particular, \verb|DREAM| has to interact with soil sensors and a water irrigation system. Both these two systems are able to gather data and share it through a third already existing system (an IoT hub), to which they are connected through cables.
 \end{itemize}
 \subsubsection{Software interfaces}
@@ -543,9 +542,8 @@ The following software interfaces are required to make \verb|DREAM| work properl
 \subsubsection{Communication interfaces}
 As far as the communication interfaces are concerned, \verb|DREAM| uses:
 \begin{enumerate}
-    \color{red}
     \item the HTTP protocol at the application layer (layer 7 of the stack) to exchange information (web pages) with the clients (users’ devices) and to access the data offered by the Telangana’s government systems;
-    \item specific protocols, such as MQTT\footnote{\url{https://mqtt.org/}.} for communication to the sensor hub.
+    \item specific protocols for the communication to the sensor hub.
 \end{enumerate}
 
 \subsection{Functional Requirements}
@@ -605,7 +603,8 @@ R16\label{R} & \verb|DREAM| shall allow policy makers and agronomists to choose 
   \hline
 R17\label{R} & \verb|DREAM| shall allow policy makers and agronomists to choose the time period and the area to consider for ranking the farmers;\\
   \hline
-  R18\label{R} & \verb|DREAM| allows policy makers and agronomists to mark a farmer as best-performing or worst-performing\\
+  R18\label{R} & \verb|DREAM| allows policy makers and agronomists to mark/unmark a farmer as best-performing
+or worst-performing;\\
   \hline
 R19\label{R} & \verb|DREAM| can compare different time periods of a farmer work according to various production criteria (e.g. production volume, fertilizers adopted, fraction of harvested plants over sowed ones, etc);\\
   \hline
@@ -668,10 +667,7 @@ R47\label{R} & \verb|DREAM| allows agronomists to visualize the problems inserte
 \hline
 R48\label{R} & \verb|DREAM| shall allow users to log in the system by using an email and a password;
 \hline
-R49\label{R} & \verb|DREAM| shall allow farmers to visualize data inserted by them about their production;
-\color{red}
-da aggiungere al mapping con i goals
-\color{black}
+R49\label{R} & \verb|DREAM| shall allow farmers to visualize data inserted by them about their production.
 \hline
   \end{longtable}
   \newpage
@@ -829,12 +825,15 @@ This section is about showing that the previously listed requirements and domain
  R46 &   &   &   &   &   &  X &  &   &      \\
  \hline
  R47 &   &   &   &   &   & X  &  &   &      \\
- R48 & X  & X  & X  & X  & X  & X  &X  &  X &   X   \\
+ \hline
+ R48\footnote{This requirement is mapped with every goal, as in order to allow policy makers, agronomists and farmers to interact with the system, logging in is necessary. This detail is omitted for brevity in the following explanations of the mapping between goals and requirements.} & X  & X  & X  & X  & X  & X  &X  &  X &   X   \\
+ \hline
+ R49\footnote{This requirement is not mapped with any goal, thus to be rigorous it should be removed from here; however, it describes a useful functionality that \verb|DREAM| shall provide, therefore we maintain it.} &    &    &    &    &    &    &   &    &     \\
  \hline
 \end{longtable}
 Now an explanation of why a certain goal is entailed by certain requirements and certain domain assumptions is provided.
 
-Requirement R48 is mapped with every goal, as in order to allow policy makers, agronomists and farmers to interact with the system, logging in is necessary. This detail is omitted for brevity in the following explanations of the mapping between goals and requirements.
+
 \vspace{1cm}
 \newline
 \textbf{G1: The policy makers are able to identify the best-performing farmers and the worst-performing farmers.}
@@ -866,7 +865,7 @@ Requirement R48 is mapped with every goal, as in order to allow policy makers, a
     
     \item R17: \verb|DREAM| shall allow policy makers and agronomists to choose the time period and the area to consider for ranking the farmers;
     
-    \item R18: \verb|DREAM| allows policy makers and agronomists to mark a farmer as best-performing or worst-performing;
+    \item R18: \verb|DREAM| allows policy makers and agronomists to mark/unmark a farmer as best-performing or worst-performing;
     
     \item R48: \verb|DREAM| shall allow users to log in the system by using an email and a password;
     
@@ -906,7 +905,7 @@ Requirement R48 is mapped with every goal, as in order to allow policy makers, a
   
 \end{itemize}
 
-In order to achieve this goal, \verb|DREAM| must be able to collect all the data that may be related to the performances of farmers (R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11); moreover, it must be able to order farmers according to specified criteria - possibly restricting the scope of ordering spatially or temporally - (R15, R16, R17). Finally, policy makers and agronomists are able to mark farmers as best- or worst- performing (R18).
+In order to achieve this goal, \verb|DREAM| must be able to collect all the data that may be related to the performances of farmers (R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11); moreover, it must be able to order farmers according to specified criteria - possibly restricting the scope of ordering spatially or temporally - (R15, R16, R17). Finally, policy makers and agronomists are able to mark/unmark farmers as best- or worst- performing (R18).
 Data used by \verb|DREAM| to rate the farmers should be correct.
 \newline
 
@@ -1071,7 +1070,7 @@ Goal G4 requires that all the relevant data is known to \verb|DREAM| (R1, R2, R3
 
   \item R14: When a farmer requests a visit of an agronomist, if no agronomist is available in the area of the farmer during the seven days after the request (excluding the day when the request is made), \verb|DREAM| notifies the farmer about this situation.
     
-    \item R18: \verb|DREAM| allows policy makers and agronomists to mark a farmer as best-performing or worst-performing;
+    \item R18: \verb|DREAM| allows policy makers and agronomists to mark/unmark a farmer as best-performing or worst-performing;
     
     \item R29: \verb|DREAM| shall allow agronomists to insert the area they are responsible of;
   
@@ -1231,7 +1230,7 @@ Goal G8 imposes that \verb|DREAM| is able to fetch weather forecasts (R27) accor
     
     \item R17: \verb|DREAM| shall allow policy makers and agronomists to choose the time period and the area to consider for ranking the farmers;
     
-    \item R18: \verb|DREAM| allows policy makers and agronomists to mark a farmer as best-performing or worst-performing;
+    \item R18: \verb|DREAM| allows policy makers and agronomists to mark/unmark a farmer as best-performing or worst-performing;
     
     \item R29: \verb|DREAM| shall allow agronomists to insert the area they are responsible of;
     
@@ -1265,19 +1264,18 @@ Goal G8 imposes that \verb|DREAM| is able to fetch weather forecasts (R27) accor
   
     \item D18: All the data the agronomists insert is correct;
 \end{itemize}
-This goal forces the system to own all the relevant data for the analysis (R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11) and to be able to compare such data (R15) according to choices of the agronomists (R16, R17). Finally, \verb|DREAM| shall allow agronomists to mark farmers as worst-performing or best.performing (R18).
+This goal forces the system to own all the relevant data for the analysis (R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11) and to be able to compare such data (R15) according to choices of the agronomists (R16, R17). Finally, \verb|DREAM| shall allow agronomists to mark farmers as worst-performing or best-performing (R18).
 \subsubsection{Scenarios}
 \paragraph{A storm ruined the harvest}
 Arin is a farmer who mainly cultivates potatoes, onions and tomatoes in the fields of his family. The harvest of March was really good, and Arin hoped that the same volume of production might have been repeated in April as well. Unfortunately, the North Indian Ocean cyclone season starts in April, and in the second week of this month Tauktae storm, the strongest storm of of the season, violently hit Arin's lands, halving the crop.\par
-\noindent Consequently, Arin wants to share in the system (\verb|DREAM|) the outcome of the storm. Arin opens its browser and access the system using its credentials. Next, he selects from a menu in the incoming webpage the entry for inserting data about production and problems. Then he fills the form with a description about the storm and what it caused to its fields, and finally he sends it.\par
+\noindent Consequently, Arin wants to share in the system (\verb|DREAM|) the outcome of the storm. Arin opens its browser and accesses the system using its credentials. Next, he selects from a menu in the incoming webpage the entry for inserting data about production and problems. Then he fills the form with a description about the storm and what it caused to its fields, and finally he sends it.\par
 \noindent Arin hopes to receive some aid.
 \paragraph{Great year for the potatoes}
 Like many other farmers in India, Ikbal knows that the best period for cultivating potatoes is during the months from October to December. The weather is neither hot nor cold and the monsoons are nearly over at this time. Therefore, last October Ikbal planted many potatoes, and in February, with the help of some peasants who work for him, has picked up all of them. \par
 \noindent In order to publish in \verb|DREAM| the results of this year potatoes' harvest, he access the system through its computer, opens the form for inserting data about the production and then starts to fill it. The form is quite structured, and requires some data for each entry. After having inserted all the objective information about the crop, Ikbal would like to share something he has found out during this year, namely that planting the potatoes at depth x allows to retrieve substantial crops of this vegetable. Thus, Ikbal fills in also the optional text box and then sends it.
 \paragraph{Registering to the system as an agronomist}
-Dalbir worked for many years as an agronomist in Bihar, but recently he has been moved to Telengana. Telengana uses this innovative system, \verb|DREAM|, to keep track of the harvests of farmers, to collect interesting data from sensors and many other things. All the agronomists in Telengana must work with \verb|DREAM|, therefore Dalbir has to create an account. \par
-\noindent Dalbir opens the webpage of \verb|DREAM| and initiates the procedure for creating a new account. He follows the procedure tailored for agronomists, which allows him to create a new username and password. Next, Dalbir has to insert some data about his job in order to finish the registration. Among the others, Dalbir is asked to insert the area where he works.\par
-\noindent His data will be verified later.
+Dalbir worked for many years as an agronomist in Bihar, but recently he has been moved to Telangana. Telangana uses this innovative system, \verb|DREAM|, to keep track of the harvests of farmers, to collect interesting data from sensors and many other things. All the agronomists in Telangana must work with \verb|DREAM|, therefore Dalbir has to create an account. \par
+\noindent Dalbir opens the webpage of \verb|DREAM| and inserts the credentials he previoulsy received by \verb|DREAM|'s administrators. Next, Dalbir has to insert some data about his job in order to finish the registration. Among the others, Dalbir is asked to insert the area where he works.\par
 \paragraph{Visiting a farm}
 The first task of Dalbir is to visit the farm of Arin. The date and hour of the meeting has been established by \verb |DREAM|, which has notified also Arin about the meeting. Arin has been chosen because last month he performed very bad.\par
 \noindent During the meeting, Arin has the opportunity of explaining all the problems he faced during the past month, one for all Tauktae (the strongest storm of the North Indian Ocean cyclone season). Arin takes Dalbir to the fields, where Dalbir can gather some sample from the terrain. At the end of the meeting, Dalbir gives Arin some advices, and then he moves to another farm. \par
@@ -1285,12 +1283,6 @@ The first task of Dalbir is to visit the farm of Arin. The date and hour of the 
 \paragraph{A bad schedule}
 Like every evening, Dalbir accesses \verb|DREAM| for downloading the daily plan of the next day. Every daily plan provided by the system contains time and place of every meeting, in addition to some information about the farmer. Dalbir notices that Ikbal's farm is closer to his parents' house, and Dalbir knows that they would be really happy to if he had lunch with them.\par
 \noindent However, the meeting with Ikbal is scheduled for the 3p.m o' clock. Therefore, Dalbir decides to exchange the meetings with Ikbal and Tarak, visiting Ikbal at 11.30a.m. and Tarak at 3p.m.. Through the user interface of \verb|DREAM|, Dalbir exhanges the two meetings and once he has confirmed, \verb|DREAM| notifies the farmers of the change.
-\noindent Therefore, periodically, \verb|DREAM| interacts with sensors deployed on the territory in order to retrieve the humidity of the soil, with the water irrigation system to retrieve the amount of water used by each farmer and with an already existing website which provides up-to-date weather forecasts. In particular:
-\begin{itemize}
-    \item 3 times a day the soil sensors are asked to provide data about the humidity of the soil;
-    \item once a day the water irrigation system is asked to provide the water used by each farmer (when the data is available);
-    \item the weather forecasts website is accessed monthly to compute some analytics on the data, but also on demand when agronomists or farmers ask for weather forecasts.
-\end{itemize}
 
 \paragraph{Starting a new cultivation}
 The farmer Ikbal has been cultivating potatoes in his piece of land for ten years. As he has recently bought some acres of land next to his one, he would like to start the cultivation of a new type of product. As he has some doubts about which product to seed, he decides to ask for help through the use of the \verb|DREAM| system.
@@ -1317,9 +1309,14 @@ After a couple of hours, the farmer Monisha opens the “Forum” section of the
 \noindent
 The next day, Ikbal opens again the “Forum” section of the \verb|DREAM| website, curious to see if someone wrote on the thread that the created. He is glad to see not only the post from Monisha, but also a couple of other posts from other two farmers, discussing about the fertilizers. He writes another post to thank Monisha and the other farmers.
 
+\paragraph{A successful policy}
+Shyla is a policy maker in the Telangana region, whose main area of interest is agriculture. One of the policies she worked on involved giving incentives to farmers in order to try and prevent damages to crops caused by storms (e.g. by financing the construction of protective infrastructure).\par
+\noindent A year after the approval of her policy, Shyla logs into \verb|DREAM| and accesses the Analysis section. She accesses the production data statistics for the current year, and compares them to last year's data. Thanks to the data analysis capabilities provided by \verb|DREAM|, she is able to confirm her policy helped significantly reduce damage caused by adverse weather conditions.
+
 \newpage
 \subsubsection{Use cases}
-In this section we show some important use cases. It should be noticed that, in the sequence diagrams, we have decided to do not represent all the possible branches and situations, but only the most relevant. In particular, in many cases the underlying assumption that the user has already logged in is made.
+In this section we show some important use cases. It should be noticed that, in the sequence diagrams, we have decided to do not represent all the possible branches and situations, but only the most relevant. In particular, in many cases the underlying assumption that the user has already logged in is made.\\
+As far as the use cases model is concerned, the main actors are highlighted. Furthermore, in order to make the diagram easier to read, we have decided to exploit generalizations of actors (e.g. User) and of use cases (e.g. ViewData) in a little improper way to reduce the number of associations.
 \newpage
 \clearpage
 \begin{sidewaysfigure}
@@ -2638,7 +2635,7 @@ UC3: LogIn &
 \hline
 UC4: ViewProductionData & 
 \begin{itemize}
-    \item \verb|DREAM| shall allow farmers to visualize data inserted by them about their production;
+    \item R49: \verb|DREAM| shall allow farmers to visualize data inserted by them about their production;
 \end{itemize}\\
 \hline
 UC5: InsertProductionData & 
@@ -2680,7 +2677,7 @@ UC7: AcceptDailyPlan &
 \hline
 UC8: ViewDetailsOfFarmToVisit & 
 \begin{itemize}
-    \item \verb|DREAM| allows agronomists to visualize data about farmers to visit - such as name, surname and location of the farm -  and their production since their last visit to the farm;
+    \item R46: \verb|DREAM| allows agronomists to visualize data about farmers to visit - such as name, surname and location of the farm -  and their production since their last visit to the farm;
 \end{itemize}\\
 \hline
 UC9: MoveVisitInDailyPlan & 
@@ -2752,17 +2749,36 @@ UC15: VisualizeBestAndWorstFarmers &
 \hline
 UC16: MarkBestPerformingFarmer & 
 \begin{itemize}
-    \item ...
+    \item R18: \verb|DREAM| allows policy makers and agronomists to mark/unmark a farmer as best-performing
+or worst-performing;
 \end{itemize}\\
 \hline
-UC17: MarkBestPerformingFarmer & 
+UC17: UnmarkBestPerformingFarmer & 
 \begin{itemize}
-    \item ...
+    \item R18: \verb|DREAM| allows policy makers and agronomists to mark/unmark a farmer as best-performing
+or worst-performing;
 \end{itemize}\\
 \hline
 UC18: AnalyzeImpactOfInitiative & 
 \begin{itemize}
-    \item ...
+    \item R19:
+\verb|DREAM| can compare different time periods of a farmer work according to
+various production criteria (e.g. production volume, fertilizers adopted,
+fraction of harvested plants over sowed ones, etc);
+\item
+R20:
+\verb|DREAM| can compare different time periods of a farmer work with respect
+to environmental factors (e.g. weather reports data, soil moisture, ...);
+\item
+R21:
+\verb|DREAM| allows policy makers to choose an initiative taken by an
+agronomist or a farmer to help a farmer - i.e., visit to the farm or reply
+to a question - and two time periods of the farmer to compare the two
+time periods;
+\item R22:
+\verb|DREAM| can show the impact of a certain initiative taken by an agronomist
+or a farmer to help a farmer - i.e., visit to the farm or reply to a question
+- during a certain time period.
 \end{itemize}\\
 \hline
 UC19: VisualizeWeatherForecasts &
@@ -2792,28 +2808,28 @@ UC22: RequestToExpert &
 \begin{itemize}
     \item R31: \verb|DREAM| allows farmers to choose the (best-performing) farmer or agronomist (assigned to his area) who to issue a request;
   
-    \item R32: \verb|DREAM| allows the farmers to send a request to a best-performing farmer or agronomist;
+    \item R32: \verb|DREAM| allows the farmers to send a request to a best-performing farmer or agronomist.
     
-    \item R33: \verb|DREAM| notifies (best-performing) farmers and agronomists of the requests of help from other farmers;
 
-    \item R34: \verb|DREAM| allows best-performing farmers and agronomists to insert a message of response to the farmers who have made a request for help to them;
 
-    \item R35: \verb|DREAM| sends the response to the farmer who issued the corresponding request;
+    
 \end{itemize} \\ \hline
 \hline
 UC23: ExpertResponse & 
 \begin{itemize}
-    \item ...
+        \item R33: \verb|DREAM| notifies (best-performing) farmers and agronomists of the requests of help from other farmers;
+
+    \item R34: \verb|DREAM| allows best-performing farmers and agronomists to insert a message of response to the farmers who have made a request for help to them.
 \end{itemize}\\
 \hline
 UC24: VisualizeResponse & 
 \begin{itemize}
-    \item ...
+    \item R35: \verb|DREAM| sends the response to the farmer who issued the corresponding request.
 \end{itemize}\\
 \hline
 UC25: CreateFarmersForumThread & 
 \begin{itemize}
-    \item R36: \verb|DREAM| allows farmers to initiate a new thread in the forum;
+    \item R36: \verb|DREAM| allows farmers to initiate a new thread in the forum.
 \end{itemize}
 \hline
 UC26: WritePostOnFarmersForum & 
@@ -2829,7 +2845,7 @@ UC26: WritePostOnFarmersForum &
 This section is dedicated to “specify both the static and the dynamic numerical requirements placed on the software or on human interaction with the software as a whole”\footnote{IEEE 29148-2018 Requirements engineering, section 9.6.14}.
 Static numerical requirements:
 \begin{itemize}
-\item according to the estimates\footnote{professor Jayashankar Telangana state agricultural university}, Telengana has a population of 36 millions of people and a total number of farm holdings equal to 55.54 lakhs, namely more or less 5 555 400 people in Telangana are farmers; assuming that all of them are potential users of \verb|DREAM|, it must support at least 5.7 million non-simultaneously connected terminals, since also the agronomists and policy makers shall be allowed to access the system;
+\item according to the estimates\footnote{professor Jayashankar Telangana state agricultural university}, Telangana has a population of 36 millions of people and a total number of farm holdings equal to 55.54 lakhs, namely more or less 5 555 400 people in Telangana are farmers; assuming that all of them are potential users of \verb|DREAM|, it must support at least 5.7 million non-simultaneously connected terminals, since also the agronomists and policy makers shall be allowed to access the system;
 \item given the huge number of (possible) users and the purpose of the system, \verb|DREAM| must be able to support at least 10\% of the total number of users simultaneously; this requirement is more important than speed performances;
 \item all the weather reports and forecasts are not directly stored on \verb|DREAM|; nevertheless, \verb|DREAM| must store all the sensors and water irrigation system data as well as the users data and the forums data. 
 We can assume that the system stores 1KB of personal information for each user:
@@ -2864,17 +2880,17 @@ No any other specific constraint is required.
 \subsection{Software System Attributes}
 In this section a list of required attributes of the system is provided.
 \subsubsection{Reliability}
-\verb|DREAM| is not a critical system, therefore some limited failures cannot create big problems. For example, an error when accessing the Telengana’s website or a failure during the generation of the daily plan can be easily solved just by re-starting the process.
+\verb|DREAM| is not a critical system, therefore some limited failures cannot create big problems. For example, an error when accessing the Telangana’s website or a failure during the generation of the daily plan can be easily solved just by re-starting the process.
 \subsubsection{Availability}
-The system is not critical, as already said, therefore some periods of inactivity are allowed. Because all the tasks it performs are not critical, small periods of inactivity do not create many problems. For instance, when a farmer needs to ask for help, he could make the request even the following day. Another example is the access to the humidity sensors: data of today could be accessed even tomorrow since they are stored in Telengana’s website as well. A final example is about the proposal of a schedule plan; agronomists can wait some time before retrieving it. 
+The system is not critical, as already said, therefore some periods of inactivity are allowed. Because all the tasks it performs are not critical, small periods of inactivity do not create many problems. For instance, when a farmer needs to ask for help, he could make the request even the following day. Another example is the access to the humidity sensors: data of today could be accessed even tomorrow since they are stored in Telangana’s website as well. A final example is about the proposal of a schedule plan; agronomists can wait some time before retrieving it. 
 We can impose that \verb|DREAM| must not be unavailable for more than 1 day per month.
 \subsubsection{Security}
 The only information that needs to be protected is the personal data of the users. Therefore, \verb|DREAM| has to assure data privacy. This can be done by ensuring that all connections are established securely via HTTPS.
 \subsubsection{Maintainability}
 The system must be designed in order to facilitate maintainability. Every functionality implemented must be well documented. The system must be decomposed in a certain number of modules to limit the complexity and to make the development process more efficient. The main goal is that each module is coherent and can be (internally) modified without affecting other modules and without changing its interface.
 \subsubsection{Portability}
-Since \verb|DREAM| is a webapp, it does not have strict requirements on the underlying operating system or hardware used. The website will be developed using an interpreted language with a widely available interpreter.
-
+Since \verb|DREAM| is a webapp, it does not have strict requirements on the underlying operating system or hardware used. The website will be developed using an interpreted language with a widely available interpreter. Furthermore, \verb|DREAM| must have a responsive interface (namely, it must scale properly to different devices’ sizes).
+\newpage
 \section{Formal analysis using Alloy}
 This section presents the formal specification of some requirements through Alloy. See the comments in the code for an explanation.
 \begin{minted}{alloy}
@@ -3050,6 +3066,37 @@ run WorldManyAgronomists for 10
 run WorldFarmersIssues for 5
 \end{minted}
 \newpage
+\clearpage
+\begin{sidewaysfigure}
+    \centering
+     \includegraphics[scale=0.45]{alloy output/assertions.png}
+    \caption{Output of the assertions.}
+\end{sidewaysfigure}
+\clearpage
+\newpage
+\clearpage
+\begin{sidewaysfigure}
+    \centering
+    \includegraphics[scale=0.45]{alloy output/worldfarmersissues.png}
+    \caption{Output of the "WorldFarmersIssues".}
+\end{sidewaysfigure}
+\clearpage
+\newpage
+\clearpage
+\begin{sidewaysfigure}
+    \centering
+    \includegraphics[scale=0.45]{alloy output/worldmanyagronomists.png}
+    \caption{Output of the "WorldManyAgronomists".}
+\end{sidewaysfigure}
+\clearpage
+\newpage
+\clearpage
+\begin{sidewaysfigure}
+    \centering
+    \includegraphics[scale=0.45]{alloy output/worldsimple.png}
+    \caption{Output of the "WorldSimple".}
+\end{sidewaysfigure}
+\clearpage
 \section{Effort spent}
 \centering
 \begin{longtable}{|m{5cm}|m{5cm}|}
@@ -3077,6 +3124,8 @@ run WorldFarmersIssues for 5
  Alloy & 9h\\
  \hline
  Review and Mockups & 4h\\
+ \hline
+ Final recap & 2h\\
  \hline
 \end{longtable}
 
@@ -3109,6 +3158,8 @@ run WorldFarmersIssues for 5
  \hline
  Review and Mockups & 3.30h\\
  \hline
+  Final recap & 2h\\
+ \hline
 \end{longtable}
 
 \centering
@@ -3138,6 +3189,8 @@ run WorldFarmersIssues for 5
  \hline
  Review & 1.30h\\
  \hline
+  Final recap & 2h\\
+ \hline
 \end{longtable}
 \newpage
 \section{References}
@@ -3148,6 +3201,6 @@ run WorldFarmersIssues for 5
     \item \href{https://alloytools.org/}{Alloy}: to specify formally some requirements;
     \item \href{https://www.overleaf.com}{Overleaf}: Latex editor;
     \item \href{https://github.com/}{Github}: to share the files;
-    \item \href{https://balsamiq.com/}{Balsamiq}: to realize the wireframes.
+    \item \href{https://balsamiq.com/}{Balsamiq}: to design the wireframes.
 \end{itemize}
 \end{document}
