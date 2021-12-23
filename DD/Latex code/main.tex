@@ -90,9 +90,27 @@ The document is divided in 5 main parts:
 \item the fourth part shows how the requirements identified in the \textit{RASD - 3.2 Functional requirements} section have brought to the introduction of a specific component/interface in the system;
 \item the fifth and last part is about a plan to follow for the implementation of the system, namely from which subcomponent to start, which subcomponents can be implemented in parallel, and about a plan for the integration of such subcomponents and also a plan for testing the integration.
 \end{enumerate}
-It should be remarked that the structure of this document does not follow a logic or temporal order, but whoever is interested in the reading can jump from a section to another, because the purpose of it is to be a reference document.
+It should be remarked that the structure of this document does not follow a logic or temporal order, but whoever is interested in the reading can jump from a section to another, because the purpose of it is to be a reference document.\newpage
 \section{Architectural design}
 \subsection{Overview}
+In this section, an high-level overview of the design components is provided.\\
+The architecture chosen is a three-tier one, in which there is a clear-cut separation between the three tiers. The reasons behind this choice comprise mainly the scalability, the accessibility and the security of this solution; they are explained more in detail in section \ref{Architectural style}.
+An high-level view of the entire architecture of \verb|DREAM| is illustrated in figure \ref{fig:overview}:
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{diagrams/overview.png}
+    \caption{The main high-level components of the system.}
+    \label{fig:overview}
+\end{figure}
+As previously said, the system has a three-tier architecture\footnote{Notice that it is not always true that logical layers (presentation, application and data) are mapped 1-to-1 to physical layers (tiers). As far as DREAM is concerned, this is true.}.
+\paragraph{Tier 1 - Presentation layer}
+The first tier is composed of a webapp installed on the device of the user; the device of the user can be any, as long as it has a browser installed and can be connected to Internet (in the figure this fact is exemplified through a smartphone and a pc). This is the tier closest to the user, and its role is basically related to managing the interaction with the user. It is the actual frontend, and in \verb|DREAM| it is provided with a GUI (Graphical User Interface). It should be remarked that the logic of the system is not present here, but is contained in the application layer.
+\paragraph{Tier 2 - Application layer}
+The second tier of the application has the fundamental role of managing all the functions that are available to the user. Here lies the business logic of \verb|DREAM|, which interacts with the other two tiers and with external services to perform all the activities of the system. This layer is exemplified by the high-level server component in figure \ref{fig:overview}. As it is explained in the following section, such layer is made of various \textit{services}, each of them associated to a specific function.
+\paragraph{Tier 3 - Data layer}
+The third tier is exemplified with a database and contains all the data \verb|DREAM| has to store. As a matter of fact, \verb|DREAM| is a data-driven application, and as such has to cope with a large amount of data to carry out its activities. All this data is stored in a database, which can be accessed by the application layer through a particular interface, as can be noticed in the following section. Along with the second tier, the third tier represents the backend of the system, which is protected inside a demilitarized zone\footnote{A DMZ is a subnetwork that contains and exposes important services and data of a company to an untrusted network (Internet in this case); the main goal is higher protection.} (DMZ).
+\paragraph{External services}
+TSDP (external weather service) and the sensor hub are two external high-level components \verb|DREAM| has to interact with. The former provides weather reports and forecasts, while the latter allows \verb|DREAM| to access sensors and water irrigation system data. 
 \subsection{Component view}\label{Component view}
 \includegraphics[width=16.5cm]{diagrams/components_diagram.png}
 \subsection{Deployment view}
@@ -185,7 +203,7 @@ This diagram describes the process of creation of a new discussion thread by a f
 According to the definition provided by David Garlan and Mary Shaw\footnote{January 1994, CMUCS-
 94-166, see "An Introduction to Software Architecture"
 at \url{http://www.cs.cmu.edu/afs/cs/project/able/ftp/intro_softarch/intro_softarch.pdf}.}, \textit{an architectural style determines the vocabulary of components and connectors that can be used in instances of that style, together with a set of constraints on how they can be combined}.\\
-\paragraph{Architectural style}
+\paragraph{Architectural style}\label{Architectural style}
 Given that the tasks that \verb|DREAM| has to achieve can be perfectly reached by implementing the system as a web application, and given that the most wide-spread, standardized and successful architectural style for distributed (web) applications is the client-server one, we have decided to opt for it. As a matter of fact, every time a user (farmer, agronomist or policy maker), namely a client, has to access the system, it sends a request to \verb|DREAM|, or better, to the server of \verb|DREAM|, which processes it and answers with a response. Moreover, our choice features 3 tiers with a thin client.\\
 The main advantages of this choice related to the system we have to design are:
 \begin{itemize}
