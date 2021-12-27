@@ -9,6 +9,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
+#[ORM\InheritanceType('SINGLE_TABLE')]
+#[ORM\DiscriminatorColumn(name: 'type', type: 'string')]
+#[ORM\DiscriminatorMap([
+    'farmer' => Farmer::class,
+    'agronomist' => Agronomist::class,
+    'policy_maker' => PolicyMaker::class,
+])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -24,6 +31,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'string')]
     private $password;
+
+    #[ORM\Column(type: 'string', length: 255)]
+    private $name;
+
+    #[ORM\Column(type: 'string', length: 255)]
+    private $surname;
+
+    #[ORM\Column(type: 'date')]
+    private $birthDate;
 
     public function getId(): ?int
     {
@@ -61,6 +77,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
 
+        if ($this instanceof Farmer) {
+            $roles[] = 'ROLE_FARMER';
+        } elseif ($this instanceof Agronomist) {
+            $roles[] = 'ROLE_AGRONOMIST';
+        } elseif ($this instanceof PolicyMaker) {
+            $roles[] = 'ROLE_POLICY_MAKER';
+        }
+
         return array_unique($roles);
     }
 
@@ -93,5 +117,51 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getSurname(): ?string
+    {
+        return $this->surname;
+    }
+
+    public function setSurname(string $surname): self
+    {
+        $this->surname = $surname;
+
+        return $this;
+    }
+
+    public function getBirthDate(): ?\DateTimeInterface
+    {
+        return $this->birthDate;
+    }
+
+    public function setBirthDate(\DateTimeInterface $birthDate): self
+    {
+        $this->birthDate = $birthDate;
+
+        return $this;
+    }
+
+    public function getFullName(): string
+    {
+        return $this->name . ' ' . $this->surname;
+    }
+
+    public function getAvatarUrl(): string
+    {
+        return 'https://eu.ui-avatars.com/api/?name=' . urlencode($this->getFullName());
     }
 }
