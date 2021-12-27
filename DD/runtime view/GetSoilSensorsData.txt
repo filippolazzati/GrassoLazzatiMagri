@@ -3,9 +3,10 @@ title GetSoilSensorsData
 participant SensorService
 participant Sensor Hub
 participant DBAL
+participant DBMS
 
 activate SensorService
-loop i < 3 && data is not arrived
+loop n_attempts < 3 && data is not arrived
 SensorService->Sensor Hub: get humidity data
 activate Sensor Hub
 SensorService<<--Sensor Hub: humidity data
@@ -13,9 +14,17 @@ deactivate Sensor Hub
 alt data is received
 SensorService->DBAL: insert(d: Data)
 activate DBAL
+DBAL->DBMS: insert(d: Data)
+activate DBMS
+DBAL<<--DBMS: ack
+deactivate DBMS
 SensorService<<--DBAL: ack
 else data is not reachable
 SensorService->DBAL: insert(d: Data)
+DBAL->DBMS: insert(d: Data)
+activate DBMS
+DBAL<<--DBMS: ack
+deactivate DBMS
 SensorService<<--DBAL: ack
 deactivate DBAL
 end

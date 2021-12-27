@@ -9,7 +9,11 @@ WebApp->AuthenticationService:login(username: string, password: string)
 activate AuthenticationService
 AuthenticationService->DBAL: query(q: string)
 activate DBAL
+DBAL->DBMS: query(q: string)
+activate DBMS
 alt valid credentials
+DBAL<<--DBMS: ack
+deactivate DBMS
 AuthenticationService<<--DBAL: ack
 WebApp<<--AuthenticationService: home page
 

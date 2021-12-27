@@ -3,8 +3,11 @@ title VisualizeBestAndWorstFarmers
 participant WebApp
 participant RankingService
 participant WeatherService
+participant ProductionDataService
+participant SensorService
 participant TSDPS
 participant DBAL
+participant DBMS
 
 activate WebApp
 WebApp->RankingService: rankByWeatherResilience(area: Area, from: DateTime, to: DateTime)
@@ -17,9 +20,29 @@ WeatherService<<--TSDPS: weather reports
 deactivate TSDPS
 RankingService<<--WeatherService: weather reports
 deactivate WeatherService
-RankingService->DBAL: query(q: string)
+RankingService->ProductionDataService: readDataByArea(area: Area, from: DateTime, to: DateTime): ProductionData[]
+activate ProductionDataService
+ProductionDataService->DBAL: query(q: string)
 activate DBAL
-RankingService<<--DBAL: farmers data
+DBAL->DBMS: query(q: string)
+activate DBMS
+DBAL<<--DBMS: ProductionData[]
+deactivate DBMS
+ProductionDataService<<--DBAL: ProductionData[]
+ProductionDataService-->>RankingService: ProductionData[]
+deactivate ProductionDataService
 deactivate DBAL
+RankingService->SensorService: getHumidityData,getIrrigationSystemData(area: Area, from: DateTime, to: DateTime):SensorData[]
+activate SensorService
+SensorService->DBAL: query(q: string)
+activate DBAL
+DBAL->DBMS: query(q: string)
+activate DBMS
+DBAL<<--DBMS: SensorData[]
+deactivate DBMS
+SensorService<<--DBAL: SensorData[]
+deactivate DBAL
+SensorService-->>RankingService:SensorData[]
+deactivate SensorService
 WebApp<<--RankingService: ranking
 deactivate RankingService

@@ -4,7 +4,9 @@ participant WebApp
 participant AuthenticationService
 participant NotificationService
 participant DBAL
+participant DBMS
 
+entryspacing 0.9
 activate WebApp
 WebApp->AuthenticationService:signup(username: string, password: string, farm: Farm)
 activate AuthenticationService
@@ -15,6 +17,10 @@ alt mail confirmed
 AuthenticationService<<--NotificationService: ack
 AuthenticationService->DBAL: insert(d: Data)
 activate DBAL
+DBAL->DBMS: insert(d:Data)
+activate DBMS
+DBAL<<--DBMS: ack
+deactivate DBMS
 AuthenticationService<<--DBAL: ack
 deactivate DBAL
 WebApp<<--AuthenticationService: account created

@@ -2,20 +2,27 @@ title AcceptDailyPlan
 
 participant WebApp
 participant DailyPlanService
+participant ProductionDataService
 participant DBAL
+participant DBMS
 participant NotificationService
 
+entryspacing 1.3
 activate WebApp
-WebApp->DailyPlanService:openDailyPlanPage()
-activate DailyPlanService
-WebApp<<--DailyPlanService: daily plan page
-deactivate DailyPlanService
 WebApp->DailyPlanService: generateDailyPlan(agronomist: Agronomist, date: DateTime)
 activate DailyPlanService
-DailyPlanService->DBAL: query(q: string)
+DailyPlanService->ProductionDataService:readDataByArea(area: Area, from: DateTime, to: DateTime): ProductionData[]
+activate ProductionDataService
+ProductionDataService->DBAL: query(q: string)
 activate DBAL
-DailyPlanService<<--DBAL: farmers data
+DBAL->DBMS: query(q: string)
+activate DBMS
+DBAL<<--DBMS: ProductionData[]
+deactivate DBMS
+ProductionDataService<<--DBAL: ProductionData[]
 deactivate DBAL
+DailyPlanService<<--ProductionDataService:ProductionData[]
+deactivate ProductionDataService
 WebApp<<--DailyPlanService: daily plan details
 deactivate DailyPlanService
 opt acceptable daily plan
@@ -23,6 +30,10 @@ WebApp->DailyPlanService: saveDailyPlan(agronomist: Agronomist, dailyPlan: Daily
 activate DailyPlanService
 DailyPlanService->DBAL: insert(d: Data)
 activate DBAL
+DBAL->DBMS: insert(d: Data)
+activate DBMS
+DBAL<<--DBMS: ack
+deactivate DBMS
 DailyPlanService<<--DBAL: ack
 deactivate DBAL
 DailyPlanService->NotificationService: notify(user: User, message: Message)

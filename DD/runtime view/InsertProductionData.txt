@@ -1,14 +1,22 @@
 title InsertProductionData
 
 participant WebApp
+
 participant ProductionDataService
 participant DBAL
+
+entryspacing 0.9
+participant DBMS
 
 activate WebApp
 WebApp->ProductionDataService:readData(farm: Farm, from: DateTime, to: DateTime)
 activate ProductionDataService
 ProductionDataService->DBAL: query(q: string)
 activate DBAL
+DBAL->DBMS: query(q: string)
+activate DBMS
+DBAL<<--DBMS: ProductionData[]
+deactivate DBMS
 ProductionDataService<<--DBAL: ProductionData[]
 deactivate DBAL
 WebApp<<--ProductionDataService: productions page
@@ -18,6 +26,10 @@ activate ProductionDataService
 opt valid data
 ProductionDataService->DBAL: insert(d: Data)
 activate DBAL
+DBAL->DBMS: query(q: string)
+activate DBMS
+DBAL<<--DBMS: ack
+deactivate DBMS
 ProductionDataService<<--DBAL: ack
 deactivate DBAL
 WebApp<<--ProductionDataService: ack

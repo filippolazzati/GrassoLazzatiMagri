@@ -4,31 +4,46 @@ participant WebApp
 participant HelpRequestService
 participant NotificationService
 participant DBAL
+participant DBMS
 
 activate WebApp
-WebApp->HelpRequestService: listHelpRequests()
+WebApp->HelpRequestService: listHelpRequestsFrom(farmer:Farmer)
 activate HelpRequestService
 HelpRequestService->DBAL: query(q: string)
 activate DBAL
+DBAL->DBMS: query(q: string)
+activate DBMS
+DBAL<<--DBMS: HelpRequest[]
+deactivate DBMS
 HelpRequestService<<--DBAL: HelpRequest[]
 deactivate DBAL
 WebApp<<--HelpRequestService: "my requests" page
 deactivate HelpRequestService
 WebApp->HelpRequestService: listAvailableExperts()
 activate HelpRequestService
+HelpRequestService->DBAL: query(q: string)
+activate DBAL
+DBAL->DBMS: query(q: string)
+activate DBMS
+DBAL<<--DBMS: experts
+deactivate DBMS
+HelpRequestService<<--DBAL: experts
+deactivate DBAL
 WebApp<<--HelpRequestService: list of experts
 deactivate HelpRequestService
 WebApp->HelpRequestService: createHelpRequest(title: string, content: string)
 activate HelpRequestService
 HelpRequestService->NotificationService:notify(user: User, message: Message)
 activate NotificationService
-opt expert connected to Internet
 HelpRequestService<<--NotificationService: ack
 deactivate NotificationService
 HelpRequestService->DBAL: insert(d: Data)
 activate DBAL
+DBAL->DBMS: insert(d: Data)
+activate DBMS
+DBAL<<--DBMS: ack
+deactivate DBMS
 HelpRequestService<<--DBAL: ack
 deactivate DBAL
 WebApp<<--HelpRequestService: request created
-end
 deactivate HelpRequestService

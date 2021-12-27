@@ -3,16 +3,21 @@ title CreateFarmersForumThread
 participant WebApp
 participant ForumService
 participant DBAL
+participant DBMS
 
 activate WebApp
-WebApp->ForumService: createTopic(title: string, content: string)
+WebApp->ForumService: createTopic(title: string)
 activate ForumService
 alt valid data
 ForumService->DBAL:insert(d: Data)
 activate DBAL
+DBAL->DBMS: insert(d:Data)
+activate DBMS
+DBAL<<--DBMS: ack
+deactivate DBMS
 ForumService<<--DBAL: ack
-WebApp<<--ForumService: confirmation
 deactivate DBAL
+WebApp<<--ForumService: confirmation
 else invalid data
 WebApp<<--ForumService: error
 end 
