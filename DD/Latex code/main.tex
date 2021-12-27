@@ -5,6 +5,7 @@
 \usepackage{graphicx}
 \usepackage{color}   %May be necessary if you want to color links
 \usepackage{hyperref}
+\usepackage{ragged2e}
 \usepackage{longtable}
 \usepackage{float}
 \usepackage[table]{xcolor}
@@ -50,12 +51,15 @@
 \newpage
 \tableofcontents %this command creates an index
 \newpage
-
+\listoffigures
+\newpage
+\listoftables
+\newpage
 \section{Introduction}
 A DD\footnote{Design Document. See section \ref{Abbreviations}}, according to the definition provided by the \textbf{IEEE Std 1016™-2009} standard, is \textit{a representation of a software design that is to be used for recording design information, addressing various design concerns, and communicating that information to the design’s stakeholders}. It should be noticed that, in this document, instead of using the abbreviation SDD, which stands for "Software Design Description", is used DD. In other words, a DD is a document that is used by \textit{acquirers, project managers, quality assurance staff, configuration managers, software designers, programmers, testers, and maintainers} to retrieve the specific design information needed by the specific stakeholder.
 \subsection{Purpose}\label{Purpose}
 \verb|DREAM|, the system to-be, aims to help policy makers 
-formulating policies in the field of agriculture.  Moreover, \verb|DREAM| aims to help farmers by putting them in contact with each other so that they can exchange advice and aids. Finally, \verb|DREAM| also schedules the daily work of agronomists and make them visit the worse-performing farmers. These are the main goals of \verb|DREAM| which shall be data-driven, namely it shall intensively exploits data to perform the tasks it is asked to do. The requirements that allow the system to satisfy the goals as well as a detailed list of all the goals are present respectively in \textit{RASD - 3.2 Functional requirements} and in \textit{RASD - 1.1 Purpose}. In this document the focus in on the design, that is on the description of the components and the interaction among them and with external systems through interfaces which compose the system and allow the satisfaction of the requirements and, at the end, of the goals.
+formulating policies in the field of agriculture.  Moreover, \verb|DREAM| aims to help farmers by putting them in contact with each other so that they can exchange advice and aids. Finally, \verb|DREAM| also schedules the daily work of agronomists. These are the main goals of \verb|DREAM| which shall be data-driven, namely it shall intensively exploits data to perform the tasks it is asked to do. The requirements that allow the system to satisfy the goals as well as a detailed list of all the goals are present respectively in \textit{RASD - 3.2 Functional requirements} and in \textit{RASD - 1.1 Purpose}. In this document the focus is on the design, that is on the description of the components and the interaction among them and with external systems through interfaces which compose the system and allow the satisfaction of the requirements and, at the end, of the goals.
 \subsection{Scope}
 The system to-be has three major stakeholders: the policy makers, the agronomists and the farmers. The needs that \verb|DREAM| aims to satisfy differ among them, and the main goals of the system have been identified in section\ref{Purpose}. For a detailed description and explanation of the context in which \verb|DREAM| operates the reader should refer to the \textit{RASD - 1.2 Scope} section. In here, we briefly tell about the main design concerns of such stakeholders.\\
 First of all, all of them have goals that, in order to be satisfied, require the storage of a large volume of data (after all, \verb|DREAM| is a data-driven system), and therefore scalable technologies suitable to manage the required amount of information have to be used. Furthermore, the stakeholders are not assumed to be expert in computer science, thus a graphical interface is needed; more specifically, the idea is to implement a web application to facilitate the access to the system to all the users and from any kind of device (computer, smartphone, ...).
@@ -63,11 +67,18 @@ First of all, all of them have goals that, in order to be satisfied, require the
 This section provides a list of the main abbreviations, acronyms and definitions adopted in the document:
 \begin{itemize}
     \item Design Document (DD): "An SDD is a representation of a software design to be used for communicating design information to its stakeholders. The requirements for the design languages (notations and other representational schemes) to be used for conformant SDDs are specified.
-    \item RASD
-    \item IFML
-    \item UI
+    \item RASDA = document that aims to present all the requirements of the system to
+be developed, explaining the domain in which it has to operate.
+    \item UI = user interface
+    \item farmer = citizen of Telangana who works on a piece of land
+    \item agronomist = expert of agriculture in Telangana
+    \item policy-maker = devises policies to regulate the agricultural production of
+    Telangana
+    \item best/worst -performing farmer = farmer chosen by a policy-maker (or an
+agronomist) taking into account its performances
 This standard is applicable to automated databases and design description languages but can be
-used for paper documents and other means of descriptions".
+used for paper documents and other means of descriptions";
+\item initiative = either a visit or an help request or a collaboration between a farmer and an agronomist to improve the performances of the harvest.
 \end{itemize}
 \subsection{Revision history}
 \raggedright
@@ -82,7 +93,13 @@ used for paper documents and other means of descriptions".
 \begin{itemize}
     \item \textit{IEEE Std 1016™-2009}, the standard for information technology, systems design, Software Design Descriptions. It describes the "required information content and organization for software design descriptions (SDDs)";
     \item \textit{ISO/IEC/IEEE 42010}, the standard for architecture description in systems and software engineering, that "addresses the creation, analysis and sustainment of architectures of systems
-through the use of architecture descriptions".
+through the use of architecture descriptions";
+\item course slides;
+\item assignment document;
+\item The Unified Modeling Language user guide, ISBN: 0-201-57168-4;
+\item January 1994, CMUCS-
+94-166, see "An Introduction to Software Architecture"
+at \url{http://www.cs.cmu.edu/afs/cs/project/able/ftp/intro_softarch/intro_softarch.pdf}.
 \end{itemize}
 \subsection{Document Structure}
 This document complies with the SDD\footnote{Software Design Descriptions} standard structure as it is defined in the \textit{IEEE Std 1016™-2009}, sections 4 and 5. Nevertheless, the contents have been ordered in a way that best fits the specific topics of this document and to facilitate the readers in the reading of this DD\footnote{Design Document.}.
@@ -106,22 +123,25 @@ An high-level view of the entire architecture of \verb|DREAM| is illustrated in 
     \caption{The main high-level components of the system.}
     \label{fig:overview}
 \end{figure}
-As previously said, the system has a three-tier architecture\footnote{Notice that it is not always true that logical layers (presentation, application and data) are mapped 1-to-1 to physical layers (tiers). As far as DREAM is concerned, this is true.}.
-\paragraph{Tier 1 - Presentation layer}
-The first tier is composed of a webapp installed on the device of the user; the device of the user can be any, as long as it has a browser installed and can be connected to Internet (in the figure this fact is exemplified through a smartphone and a pc). This is the tier closest to the user, and its role is basically related to managing the interaction with the user. It is the actual frontend, and in \verb|DREAM| it is provided with a GUI (Graphical User Interface). It should be remarked that the logic of the system is not present here, but is contained in the application layer.
-\paragraph{Tier 2 - Application layer}
+As previously said, the system has a three-tier architecture.
+\paragraph{Client Tier}
+The user interface is visualized through a browser installed on the user's device (in the figure this device is exemplified through a smartphone and a pc). This is the tier closest to the user, and its role is basically related to managing the interaction with the user. It should be remarked that the logic of the system is not present here, but is contained in the application layer (web tier).
+\paragraph{Web Tier}
 The second tier of the application has the fundamental role of managing all the functions that are available to the user. Here lies the business logic of \verb|DREAM|, which interacts with the other two tiers and with external services to perform all the activities of the system. This layer is exemplified by the high-level server component in figure \ref{fig:overview}. As it is explained in the following section, such layer is made of various \textit{services}, each of them associated to a specific function.
-\paragraph{Tier 3 - Data layer}
-The third tier is exemplified with a database and contains all the data \verb|DREAM| has to store. As a matter of fact, \verb|DREAM| is a data-driven application, and as such has to cope with a large amount of data to carry out its activities. All this data is stored in a database, which can be accessed by the application layer through a particular interface, as can be noticed in the following section. Along with the second tier, the third tier represents the backend of the system, which is protected inside a demilitarized zone\footnote{A DMZ is a subnetwork that contains and exposes important services and data of a company to an untrusted network (Internet in this case); the main goal is higher protection.} (DMZ).
+\paragraph{Data Tier}
+The third tier is exemplified with a database and contains all the data \verb|DREAM| has to store. As a matter of fact, \verb|DREAM| is a data-driven application, and as such has to cope with a large amount of data to carry out its activities. All this data is stored in a database, which can be accessed by the application layer through a particular interface, as can be noticed in the following section.
 \paragraph{External services}
 TSDP (external weather service) and the sensor hub are two external high-level components \verb|DREAM| has to interact with. The former provides weather reports and forecasts, while the latter allows \verb|DREAM| to access sensors and water irrigation system data. 
 \subsection{Component view}\label{Component view}
 \includegraphics[width=16.5cm]{diagrams/components_diagram.png}
 \subsection{Deployment view}
-By the definition provided in "The Unified Modeling Language User Guide"\footnote{ISBN: 0-201-57168-4}, a deployment diagram is \textit{a diagram that shows the configuration of run time processing nodes and the components that live on them}. In other words, we represent the topology of processors and devices where our software executes.\\
 The deployment diagram of \verb|DREAM| is the following:
-\newpage
-\includegraphics[trim=5cm 15cm 1cm 10cm,width=16.5cm]{diagrams/deployment_diagram.png}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.43]{diagrams/deployment_diagram.png}
+    \caption{Deployment diagram of the system.}
+    \label{fig:deployment_diagram}
+\end{figure}
 \newpage
 Some observations are required:
 \begin{itemize}
@@ -129,16 +149,15 @@ Some observations are required:
     \item some colours have been used for an easier visualization of the tiers;
     \item for the sake of simplicity, we have decided to represent only 2 possible clients, while the system is designed to support a much larger number;
     \item the number of web servers is more than one in order to offer faster responses and to scale better with more users;
-    \item according to the amount of data to manage\footnote{see \textit{RASD - 3.3 Performance requirements} for an estimate of the storage capacity required.}, the data might be partitioned in more physical devices; for the sake of simplicity we have represented only one device since the access is hidden behind the DBAL;
-    \item the architecture adopted for a scalable and secure routing of the users' requests to the servers is the FWLB (firewall load balancing), that is a \textit{deployment architecture where multiple firewall systems are placed behind Server Load Balancers}\footnote{\url{https://www.a10networks.com/blog/what-is-firewall-load-balancing-fwlb/}.}.
+    \item according to the amount of data to manage\footnote{see \textit{RASD - 3.3 Performance requirements} for an estimate of the storage capacity required.}, the data might be partitioned in more physical devices; for the sake of simplicity we have represented only one device since the access is hidden behind the DBAL.
 \end{itemize}
 \subsection{Runtime view}
+\justifying
 In this section the interactions among the components (identified at section \ref{Component view}) are shown. In order to make the presentation clearer, the UML notation of sequence diagrams is used.\\ It should be noticed that not all the use cases and scenarios identified in \textit{RASD - 3.2.3 Scenarios} and \textit{RASD - 3.2.4 Use cases} are represented here. We have decided to explicitly describe only the most relevant use cases, since in many occasions the interaction among the components is more or less the same. As a matter of fact, it often occurs that the difference lies only in the function invoked on a specific component; since all the interfaces are well-explained in the rest of this document (see section \ref{Component interfaces}), we opted to avoid this repetition.
-Furthermore, the DBMS component is not represented in any sequence diagram because its interaction with the DBAL is hidden behind the software framework adopted.
 \newpage
 \begin{figure}[H]
    \centering
-   \includegraphics[scale=0.40]{diagrams/sequence diagrams/RegisterFarmer.png}
+   \includegraphics[scale=0.30]{diagrams/sequence diagrams/RegisterFarmer.png}
     \caption{Sequence diagram that describes the RegisterFarmer use case.}
 \end{figure}
 This sequence diagram describes the process of registration of a farmer in the system. The farmer invokes the signUp method on the AuthenticationService, which checks the validity of the data (length of the password, ...) and, in case data is valid, it exploits the NotificationService to send an e-mail to the farmer with a link to verify the account. In case the account is verified, the AuthenticationService stores the new account in the database and positively notifies the farmer, otherwise an error is sent.
@@ -156,7 +175,7 @@ OBS.: from now on, checks on the data inserted by the user in order to avoid SQL
 \newpage
 \begin{figure}[H]
    \centering
-   \includegraphics[scale=0.60]{diagrams/sequence diagrams/InsertProductionData.png}
+   \includegraphics[scale=0.40]{diagrams/sequence diagrams/InsertProductionData.png}
     \caption{Sequence diagram that describes the InsertProductionData use case.}
 \end{figure}
 This sequence diagram describes the procedure through which a Farmer, starting from the home page, can insert production data in the system. According to the corresponding use case, the farmer automatically invokes the readData method when opening the "my productions" page. This call triggers an underlying retrieval of data from the database. Next, the Farmer calls insertData with all the details of the production to insert and, after a check about the validity, the data is inserted into the database and an ack is returned to the WebApp.
@@ -164,10 +183,10 @@ This sequence diagram describes the procedure through which a Farmer, starting f
 \newpage
 \begin{figure}[H]
    \centering
-   \includegraphics[scale=0.40]{diagrams/sequence diagrams/AcceptDailyPlan.png}
+   \includegraphics[scale=0.25]{diagrams/sequence diagrams/AcceptDailyPlan.png}
     \caption{Sequence diagram that describes the AcceptDailyPlan use case.}
 \end{figure}
-This sequence diagram describes the interactions that occur when an agronomist generates and accepts a new daily plan. First of all, the agronomist opens the daily plan page and then he selects the date of his next working day. The DailyPlanService queries the database to retrieve data about the Farmers that he needs to generate a suitable daily plan for the agronomist. In case the daily plan is acceptable to the agronomist, the WebApp invokes the saveDailyPlan method on the DailyPlanService, that stores the new daily plan in the database and then notifies the involved farmer (such interaction is not shown in the diagram).\\
+This sequence diagram describes the interactions that occur when an agronomist generates and accepts a new daily plan. First of all, the agronomist opens the daily plan dates page and then he selects the date of his next working day. The DailyPlanService asks the ProductionDataService to query the database to retrieve data about the Farmers that he needs to generate a suitable daily plan for the agronomist. In case the daily plan is acceptable to the agronomist, the WebApp invokes the saveDailyPlan method on the DailyPlanService, that stores the new daily plan in the database and then notifies the involved farmers.\\
 OBS.: In order to modify the daily plan, specific methods are offered by the DailyPlanService. See section \ref{Component interfaces} for more details (sequence diagrams are omitted for the sake of simplicity).
 
 \newpage
@@ -181,10 +200,10 @@ This sequence diagram describes the process with which \verb|DREAM| retrieves da
 \newpage
 \begin{figure}[H]
    \centering
-   \includegraphics[scale=0.30]{diagrams/sequence diagrams/VisualizeBestAndWorstFarmers.png}
+   \includegraphics[scale=0.20]{diagrams/sequence diagrams/VisualizeBestAndWorstFarmers.png}
     \caption{Sequence diagram that describes the VisualizeBestAndWorstFarmers use case.}
 \end{figure}
-This sequence diagram describes the process that leads to the ranking of farmers. The policy maker invokes the rankByWeatherResilience method on the RankService, which exploits the WeatherService to retrieve the weather reports from the TSDPS; moreover, RankService queries the database to retrieve all the data about farmers it needs to rank them, and finally it provides the policy maker the ranking.
+This sequence diagram describes the process that leads to the ranking of farmers. The policy maker invokes the rankByWeatherResilience method on the RankingService, which exploits the WeatherService to retrieve the weather reports from the TSDPS; moreover, RankingService asks also the ProductionDataService and the SensorService to query the database to retrieve all the data it needs to rank the farmers (notice that getHumidityData and getIrrigationSystemData are invoked on the same arrow for graphical reasons), and finally it provides the policy maker the ranking.
 
 \newpage
 \begin{figure}[H]
@@ -192,7 +211,7 @@ This sequence diagram describes the process that leads to the ranking of farmers
    \includegraphics[scale=0.40]{diagrams/sequence diagrams/RequestToExpert.png}
     \caption{Sequence diagram that describes the RequestToExpert use case.}
 \end{figure}
-This sequence diagram represents the way a farmer can ask for help to an expert (agronomist or best-performing farmer). Starting from the home page, the farmer open the "my requests" page which implies a query to retrieve all the past requests of the farmer. Next, the farmer selects the expert from which he wants to receive some help and invokes the createHelpRequest method on the HelpRequestService. This service exploits the NotificationService to notify the expert, and, in case the the expert is already connected on Internet, an ack is received, the request is inserted in the database and the farmer is positively notified. It should be remarked that if the expert is not available, the system notifies the farmer that the expert will be notified as soon as he accesses \verb|DREAM| (this branch has been omitted for the sake of simplicity).
+This sequence diagram represents the way a farmer can ask for help to an expert (agronomist or best-performing farmer). Starting from the home page, the farmer open the "my requests" page which implies a query to retrieve all the past requests of the farmer. Next, the farmer selects the expert from which he wants to receive some help and invokes the createHelpRequest method on the HelpRequestService. This service exploits the NotificationService to notify the expert: the request is inserted in the database and the farmer is positively notified.
 
 \newpage
 \begin{figure}[H]
@@ -202,13 +221,235 @@ This sequence diagram represents the way a farmer can ask for help to an expert 
 \end{figure}
 This diagram describes the process of creation of a new discussion thread by a farmer. It invokes the createTopic method on the HelpRequestService and, if the data inserted are valid, the service stores the information in the database and positively notifies the farmer, otherwise an error is shown.
 \newpage
-\subsection{Component interfaces}\label{Component interfaces}
+\subsection{Component interfaces}
+\subsubsection{DBAL}
+Database Abstraction Layer - Allows to query the database in an object-oriented style abstracting over the specific database system used.
+
+\begin{itemize}
+\item \begin{verbatim}query(q: string)\end{verbatim}
+\end{itemize}
+
+\subsubsection{NotificationService}
+Service for notifications.
+
+\paragraph{Notify}
+\begin{itemize}
+\item \begin{verbatim}
+notify(user: User, message: Message): void
+\end{verbatim}
+Sends a push notification to the specified user with the specified message.
+\item \begin{verbatim}
+sendMail(account: string, title: string, body: string): void
+\end{verbatim}
+Sends an email to the specified account.
+\end{itemize}
+
+\subsubsection{AuthenticationService}
+Handles user authentication and signup.
+
+\paragraph{Authentication}
+\begin{itemize}
+\item \begin{verbatim}
+login(username: string, password: string): void
+\end{verbatim}
+Logs in the user with the specified username and password.
+If no such user exists or the password is incorrect, they will be prompted to check their credentials; otherwise, they will be redirected to the correct page based on the type of the user.
+\item \begin{verbatim}
+signup(username: string, password: string, farm: Farm): void
+\end{verbatim}
+Creates a new user account for a farmer.
+\end{itemize}
+
+\subsubsection{SensorService}
+Allows for interactions with ambient and soil sensors (humidity sensors, irrigation systems...) through a sensor hub.
+
+\paragraph{RetrieveSensorData}
+\begin{itemize}
+\item \begin{verbatim}
+getHumidityData(area: Area, from: DateTime, to: DateTime): SensorData[]
+\end{verbatim}
+Returns soil humidity data for the specified area in the specified time interval.
+The items in the returned array contain the specific sensor identifier, the reading value, the date of the reading and the location.
+\item \begin{verbatim}
+getIrrigationSystemData(area: Area, from: DateTime, to: DateTime): SensorData[]
+\end{verbatim}
+Returns irrigation system statistics for the specified area in the specified time interval. The items in the returned array contain the specific sensor identifier, the reading value, the date of the reading and the location.
+\end{itemize}
+
+\subsubsection{WeatherService}
+Allows to read weather forecasts and reports.
+
+\paragraph{ReadWeatherData}
+\begin{itemize}
+\item \begin{verbatim}
+getWeatherReports(area: Area, from: DateTime, to: DateTime): WeatherData[]
+\end{verbatim}
+Returns historic weather reports for the specified area and time interval.
+The items in the returned array contain the date and time of the report and the weather data.
+\item \begin{verbatim}
+getWeatherForecasts(area: Area, date: DateTime): WeatherData[]
+\end{verbatim}
+Returns weather forecasts for the specified area and the specified date.
+The items in the returned array contain the time of the report and the weather data.
+The granularity of the reports varies based on how further in time the specified date is.
+\end{itemize}
+
+\subsubsection{ProductionDataService}
+Handles farmer production data and issues.
+
+\paragraph{InsertProductionData}
+\begin{itemize}
+\item \begin{verbatim}
+insertData(farm: Farm, date: DateTime, data: ProductionData): void
+\end{verbatim}
+Inserts production data for the specified farm and date.
+\item \begin{verbatim}
+insertIssue(farm: Farm, date: DateTime, issue: ProductionIssue): void
+\end{verbatim}
+Inserts a production issue for the specified farm and date.
+\end{itemize}
+
+\paragraph{ReadProductionData}
+\begin{itemize}
+\item \begin{verbatim}
+readData(farm: Farm, from: DateTime, to: DateTime): ProductionData[]
+\end{verbatim}
+Retrieves production data for the specified farm and time interval.
+\item \begin{verbatim}
+readIssues(farm: Farm, from: DateTime, to: DateTime): ProductionIssue[]
+\end{verbatim}
+Reads production issues for the specified farm and time interval.
+
+\item \begin{verbatim}
+    readDataByArea(area: Area, from: DateTime, to: DateTime): ProductionData[]
+\end{verbatim}
+Reads the data by area.
+\end{itemize}
+
+\subsubsection{RankingService}
+Allows ranking farmers based on various parameters.
+
+\paragraph{Ranking}
+\begin{itemize}
+\item \begin{verbatim}
+rankByProductivity(area: Area, from: DateTime, to: DateTime): Farmer[]
+\end{verbatim}
+Ranks farmers based on productivity, i.e. harvested volume over sowed volume, in the specified interval.
+\item \begin{verbatim}
+rankByWeatherResilience(area: Area, from: DateTime, to: DateTime): Farmer[]
+\end{verbatim}
+Ranks farmers based on weather resilience: the best (highest ranked) farmers are the ones who saw a smaller decrease in production volume in adverse weather conditions.
+\end{itemize}
+
+\subsubsection{HelpRequestService}
+Handling of help request / replies.
+
+\paragraph{HelpRequest}
+\begin{itemize}
+\item \begin{verbatim}
+createHelpRequest(title: string, content: string): HelpRequest
+\end{verbatim}
+Creates a new help request from the current user.
+\item \begin{verbatim}
+listHelpRequestsFrom(farmer:Farmer): HelpRequest[]
+\end{verbatim}
+Retrieves list of help requests sent from the farmer.
+\item \begin{verbatim}
+listHelpRequestsTo(expert:Expert): HelpRequest[]
+\end{verbatim}
+Retrieves list of help requests sent to the expert.
+\item \begin{verbatim}
+listAvailableExperts(): User[]
+\end{verbatim}
+Retrieves list of available experts (best farmers or agronomists).
+\item \begin{verbatim}
+answerHelpRequest(request: HelpRequest, reply: string): void
+\end{verbatim}
+Adds a reply to an open help request.
+\item \begin{verbatim}
+closeHelpRequest(request: HelpRequest): void
+\end{verbatim}
+Marks a request as closed / solved.
+\end{itemize}
+
+\subsubsection{ForumService}
+Provides an interface for farmers to interact with the forum.
+
+\paragraph{Forum}
+\begin{itemize}
+\item \begin{verbatim}
+createTopic(title: string): Topic
+\end{verbatim}
+Creates a new empty topic in the forum.
+\item \begin{verbatim}
+addMessage(topic: Topic, comment: string): Message
+\end{verbatim}
+Adds a new message to an open topic.
+\item \begin{verbatim}
+closeTopic(topic: Topic)
+\end{verbatim}
+Closes an open topic to prevent any further comments.
+\end{itemize}
+
+\subsubsection{DailyPlanService}
+Service for agronomist daily plans.
+
+\paragraph{DailyPlan}
+\begin{itemize}
+\item \begin{verbatim}
+generateDailyPlan(agronomist: Agronomist, date: DateTime): DailyPlan
+\end{verbatim}
+Generates a new daily plan for the specified agronomist and date.
+\item \begin{verbatim}
+addDailyPlanEntry(plan: DailyPlan, farm: Farm, time: Time): FarmVisit
+\end{verbatim}
+Adds a new visit to the specified daily plan at the specified time.
+\item \begin{verbatim}
+removeDailyPlanEntry(entry: FarmVisit)
+\end{verbatim}
+Removes the specified farm visit from the related daily plan.
+\item \begin{verbatim}
+moveDailyPlanEntry(entry: FarmVisit, time: Time)
+\end{verbatim}
+Updates the time of the specified farm visit.
+\item \begin{verbatim}
+saveDailyPlan(agronomist: Agronomist, dailyPlan: DailyPlan): void
+\end{verbatim}
+Saves the specified daily plan in the database and calls the NotificationService to notify the involved farmer.
+\end{itemize}
+
+\subsubsection{SuggestionService}
+Service for automated farmer suggestions.
+
+\paragraph{Suggestions}
+\begin{itemize}
+\item \begin{verbatim}
+getSuggestions(farmer: Farmer): Suggestion[]
+\end{verbatim}
+Retrieves a list of suggestions for the specified farmer.
+\end{itemize}
+
+\subsubsection{AnalyticsService}
+Allows retrieving global analytics for initiatives.
+
+\paragraph{Analytics}
+\begin{itemize}
+\item \begin{verbatim}
+getInitiatives(): Initiative[]
+\end{verbatim}
+Retrieves the list of currently open initiatives.
+\item \begin{verbatim}
+analyseInitiative(initiative:Initiative, timeInterval:TimeInterval):InitiativeResult
+\end{verbatim}
+Returns a series of indicators comparing the activity of the farmers involved in the initiative, before and after the beginning of the collaboration. TimeInterval specifies the interval of the indicators.
+\end{itemize}
+
 \subsection{Selected architectural styles and patterns}
 According to the definition provided by David Garlan and Mary Shaw\footnote{January 1994, CMUCS-
 94-166, see "An Introduction to Software Architecture"
 at \url{http://www.cs.cmu.edu/afs/cs/project/able/ftp/intro_softarch/intro_softarch.pdf}.}, \textit{an architectural style determines the vocabulary of components and connectors that can be used in instances of that style, together with a set of constraints on how they can be combined}.\\
 \paragraph{Architectural style}\label{Architectural style}
-Given that the tasks that \verb|DREAM| has to achieve can be perfectly reached by implementing the system as a web application, and given that the most wide-spread, standardized and successful architectural style for distributed (web) applications is the client-server one, we have decided to opt for it. As a matter of fact, every time a user (farmer, agronomist or policy maker), namely a client, has to access the system, it sends a request to \verb|DREAM|, or better, to the server of \verb|DREAM|, which processes it and answers with a response. Moreover, our choice features 3 tiers with a thin client.\\
+Given that the tasks that \verb|DREAM| has to achieve can be perfectly reached by implementing the system as a web application, we have decided to opt for it. As a matter of fact, every time a user (farmer, agronomist or policy maker), namely a client, has to access the system, it sends a request to \verb|DREAM|, or better, to the server of \verb|DREAM|, which processes it and answers with a response. Moreover, our choice features 3 tiers with a thin client.\\
 The main advantages of this choice related to the system we have to design are:
 \begin{itemize}
     \item \textbf{scalability}: the number of resources can be easily increased when needed; thanks also to the decision of adopting a 3-tiers architecture, the data is apart from the business logic, therefore the storage capacity can be increased without affecting the anything else
@@ -217,6 +458,7 @@ The main advantages of this choice related to the system we have to design are:
 \end{itemize}
 \subsection{Other design decisions}
 \paragraph{Relational database}
+\justifying
 We have decided to opt for a relational database because they perfectly match the use case of \verb|DREAM|. As a matter of fact, according to \textit{RASD - 3.3 Performance requirements}, there is not a huge number of relations between the entities of the data, thus a graph database would be counter-productive, because of its characteristic of being schema-less; the system has not strict time requirements, therefore adopting a key-value database would be uselessly expensive; the amount of data to manage is big, but not in the order required for matching the use case of a columnar database; finally, since data has to be pre-processed by \verb|DREAM| before reaching the users (in other words we accept data exiting the database at a low level), then we avoid a document-oriented database (also because it would make us waste a lot of space).
 \paragraph{Database abstraction layer}
 A DBAL is useful way to abstract from the details of the specific technology adopted for the database. It allows to reduce the amount of work required for the implementation of the components to manage the data because it provides APIs that hide the technicalities of the specific database chosen.
@@ -240,9 +482,9 @@ A minimal amount of client-side logic will be required to handle some user inter
 \newpage
 \section{User Interface design}
 Since the front-end of the \verb|DREAM| system is a web application, the content of its user interface consists in HTML pages displayed through a browser. Some wireframes of the UI\footnote{User Interface} can be found in \textit{RASD - 3.1.1 User interface}. In this section, IFML\footnote{Interaction Flow Modeling Language, see \url{https://www.ifml.org/}} diagrams are used to show the pages composing the \verb|DREAM| website, the components contained in these pages, the events that the user can fire through his/her interaction with the UI and how these events are handled by the \verb|DREAM| system.
-As explained in the previous section, the \verb|DREAM| website will be implemented as a multi-page application, which pages will be generated by server-side templating. As a consequence of this design choice, most of the UI events cause an HTTP request to the web server, which replies with an HTTP response containing the new HTML that the browser displays. As the MVC pattern is adopted - see previous section -, HTTP requests (that can be interpreted as messages produced by the UI events), are handled by the Controller components (hosted in the \verb|DREAM| server): in the following diagrams, actions of these components are displayed in grey hexagons with abstract names - these actions should be a guideline for the implementation of Controller components, but their mapping with software implementation aspects such as classes or methods is not discussed here.
+As explained in the previous section, the \verb|DREAM| website will be implemented as a multi-page application, whose pages will be generated by server-side templating. As a consequence of this design choice, most of the UI events cause an HTTP request to the web server, which replies with an HTTP response containing the new HTML that the browser displays. As the MVC pattern is adopted - see previous section -, HTTP requests (that can be interpreted as messages produced by the UI events), are handled by the Controller components (hosted in the \verb|DREAM| server): in the following diagrams, actions of these components are displayed in grey hexagons with abstract names - these actions should be a guideline for the implementation of Controller components, but their mapping with software implementation aspects such as classes or methods is not discussed here.
 The following diagrams are referred to the PC version of the website; adjustments for the mobile version of the website - due to visualization issues - are specified in the textual descriptions of the diagrams.
-
+\vspace{9cm}
 \subsection {General Overview}
 \begin{figure}[H]
    \centering
@@ -276,7 +518,7 @@ By selecting the "My Production" entry of the main menu, the user is displayed t
 By selecting the "Insert Production Data" button in the My Production Page, the user is displayed the Insert Production Data page, which contains a form for inserting the production data for a work day. By submitting this form, the user is displayed a confirmation page, that shows the data inserted together with a confirmation message.\footnote{See \textit{RASD - 3.2.4 Use cases}, Use Case 5.}\newline
 By selecting the "Insert Problem" button in the My Production Page, the user is displayed the Insert Problem Page, which contains a form for inserting a description of a problem the user is facing and for optionally requesting the visit of an agronomist as soon as possible. By submitting this form, the user is displayed a confirmation page, that shows the problem inserted, a confirmation message, and, if he/she requested the agronomist's visit, the scheduled date of the visit and the agronomist who will perform the visit.\footnote{See \textit{RASD - 3.2.4 Use cases}, Use Case 6.}\newline
 All the pages Insert Production Data, Insert Problem, Confirm Page For Inserting Production Data, Confirm Page for Inserting a Problem contain a "Back" button that takes to the My Production Page.
-
+\vspace{4cm}
 \subsubsection{"Weather Forecasts" section}
 \begin{figure}[H]
     \centering
@@ -306,7 +548,7 @@ By selecting a request in the list, the farmer is shown in the My Requests Page 
 In the My Production Page, a "New Request" button is present, and if the user selects it, he/she is shown a page for choosing whether to submit the request to an agronomist or to a best-performing farmer. After this choice, the user is displayed a New Request Page, containing a form for creating a new request. After submitting this form, the user is displayed a confirmation page, that shows the details of the request inserted together with a confirmation message.\footnote{See \textit{RASD - 3.2.4 Use cases}, Use Case 22.}
 \newline
 In the My Requests page there is a "Back" button that brings to the Farmer Home Page; in the New Request Page and in the Confirm Page For Inserting Request there is a "Back" button that brings to the My Requests Page.
-
+\vspace{6cm}
 \subsubsection{"My Replies" section}
 \begin{figure}[H]
     \centering
@@ -333,7 +575,7 @@ In the Forum Page there is a "Back" button for going back to the Farmer Home Pag
 The Home Page for agronomists contains a menu, from which the user can access the four sections of the interface: "Daily Plan", "Farms", "Weather Forecasts", "My Replies". \newline
 If there are any notifications for the agronomist - e.g., a new request has been issued to him/her -, they are displayed in the Home Page.\newline
 If it's the first time that the agronomist accesses the \verb|DREAM| system, a form for entering his personal and working data is present in the Home Page.\footnote{See \textit{RASD - 3.2.4 Use cases}, Use Case 2.}\newline
-All pages represented in the diagram contain the main menu (not displayed in the diagram for the sake of simplicity), so that the user can freely navigate from one section to another without passing through the Home Page. 
+All pages represented in the diagram contain the main menu (not displayed in the diagram for the sake of simplicity), so that the user can freely navigate from one section to another without passing through the Home Page. \vspace{7cm}
 \begin{center}
     \begin{sidewaysfigure}
     \includegraphics[scale=0.07]{diagrams/ui diagrams/agronomist/agronomist.png}
@@ -352,7 +594,7 @@ If the daily plan has not been accepted yet, there are a "Farm Details", "Move" 
 If the daily plan has been accepted, and the last hour of the working day of a daily plan has passed, there are a "Farm Details", "Move" and "Delete" buttons for each visit, an input field for each visit for inserting a report, and an "Add Visit" button and a "Confirm Daily Plan" button. The "Move", "Delete" and "Add Visit" buttons are exactly the same as when the daily plan has not been accepted yet. When the user selects the "Confirm Daily Plan" button, the Daily Plan Page is shown to the user without the "Move", "Delete", "Add Visit" and "Accept Daily Plan" button, and with a confirmation message that the daily plan has been confirmed.\footnote{See \textit{RASD - 3.2.4 Use cases}, Use Case 12.} \newline
 If the user selects the "Farm Details" button related to a certain farm, the Farm Details Page of the selected farm is shown. It contains some details about the farm and the farmer who owns the farm - location of the farm, name and surname of the farmer - and the list of production data and problems inserted by the farmer since the last visit of the agronomist to the farm.\footnote{See \textit{RASD - 3.2.4 Use cases}, Use Case 8.}\newline
 A "Back" button in the Daily Plan Dates Page brings back to the Agronomist Home Page, a "Back" button in the Daily Plan page brings back to the Daily Plan Dates Page, and a "Back" button in the Farm Details Page brings back to the Daily Plan Page.
-
+\vspace{5cm}
 \subsubsection{"Farms" section}
 \begin{figure}[H]
     \centering
@@ -409,7 +651,7 @@ The following table shows how business logic components presented in the section
  % do not write anything here
  \endfirsthead
  \hline
-  \cellcolor{yellow!30} & \cellcolor{white}FS & \cellcolor{white}DPS & \cellcolor{white}AS & \cellcolor{white}SS & \cellcolor{white}WS & \cellcolor{white}PDS & \cellcolor{white}RS & \cellcolor{white}HRS &  \cellcolor{white}AUTHS \\
+  \cellcolor{yellow!30} &\cellcolor{white}FS & \cellcolor{white}DPS & \cellcolor{white}AS & \cellcolor{white}SS & \cellcolor{white}WS & \cellcolor{white}PDS & \cellcolor{white}RS & \cellcolor{white}HRS & \cellcolor{white}AUTHS \\
  \endhead
  % do not write anything here
  \endfoot
@@ -417,7 +659,7 @@ The following table shows how business logic components presented in the section
  \endlastfoot
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  \hline
-  \cellcolor{yellow!30} & \cellcolor{white}FS & \cellcolor{white}DPS & \cellcolor{white}AS & \cellcolor{white}SS & \cellcolor{white}WS & \cellcolor{white}PDS & \cellcolor{white}RS & \cellcolor{white}HRS &  \cellcolor{white}AUTHS \\
+  \cellcolor{yellow!30} & \cellcolor{white}FS & \cellcolor{white}DPS & \cellcolor{white}AS & \cellcolor{white}SS & \cellcolor{white}WS & \cellcolor{white}PDS & \cellcolor{white}RS & \cellcolor{white}HRS & \cellcolor{white}AUTHS \\
  \hline
  R1 &   &  &  &  X &  &   &  &   &    \\
  \hline
@@ -556,7 +798,100 @@ Due to the number of independent features in the system, it is crucial that \tex
 \par After the implementation and integration phase is complete and the system is deemed to be in a production-ready state, \textbf{stress testing} is also required due to the large number of users that will access the system simultaneously. This will be carried forward using specialized external services that allow sending a large number of requests while simulating real user behaviour.
 \newpage
 \section{Effort spent}
+\centering
+\begin{longtable}{|m{5cm}|m{5cm}|}
+\caption{The time Christian Grasso has spent on this document.}
+ \label{christian effort spent}
+ \hline
+ \multicolumn{2}{|c|}{\cellcolor{white}\emph{Effort spent}} \\
+  % do not write anything here
+ \endfirsthead
+ % do not write anything here
+ \endhead
+ % do not write anything here
+ \endfoot
+ % do not write anything here
+ \endlastfoot
+ \hline
+ Initial organization & 2h\\
+ \hline
+ Interfaces and organization & 4.30h\\
+ \hline
+ Component diagram & 2.30h\\
+ \hline
+ Other design decisions and component interfaces & 3h\\
+ \hline
+ Final recap & 2.30h\\
+ \hline
+\end{longtable}
+
+\centering
+\begin{longtable}{|m{5cm}|m{5cm}|}
+\caption{The time Filippo Lazzati has spent on this document.}
+ \label{filippo effort spent}
+ \hline
+ \multicolumn{2}{|c|}{\cellcolor{white}\emph{Effort spent}} \\
+  % do not write anything here
+ \endfirsthead
+ % do not write anything here
+ \endhead
+ % do not write anything here
+ \endfoot
+ % do not write anything here
+ \endlastfoot
+ \hline
+ Initial organization & 2h\\
+ \hline
+ Introduction & 2h\\
+ \hline
+ Interfaces and organization & 2h\\
+ \hline
+Deployment diagram and other design choices & 3.30h\\
+ \hline
+ Runtime view & 3h\\
+ \hline
+ Overview & 45mins\\
+ \hline
+  Final recap & 2.30h\\
+ \hline
+\end{longtable}
+
+\centering
+\begin{longtable}{|m{5cm}|m{5cm}|}
+\caption{The time Chiara Magri has spent on this document.}
+ \label{chiara effort spent}
+ \hline
+ \multicolumn{2}{|c|}{\cellcolor{white}\emph{Effort spent}} \\
+  % do not write anything here
+ \endfirsthead
+ % do not write anything here
+ \endhead
+ % do not write anything here
+ \endfoot
+ % do not write anything here
+ \endlastfoot
+ \hline
+ Initial organization & 2h\\
+ \hline
+ Interfaces and organization & 2h\\
+ \hline
+ User interface & 11h\\
+\hline
+  Final recap & 2.30h\\
+ \hline
+\end{longtable}
 \newpage
 \section{References}
+\subsection{Used tools}
+\begin{itemize}
+    \item \href{https://www.ifmledit.org
+
+}{IFML}
+\item \href{https://staruml.io/}{StarUML}: to draw UML diagrams;
+    \item \href{https://app.diagrams.net/}{draw.io}: another tool to draw UML diagrams;
+    \item \href{https://alloytools.org/}{Alloy}: to specify formally some requirements;
+    \item \href{https://www.overleaf.com}{Overleaf}: Latex editor;
+    \item \href{https://github.com/}{Github}: to share the files;
+\end{itemize}
 \end{document}
 

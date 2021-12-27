@@ -50,6 +50,8 @@ Handles farmer production data and issues.
 -- readIssues(farm: Farm, from: DateTime, to: DateTime): ProductionIssue[]
    Reads production issues for the specified farm and time interval.
 
+readDataByArea(area: Area, from: DateTime, to: DateTime): ProductionData[]
+
 --------------------
 
 RankingService
@@ -68,7 +70,7 @@ AnalyticsService
 Allows retrieving global analytics for the system.
 
 - Analytics
--- ???
+-- iniziative
 
 --------------------
 
@@ -79,7 +81,10 @@ Handling of help request / replies.
 -- createHelpRequest(title: string, content: string): HelpRequest
    Creates a new help request from the current user.
 
--- listHelpRequests(): HelpRequest[]
+-- listHelpRequestsFrom(farmer:Farmer): HelpRequest[]
+   Retrieves list of open help requests.
+
+-- listHelpRequestsTo(expert:Expert): HelpRequest[]
    Retrieves list of open help requests.
 
 -- listAvailableExperts(): Expert[]
