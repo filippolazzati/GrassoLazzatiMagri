@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Forum Thread{% endblock %}
+
+{% block toolbar %}
+    <a class="btn btn-light" href="{{ path('forum_index') }}">
+        <i class="bi bi-arrow-left-short"></i> Back to thread list
+    </a>
+{% endblock %}
+
+{% block content %}
+    {{ form(form) }}
+{% endblock %}

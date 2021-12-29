@@ -3,7 +3,9 @@ html {
 }
 
 body {
-    min-height: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 body.login-page {
@@ -19,4 +21,20 @@ body.login-page .form-login {
     max-width: 330px;
     padding: 15px;
     margin: 0 auto;
+}
+
+main {
+    flex: 1;
+}
+
+a {
+    text-decoration: none;
+}
+
+table th a {
+    color: var(--bs-body-color);
+}
+
+table tr[data-href] {
+    cursor: pointer;
 }

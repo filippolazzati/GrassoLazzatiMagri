@@ -4,19 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{% block title %}DREAM{% endblock %}</title>
+    <title>{% block title %}DREAM{% endblock %}{{ block('title') != 'DREAM' ? ' | DREAM' : '' }}</title>
     <link rel="stylesheet" href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}"/>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
 </head>
 {% block fullbody %}
     <body>
-        {% block header %}
-            {% include 'partials/_header.html.twig' %}
+        {% block navbar %}
+            {% include 'partials/_navbar.html.twig' %}
         {% endblock %}
-        <main class="{% block containerClass %}container{% endblock %}">
+        <main class="{% block containerClass %}container pt-4{% endblock %}">
+            {% block subheader %}
+                <div class="d-flex align-items-center justify-content-between mt-2 mb-4">
+                    <h1 class="h2 mb-0">{{ block('title') != 'DREAM' ? block('title') : app.request.pathInfo }}</h1>
+                    <div>{% block toolbar %}{% endblock %}</div>
+                </div>
+            {% endblock subheader %}
+            {% block alerts %}
+                {% include 'partials/_alerts.html.twig' %}
+            {% endblock %}
             {% block content %}{% endblock %}
         </main>
+        <footer class="footer bg-light py-3">
+            <div class="container">
+                <div class="d-flex align-items-center justify-content-between">
+                    <span class="text-muted">
+                        DREAM<br>
+                        <small>Software Engineering 2 - A.Y. 2021/22 - I&T Assignment</small>
+                    </span>
+                </div>
+            </div>
+        </footer>
         <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{ asset('js/app.js') }}"></script>
         {% block javascripts %}{% endblock %}
     </body>
 {% endblock %}

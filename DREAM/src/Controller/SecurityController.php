@@ -41,7 +41,7 @@ class SecurityController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->flush();
-            //$this->addFlash('success', 'Profile updated');
+            $this->addFlash('success', 'Profile updated');
 
             return $this->redirectToRoute('profile');
         }

@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ thread.title }} | Forum{% endblock %}
+
+{% block subheader %}
+    <div class="mb-3">
+        <a class="btn btn-light btn-sm" href="{{ path('forum_index') }}">
+            <i class="bi bi-arrow-left-short"></i> Back to thread list
+        </a>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <h2 class="h3">{{ thread.title }}</h2>
+
+    <div class="d-flex align-items-center justify-content-between my-2">
+        <div class="text-muted">
+            {% set messageOffset = pagination.itemNumberPerPage * (pagination.currentPageNumber - 1) + 1 %}
+            Showing messages {{ messageOffset }}-{{ min(messageOffset + pagination.itemNumberPerPage - 1, pagination.totalItemCount) }} of {{ pagination.totalItemCount }}
+        </div>
+        <div>
+            {{ knp_pagination_render(pagination) }}
+        </div>
+    </div>
+
+    <div class="thread my-4">
+        {% for message in pagination %}
+            <div class="card my-3">
+                <div class="card-header">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <img src="{{ message.author.avatarUrl }}" alt="{{ message.author.fullName }}"
+                                 class="rounded-circle me-2" style="width: 24px; height: 24px;">
+                            <strong>{{ app.user.fullName }}</strong>
+                        </div>
+                        <span class="d-block text-muted">{{ message.createdAt|date('d/m/Y H:i:s') }}</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {{ message.content }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if pagination.currentPageNumber == totalPages %}
+        {# Last page, show reply form #}
+        <h3 class="h5">Reply</h3>
+        <div class="row">
+            <div class="col-12 col-lg-8">
+                {{ form_start(newMessageForm) }}
+
+                {{ form_errors(newMessageForm.content) }}
+                {{ form_widget(newMessageForm.content) }}
+                <div class="mt-2">
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-reply"></i> Send Reply</button>
+                </div>
+                {{ form_end(newMessageForm) }}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
