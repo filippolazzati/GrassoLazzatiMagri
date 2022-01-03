@@ -67,7 +67,7 @@ First of all, all of them have goals that, in order to be satisfied, require the
 This section provides a list of the main abbreviations, acronyms and definitions adopted in the document:
 \begin{itemize}
     \item Design Document (DD): "An SDD is a representation of a software design to be used for communicating design information to its stakeholders. The requirements for the design languages (notations and other representational schemes) to be used for conformant SDDs are specified.
-    \item RASDA = document that aims to present all the requirements of the system to
+    \item RASD = document that aims to present all the requirements of the system to
 be developed, explaining the domain in which it has to operate.
     \item UI = user interface
     \item farmer = citizen of Telangana who works on a piece of land
@@ -79,7 +79,12 @@ agronomist) taking into account its performances
 This standard is applicable to automated databases and design description languages but can be
 used for paper documents and other means of descriptions";
 \item initiative = either a visit or an help request or a collaboration between a farmer and an agronomist to improve the performances of the harvest.
+\item TSDPS = Telangana State Development Planning Society
+\item ITD = Implementation and Testing Document
+\item IT = Implementation and Testing
+\item OS = Operating System
 \end{itemize}
+
 \subsection{Revision history}
 \raggedright
 \begin{tabular}{ |c | c |}
@@ -637,21 +642,29 @@ A "Back" button in the Initiatives Page brings to the Policy Maker Home Page, wh
 
 \newpage
 \section{Requirements Traceability}
-This section shows the mapping between the requirements listed in \textit{RASD - 3.2.1 Use cases} and the components presented in the section  2.2 of this document.
+This section shows the mapping between the functional and non functional requirements presented in the RASD and the components presented in the section  2.2 of this document.
+\subsection{Functional Requirements Traceability}
+The following table shows how business logic components presented in the section  2.2 of this document implement the functional requirements of the \verb|DREAM| system, listed in \textit{RASD - 3.2.1 Requirements}.
 \newline
-\newline
-The following table shows how business logic components presented in the section  2.2 of this document implement the requirements of the \verb|DREAM| system.
+Some of the components presented in section 2.2 are not present in the table:
+\begin{itemize}
+    \item Webapp: It is involved in the implementation of all the requirements involving the interaction with the user (R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R16, R17, R18, R21, R22, R24, R25, R26, R28, R29, R38, R42, R43, R44, R45, R46, R47, R48, R49).
+    \item NotificationService: It is not included in the table, as only business logic components are. It is involved in the implementation of requirements R33, R35, R45.
+    \item DBAL: It is necessary for providing an implementation for all requirements involving the access to the database (all requirements except R26, R27, R28, R30).
+    \item DBMS: It is necessary for providing an implementation for all requirements of the system involving the storage of or access to persistent data (all requirements except R26, R27, R28, R30).
+\end{itemize}
+
 \rowcolors{2}{gray!15}{gray!35}
-\begin{longtable}[c]{|m{0.15cm}|m{0.15cm}|m{0.15cm}|m{0.15cm}|m{0.15cm}|m{0.15cm}|m{0.15cm}|m{0.15cm}|m{0.15cm}|m{0.15cm}|}
- \caption{Traceability matrix of components to requirements.}
+\begin{longtable}[c]{|m{0.10cm}|m{0.10cm}|m{0.10cm}|m{0.10cm}|m{0.05cm}|m{0.10cm}|m{0.10cm}|m{0.10cm}|m{0.10cm}|m{0.10cm}|m{0.10cm}|}
+ \caption{Traceability matrix of components to functional requirements.}
  \label{comp-req mapping}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  \hline
- \multicolumn{10}{|c|}{\cellcolor{white}Mapping between Components and Requirements}
+ \multicolumn{11}{|c|}{\cellcolor{white}Mapping between Components and Functional Requirements}
  % do not write anything here
  \endfirsthead
  \hline
-  \cellcolor{yellow!30} &\cellcolor{white}FS & \cellcolor{white}DPS & \cellcolor{white}AS & \cellcolor{white}SS & \cellcolor{white}WS & \cellcolor{white}PDS & \cellcolor{white}RS & \cellcolor{white}HRS & \cellcolor{white}AUTHS \\
+  \cellcolor{yellow!30} &\cellcolor{white}FS & \cellcolor{white}DPS & \cellcolor{white}AS & \cellcolor{white}SS & \cellcolor{white}WS & \cellcolor{white}PDS & \cellcolor{white}RS & \cellcolor{white}HRS & \cellcolor{white}SUGGS & \cellcolor{white}AUTHS \\
  \endhead
  % do not write anything here
  \endfoot
@@ -659,101 +672,105 @@ The following table shows how business logic components presented in the section
  \endlastfoot
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  \hline
-  \cellcolor{yellow!30} & \cellcolor{white}FS & \cellcolor{white}DPS & \cellcolor{white}AS & \cellcolor{white}SS & \cellcolor{white}WS & \cellcolor{white}PDS & \cellcolor{white}RS & \cellcolor{white}HRS & \cellcolor{white}AUTHS \\
+  \cellcolor{yellow!30} & \cellcolor{white}FS & \cellcolor{white}DPS & \cellcolor{white}AS & \cellcolor{white}SS & \cellcolor{white}WS & \cellcolor{white}PDS & \cellcolor{white}RS & \cellcolor{white}HRS & \cellcolor{white}SUGGS & \cellcolor{white}AUTHS \\
  \hline
- R1 &   &  &  &  X &  &   &  &   &    \\
+ R1 &   &  &  &  X &  &   &  &   &  &  \\
  \hline
- R2 &  &  &  &   &  &   &  &   &     \\
+ R2 &  &  &  &   &X  &   &  &   &  &   \\
  \hline
- R3 &  &  &  &   &  &   &  &   &     \\
+ R3 &  &  &  & X  &  &   &  &   &  &   \\
  \hline
- R4 &  &  &  &  &  &   &  &   &     \\
+ R4 &  & X &  &  &  &   &  &   &  &   \\
  \hline
- R5 &  &   &   &   &   &   &  &   &     \\
+ R5 &  &   &   &   &   &   &  &   & & X   \\
  \hline
- R6 &  &   &   &   &   &   &   &   &      \\
+ R6 &  &   &   &   &   & X  &   &   &   &   \\
  \hline
- R7 &  &   &   &   &   &   &   &   &      \\
+ R7 &  &   &   &   &   &  X &   &   &  &    \\
  \hline
- R8 &  &   &   &   &   &   &   &   &     \\
+ R8 &  &   &   &   &   & X  &   &   &  &   \\
  \hline
- R9 &   &  &   &   &   &   &   &   &      \\
+ R9 &   &  &   &   &   & X  &   &   &  &    \\
  \hline
- R10 &   &  &  &   &   &   &   &   &     \\
+ R10 &   &  &  &   &   & X  &   &   &  &   \\
  \hline
- R11 &   &  &  &   &   &   &   &   &      \\
+ R11 &   &  &  &   &   &  X &   &   &  &    \\
  \hline
- R12 &    &   &  &   &   &   &   &   &   \\
+ R12 &    & X  &  &   &   & X  &   &   & &  \\
  \hline
- R13 &    &   &  &   &   &   &   &   &   \\
+ R13 &    & X  &  &   &   &   &   &   &  & \\
  \hline
- R14 &    &   &  &   &   &   &   &   &   \\
+ R14 &    & X  &  &   &   &   &   &   &  & \\
  \hline
- R15 &   &  &   &   &   &   &   &   &      \\
+ R15 &   &  &   & X  & X  & X  & X  &   &  &    \\
  \hline
- R16 &   &  &   &   &   &   &   &   &      \\
+ R16 &   &  &   &   &   &   &   &   &  &    \\
  \hline
- R17 &   &   &  &   &  &   &   &   &      \\
+ R17 &   &   &  &   &  &   &   &   &   &   \\
  \hline
- R18 &   &   &  &   &   &   &   &   &      \\
+ R18 &   &   &  &   &   &   &  X &   &  &    \\
  \hline
- R19 &   &   &   &  &   &   &   &   &      \\
+ R19 &   &   &  X &  &   & X  &   &   &  &    \\
  \hline
- R20 &   &   &   &  &  &   &   &   &     \\
+ R20 &   &   &  X & X & X & X  &   &   &  &   \\
  \hline
- R21 &   &   &   &  &   &   &   &   &     \\
+ R21 &   &   & X  &  &   &   &   &   &  &   \\
  \hline
- R22 &   &   &   &   &   &   &  &   &     \\
+ R22 &   &   & X  &   &   &   &  &   &  &   \\
  \hline
- R23 &   &   &   &   &   &   &   &   &     \\
+ R23 &   &   &   & X  & X  & X  &   &   & X &    \\
  \hline
- R24 &   &   &   &   &   &   &   &   &     \\
+ R24 &   &   &   & X  & X  &  X &   &   & X  &  \\
  \hline
- R25 &   &   &   &   &   &   &   &   &     \\
+ R25 &   &   &   &  X & X  & X  &   &   & X &    \\
  \hline
- R26 &   &   &   &   &  &   &   &   &      \\
+ R26 &   &   &   &   & X &   &   &   &  &    \\
  \hline
- R27 &   &   &   &   &  &   &   &   &      \\
+ R27 &   &   &   &   & X &   &   &   &  &    \\
  \hline
- R28 &   &   &   &   &   &  &   &   &      \\
+ R28 &   &   &   &   & X  &  &   &   &  &    \\
  \hline
- R29 &   &   &   &   &   &  &   &   &  \\
+ R29 &   &   &   &   &   &  &   &   & & X \\
  \hline
- R30 &   &   &   &   &   &  &   &   &      \\
+ R30 &   &   &   &   & X  &  &   &   &   &   \\
  \hline
- R31 &   &   &   &   &   &  &   &   &      \\
+ R31 &   &   &   &   &   &  &   & X  &   &   \\
  \hline
- R32 &   &   &   &   &   &  &   &   &      \\
+ R32 &   &   &   &   &   &  &   & X  &  &    \\
  \hline
- R33 &   &   &   &   &   &  &   &   &      \\
+ R33 &   &   &   &   &   &  &   & X  &  &    \\
  \hline
- R34 &   &   &   &   &   &   &   &  &      \\
+ R34 &   &   &   &   &   &   &   & X &   &   \\
  \hline
- R35 &   &   &   &   &   &   &   &  &      \\
+ R35 &   &   &   &   &   &   &   & X &  &    \\
  \hline
- R36 &   &   &   &   &   &   &   &  &      \\
+ R36 & X  &   &   &   &   &   &   &  &  &    \\
  \hline
- R37 &   &   &   &   &   &   &   &  &      \\
+ R37 & X  &   &   &   &   &   &   &  & &     \\
  \hline
- R38 &   &   &   &   &   &   &  &   &     \\
+ R38 &   & X  &   &   &   &   &  &   & &    \\
  \hline
- R39 &   &   &   &   &   &   &  &   &     \\
+ R39 &   & X  &   &   &   &   &  &   &  &   \\
  \hline
- R40 &   &   &   &   &   &   &  &   &     \\
+ R40 &   & X  &   &   &   &   &  &   &  &   \\
  \hline
- R41 &   &   &   &   &   &   &  &   &      \\
+ R41 &   & X  &   &   &   &   &  &   &  &    \\
  \hline
- R42 &   &   &   &   &   &   &  &   &      \\
+ R42 &   & X  &   &   &   &   &  &   &  &    \\
  \hline
- R43 &   &   &   &   &   &   &  &   &      \\
+ R43 &   & X  &   &   &   &   &  &   &   &   \\
  \hline
- R44 &   &   &   &   &   &   &  &   &      \\
+ R44 &   & X  &   &   &   &   &  &   &   &   \\
  \hline
- R45 &   &   &   &   &   &   &  &   &      \\
+ R45 &   & X  &   &   &   &   &  &   &  &    \\
  \hline
- R46 &   &   &   &   &   &   &  &   &      \\
+ R46 &   &   &   &   &   & X  &  &   &  &    \\
  \hline
- R47 &   &   &   &   &   &   &  &   &      \\
+ R47 &   &   &   &   &   & X  &  &   &  &    \\
+ \hline
+  R48 &   &   &   &   &   &   &  &   &  & X   \\
+ \hline
+  R49 &   &   &   &   &   & X  &  &   &  &    \\
  \hline
 \end{longtable}
 
@@ -767,15 +784,277 @@ Legend:
     \item PDS:ProductionDataService
     \item RS: RankingService
     \item HRS: HelpRequestService
+    \item SUGGS: SuggestionService
     \item AUTHS: AuthenticationService
 \end{itemize}
 
 Here a brief explanation of the mapping presented in the previous table is provided.
 
-\begin{itemize}
-    \item R1 - \verb|DREAM| collects soil moisture data from the soil moisture sensors: SensorService
-\end{itemize}
+\rowcolors{2}{gray!15}{gray!35}
+\begin{longtable}[c]{|m{11.75cm}|}
+\caption{Explanation of mapping between components and functional requirements.}
+ \label{comp-req mapping explanation}
+    \hline
+    \textbf{R1 - DREAM collects soil moisture data from the soil moisture sensors: SensorService}
+    \newline\newline
+    As showed in the section 2.4 (Runtime view) of this document, in the GetSoilSensorsData sequence diagram, the SensorService component is responsible for asking the data to soil moisture sensor system and storing them in the database of the \verb|DREAM| system. It also provides and interface to other components for accessing these data - getHumidityData, see section 2.5.4 of this document.\\ 
+    \hline
+    
+    \textbf{R2 - DREAM accesses weather reports data provided by the TSDPS system: WeatherService}
+    \newline\newline
+    The WeatherService component is responsible for asking weather reports data to the TSDPS\footnote{Telangana State Development Planning Society} system and storing them in the database of the \verb|DREAM| system. It also provides and interface to other components for accessing these data - getWeatherReports, see section 2.5.5 of this document.\\ 
+    \hline
+    
+    \textbf{R3 - DREAM collects watering data from the water irrigation system: SensorService}
+    \newline\newline
+    The SensorService component is responsible for asking water irrigation data to the water irrigation system and storing them in the database of the \verb|DREAM| system. It also provides and interface to other components for accessing these data - getIrrigationSystemData, see section 2.5.4 of this document.\\ 
+    \hline
+    
+    \textbf{R4 - DREAM shall allow agronomists to insert feedback about the farmers they
+    visited: DailyPlanService}
+    \newline\newline
+    Agronomists insert feedback about their visits to the farms when confirming their daily plan, and this operation is managed by the DailyPlanService.
+    \color{red}
+    aggiungere interfaccia: in DailyPlanService manca interfaccia per confermare il daily plan
+    anche nel class diagram si potrebbe aggiungere il feedback tra gli attributi della visita
+    \color{black}\\
+    \hline
+    
+    \textbf{R5 - DREAM shall allow farmers to insert the location and the area of their plot
+    of land: AuthenticationService}
+    \newline\newline
+    The insertion of these data by the farmers is managed by the AuthenticationService component with the signup interface (see section 2.5.3 of this document).
+    \color{red}
+    facciamo anche interfaccia per modifica?
+    \color{black} \\
+    \hline
+    
+    \textbf{R6 - DREAM shall allow farmers to insert the type of products they grow in a
+    certain area of their farms: ProductionDataService}
+    \newline\newline
+    Farmers can insert the type of products they grow in a certain area of their farms when inserting production data. This interaction is managed by the ProductionDataService.
+    \color{red}
+    aggiungere interfaccia in ProductionDataService.
+    anche nel sequence diagram manca questa cosa
+    \color{black} \\
+    \hline
+    
+    \textbf{R7 - DREAM shall allow farmers to insert data about their sowing activity: ProductionDataService
+    \newline\newline
+    R8 - DREAM shall allow farmers to insert data about their planting activity: ProductionDataService
+    \newline\newline
+    R9 - DREAM shall allow farmers to insert data about their harvesting activity: ProductionDataService
+    \newline\newline
+    R10 - DREAM shall allow farmers to insert data about the irrigation of their plantations: ProductionDataService}
+    \newline\newline
+    Farmers can insert their production data, regarding their sowing, planting, harvesting, fertilizing and watering activity - through the webapp. The insertion of these data in the database is performed by the ProductionDataService component, that offers an insertData interface (see section 2.5.6 of this document and section 2.4 - sequence diagram InsertProductionData).
+    It also offers a ReadProductionData interface to other components, that allows them with readData and readDataByArea to access these data.
+    \color{red}
+    NEL RASD MANCA IL REQUIREMENT PER INSERIRE CHE FERTILIZZANTI I FARMER HANNO USATO
+    \color{black} \\
+    \hline
+    
+    \textbf{R11 - DREAM shall allow farmers to insert descriptions of problems they face: ProductionDataService}
+    \newline\newline
+    Farmers can insert problems they face in the "MyProduction" section of the website. The insertion of such problems in the database of the \verb|DREAM| system is performed by the ProductionDataService, which offers an insertIssue interface (see section 2.5.6 of this document). It also offers a readIssues interface to other components that allows them to access problems inserted by farmers. \\
+    \hline
+    
+    \textbf{R12 - DREAM shall allow farmers to request a visit of an agronomist when inserting a problem: ProductionDataService, DailyPlanService
+    \newline\newline
+    R13 - When a farmer requests a visit of an agronomist, DREAM inserts the visit to the farmer into the daily plan of an agronomist assigned to the area of the farmer: DailyPlanService
+    \newline\newline
+    R14 - When a farmer requests a visit of an agronomist, if no agronomist is available in the area of the farmer during the seven days after the request (excluding the day when the request is made), DREAM notifies the farmer about this situation: DailyPlanService}
+    \newline\newline
+    If a farmer requests a visit of an agronomist when inserting a problem, the ProductionDataService, which processes the insertion of problems by farmers (interface insertIssue, see section 2.5.6 of this document), uses the DailyPlanService interface ..... (see section 2.5.10 of this document) to insert the requested visit into the daily plan of an agronomist assigned to the area of the farmer.
+    \color{red}
+    \begin{itemize}
+        \item boolean in parametri insertIssue per sapere se è stata richiesta una visita?
+        \item interfaccia in DailyPlanService
+        \item toglierei R14 dai requirement
+    \end{itemize}
+    \color{black} \\
+    \hline
+    
+    \textbf{R15 - DREAM can use different criteria (namely, productivity in terms of harvested quantity over sowed quantity, productivity in presence of adverse meteorological events, productivity in presence of drought, and so on) and/or combinations of them to rank farmers: SensorService, WeatherService, ProductionDataService, RankingService
+    \newline \newline
+    R16 - DREAM shall allow policy makers and agronomists to choose the criteria to use for ranking farmers and the associated weights (for combinations of them): SensorService, WeatherService, ProductionDataService, RankingService
+    \newline\newline
+    R17 - DREAM shall allow policy makers and agronomists to choose the time period and the area to consider for ranking the farmers: RankingService}
+    \newline\newline
+    
+    The RankingService component offers a rankByProductivity and a rankByWeatherResilience interfaces (see section 2.5.7 of this document), that allow to rank the farmers according to different criteria and with respect to different time periods and areas. In order to rank the farmers, it uses interfaces provided by SensorService (getHumidityData, getIrrigationSystemData, see section 2.5.4 of this document), WeatherService (getWeatherReports, see section 2.5.4 of this document), ProductionDataService (readDataByArea, see section 2.5.6 of this document). See also section 2.4 of this document, sequence diagram VisualizeBestAndWorstFarmers.
+    
+    \color{red}
+    Così com'è ora non permette di assegnare dei pesi ai criteri: farei un interfaccia sola in RankingService a cui si passano i criteri come parametri.
+    \color{black}\\
+    \hline
+    
+    \textbf{R18 - DREAM allows policy makers and agronomists to mark/unmark a farmer as best-performing or worst-performing: RankingService}
+    \newline\newline
+    The RankingService component offers a .... interface for implementing this requirement.
+    \color{red}
+    manca l'interfaccia
+    \color{black}\\
+    \hline
+    
+    \textbf{R19 - DREAM can compare different time periods of a farmer work according to various production criteria (e.g. production volume, fertilizers adopted, fraction of harvested plants over sowed ones, etc): AnalyticsService, ProductionDataService
+    \newline\newline
+    R20 - DREAM can compare different time periods of a farmer work with respect to environmental factors (e.g. weather reports data, soil moisture, ...): AnalyticsService, SensorService, WeatherService, ProductionDataService
+    \newline\newline
+    R21 - DREAM allows policy makers to choose an initiative taken by an agronomist or a farmer to help a farmer - i.e., visit to the farm or reply to a question - and two time periods of the farmer to compare the two time periods: AnalyticsService
+    \newline\newline
+    R22 - DREAM can show the impact of a certain initiative taken by an agronomist or a farmer to help a farmer - i.e., visit to the farm or reply to a question - during a certain time period: AnalyticsService
+    \newline\newline}
+    In order to allow policy makers to analyze the impact of initiatives involving farmers and agronomists on the farmers' production, the AnalyticsService component offers two interfaces: getInitiatives ad analyseInitiative (see section 2.5.12 of this document). To analyze the impact of an initiative, that is comparing the farmer's production before and after the initiative, the AnalyticsServiceComponent uses interfaces provided by the ProductionDataService (readData, see section 2.5.6 of this document), SensorService (getHumidityData, getIrrigationSystemData, see section 2.5.4 of this document) and WeatherService (getWeatherReports, see section 2.5.5 of this document) components.
+    \color{red}
+    ricordiamoci di cambiare la questione delle iniziative nel rasd se vogliamo che includano anche cose diverse da request e visit (andrebbero anche messe nel class diagram)
+    \color{black}\\
+    \hline
+    
+    \textbf{R23 - DREAM is able to find correlations among environmental factors, fertilisers adopted and crops planted with the volume of production of the farmers: SuggestionService, SensorService, WeatherService, ProductionDataService
+    \newline\newline
+    R24 - DREAM is able to send suggestions to farmers about fertilizers to useSuggestionService, SensorService, WeatherService, ProductionDataService
+    \newline\newline
+    R25 - DREAM is able to send suggestions to farmers about crops to plant: SuggestionService, SensorService, WeatherService, ProductionDataService
+    \newline\newline}
+    The SuggestionService component offers a getSuggestions interface (see section 2.5.11), that computes some suggestions for a farmer about fertilizers to use or crops to plant. In order to achieve this result, the SuggestionService component uses interfaces provided by: SensorService (getHumidityData, see section 2.5.4 of this document), WeatherService (getWeatherReports, getWeatherForecasts, see section 2.5.5 of this document), ProductionDataService (readData, see section 2.5.6 of this document).
+    \color{red}
+    collegare in component diagram
+    \color{black}\\
+    \hline
+    
+    \textbf{R26 - DREAM allows farmers to choose the date of the forecasts to visualize: WeatherService
+    \newline\newline
+    R27 - DREAM is able to connect to the Telangana government website to fetch forecasts for the chosen date: WeatherService
+    \newline\newline
+    R28 - DREAM can show weather forecast data for a certain location and date: WeatherService
+    \newline\newline
+    R30 - DREAM shall allow agronomists to choose the date of the weather forecasts to visualize}
+    \newline\newline
+    
+    Requirements pertaining the weather forecasts are implemented by the WeatherService component, which offers a getWeatherForecasts interface (see section 2.5.5 of this document), that retrieve weather forecasts for a chosen date from the TSDPS website.\\
+    \hline
+    
+    \textbf{R29 - DREAM shall allow agronomists to insert the area they are responsible of: AuthenticationService}
+    \newline\newline
+    The insertion and modification of these data by the farmers is managed by the AuthenticationService component.
+    \color{red}
+    aggiungere interfaccia: manca in AuthenticationService (corrisponde a quando l'agronomist si connette la prima volta e gli appare la form di registrazione nella home page)
+    facciamo sia inserimento che modifica?
+    \color{black} \\
+    \hline
+    
+    \textbf{R31 - DREAM allows farmers to choose the (best-performing) farmer or agronomist (assigned to his area) who to issue a request: HelpRequestService
+    \newline\newline
+    R32 - DREAM allows the farmers to send a request to a best-performing farmer or agronomist: HelpRequestService
+    \newline\newline
+    R33 - DREAM notifies (best-performing) farmers and agronomists of the requests of help from other farmers: HelpRequestService
+    \newline\newline
+    R34 - DREAM allows best-performing farmers and agronomists to insert a message of response to the farmers who have made a request for help to them: HelpRequestService
+    \newline\newline
+    R35 - DREAM sends the response to the farmer who issued the corresponding request: HelpRequestService}
+    \newline\newline
+    The HelpRequestService component offers all the interfaces necessary to implement the requirements related to help requests from farmers to agronomists or best-performing farmers (see section 2.5.8 of this document  and section 2.4 of this document - RequestToExpert sequence diagram). The listAvailableExperts interface allows farmers to see who are the agronomists and best-performing farmers he/she can issue a request to (R31). The createHelpRequest interface allows farmers to send an help request to the chosen agronomist or best-performing farmer (R32, R33) - that is, saving it in the database of the \verb|DREAM| system, from where it will be retrieved via the interface listHelpRequestsTo when the agronomist or best-performing farmer will access the "MyReplies" section of the website. The answerHelpRequest interface allows recipients of requests to insert a reply (R34, R35) - that is, saving it in the database of the \verb|DREAM| system, from where it will be retrieved via the interface listHelpRequestsFrom when the farmer will access the "MyRequests" section of the website. The HelpRequestService component uses the NotificationService component to notify users of new help requests or replies; this is not shown in the table as explained above.
+    \color{red}
+    \begin{itemize}
+        \item eliminare closeHelpRequest dalle interfaces
+        \item aggiungere interfaccia per il feedback
+        \item l'area o il farmer dovrebbe essere un parametro di listHelpRequest (nel caso, camniare anche il sequence diagram)
+    \end{itemize}
+    \color{black}\\
+    \hline
+    
+    \textbf{R36 - DREAM allows farmers to initiate a new thread in the forum: ForumService}
+    \newline\newline
+    The requirement is implemented by the ForumService component, which offers a createTopic interface (see section 2.5.9 of this document).\\
+    \hline
+    
+    \textbf{R37 - DREAM allows the farmers to add a post to a thread in the forum: ForumService}
+    \newline\newline
+    The requirement is implemented by the ForumService component, which offers an addMessage interface (see section 2.5.9 of this document).
+    \color{red}
+    aggiungere interfaccia getMessagesOfTopic(topic:Topic) a ForumService?
+    \color{black}\\
+    \hline
+    
+    \textbf{R38 - DREAM is able to generate a daily plan of visits for each agronomist evenly distributing (with exceptions to bad-performing farmers) over the year the number of visits to each farmer: DailyPlanService
+    \newline\newline
+    R39 - DREAM enforces that every farmer is assigned a visit in the daily plan of an agronomist at least twice a year: DailyPlanService
+    \newline\newline
+    R40 - DREAM enforces that no agronomist in a certain area is assigned more than twice of the visits than an agronomist of the same area: DailyPlanService
+    \newline\newline
+    R41 - DREAM enforces that the daily plan of agronomists includes more visits to worst-performing farmers than to other ones: DailyPlanService}
+    \newline\newline
+    Requirements pertaining the generation of the daily plan for agronomists are implemented by the DailyPlanService component, which offers a generateDailyPlan interface (see section 2.5.10 of this document, section 2.4 of this document - AcceptDailyPlan sequence diagram). 
+    \color{red}
+    quasi quasi toglierei l'interazione con ProductionDataService nel sequence diagram
+    \color{black}\\
+    \hline
+    
+    \textbf{R42 - DREAM allows agronomists to accept or modify -i.e.: remove, add or move a visit - the automatically generated daily plan: DailyPlanService}
+    \newline\newline
+    The DailyPlanService offers interfaces for modifying the daily plan of an agronomist - addDailyPlanEntry, removeDailyPlanEntry, moveDailyPlanEntry - and for accepting a daily plan (saveDailyPlan). (See section 2.5.10 of this document and section 2.4 of this document - sequence diagram AcceptDailyPlan).\\
+    \hline
+    
+    \textbf{R43 - DREAM allows agronomists to confirm a daily plan at the end of the working day: DailyPlanService}
+    \newline\newline
+    The DailyPlanService offers a ... interface for confirming the daily plan of an agronomist.
+    \color{red}
+    manca interfaccia
+    \color{black} \\
+    \hline
+    
+    \textbf{R44 - DREAM allows agronomists to specify deviations -i.e.: remove, add or move a visit- from a daily plan at the end of the working day: DailyPlanService}
+    \newline\newline
+    The DailyPlanService offers interfaces for modifying the daily plan of an agronomist - addDailyPlanEntry, removeDailyPlanEntry, moveDailyPlanEntry (see sectuib 2.5.10 if this document).
+    \color{red}
+    stesse di prima? in realtà se prima il daily plan non era salvato nel database dovremmo farne di altre - oppure lo salviamo prima che venga accettato, che ha più senso, altrimenti l'agronomist vedrebbe daily plan diversi ogni volta che entra in un daily plan e lo guarda senza accettarlo
+    \color{black} \\
+    \hline
+    
+    \textbf{R45 - DREAM is able to notify farmers involved by a visit of an agronomist: DailyPlanService}
+    \newline\newline
+    When an agronomist accepts a daily plan, the saveDailyPlan interface of the DailyPlanService component is used. When this happens, the DailyPlanService component uses the NotificationService component to notify farmers involved by visits of agronomists (the mapping is not showed in the table, as explained above). \\
+    \hline
+    
+    \textbf{R46 - DREAM allows agronomists to visualize data about farmers to visit - such as name, surname and location of the farm - and their production since their last visit to the farm: ProductionDataService
+    \newline\newline
+    R47 - DREAM allows agronomists to visualize the problems inserted by a farmer to be visited since their last visit to the farm: ProductionDataService}
+    \newline\newline
+    These requirements are implemented by the ProductionDataService component, that offers the readData and readIssues interfaces (see section 2.5.6 of this document). \\
+    \hline
+    
+    \textbf{R48 - DREAM shall allow users to log in the system by using an email and a password: AuthenticationService}
+    \newline\newline
+    This requirement is implemented by the AuthenticationService component, that offers the login interface (see section 2.5.3 of this document). \\
+    \hline
+    
+    \textbf{R49 - DREAM shall allow farmers to visualize data inserted by them about their production: ProductionDataService}
+    \newline\newline
+    This requirements is implemented by the ProductionDataService component, that offers the readData and readIssues interfaces (see section 2.5.6 of this document). \\
+    \hline
+\end{longtable}
 
+\subsection{Non Functional Requirements Traceability}
+Non functional requirements for the \verb|DREAM| system are presented in \textit{RASD - 3.3 Performance Requirements} and in \textit{RASD - 3.5 Software System Attributes}. In this section, an explanation of how this requirements are met by elements presented in this document is provided.
+
+\subsubsection{Performance Requirements}
+Performance requirements regarding the number of simultaneous users and transactions supported by the \verb|DREAM| system are achieved by the possibility of replicating the web server and the database showed in the deployment diagram in section 2.3 - Deployment view - on more than one physical machine. \newline
+Performance requirements regarding the quantity of data stored by the \verb|DREAM| system are achieved by the possibility of distributing the database on more than one physical machine.
+
+\subsubsection{Software System Attributes}
+As discussed in RASD, reliability and availability are not main concerns of the \verb|DREAM| system; nevertheless, they are increased by the replication of web server and database.
+\newline
+Elements supporting the security requirement are:
+\begin{itemize}
+    \item the usage of HTTPS\footnote{Hypertext Transfer Protocol Secure, provides secure communication over a network by the mean of cryptography} connections between clients and servers, to prevent interception of messages by unintended parties
+    \item the usage of a firewall between clients and servers, to filter requests to the \verb|DREAM| system, eliminating malicious ones
+    \item the usage of a server-side framework that provides security functionalities off-the-shelf, such as authentication and protection against SQL injection attacks
+\end{itemize}
+\newline
+Maintainability is mainly achieved through the rigorous alignment of implementation and documentation, that includes the RASD, the DD (this document itself) and the ITD\footnote{Implementation and Testing document}.
+\newline
+Client-side portability is achieved by the choice of implementing the \verb|DREAM| system as a web application: clients of web applications are browsers, and browsers are available for essentially all possible devices. Just one remark: portability of the web application through different browsers should be taken in consideration during the IT\footnote{Implementation and Testing} phase. Server-side portability is achieved by the adoption of a server-side framework based on an interpreted programming language, executed on a platform available for all most popular OSs\footnote{Operating Systems} (namely, Linux, MacOS and Windows).
 \newpage
 \section{Implementation, integration and test plan}
 \subsection{Implementation and integration}
@@ -877,6 +1156,8 @@ Deployment diagram and other design choices & 3.30h\\
  \hline
  User interface & 11h\\
 \hline
+  Requirements traceability & 6h \\
+  \hline
   Final recap & 2.30h\\
  \hline
 \end{longtable}
@@ -886,7 +1167,7 @@ Deployment diagram and other design choices & 3.30h\\
 \begin{itemize}
     \item \href{https://www.ifmledit.org
 
-}{IFML}
+}{IFMLedit}: to produce IFML diagrams
 \item \href{https://staruml.io/}{StarUML}: to draw UML diagrams;
     \item \href{https://app.diagrams.net/}{draw.io}: another tool to draw UML diagrams;
     \item \href{https://alloytools.org/}{Alloy}: to specify formally some requirements;
