@@ -17,10 +17,14 @@ class Farmer extends User
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Message::class, orphanRemoval: true)]
     private $forumMessages;
 
+    #[ORM\OneToOne(mappedBy: 'farmer', targetEntity: Farm::class, cascade: ['persist', 'remove'])]
+    private $farm;
+
     public function __construct()
     {
         $this->forumThreads = new ArrayCollection();
         $this->forumMessages = new ArrayCollection();
+        $this->setFarm(new Farm());
     }
 
     /**
@@ -79,6 +83,23 @@ class Farmer extends User
                 $forumMessage->setAuthor(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getFarm(): ?Farm
+    {
+        return $this->farm;
+    }
+
+    public function setFarm(Farm $farm): self
+    {
+        // set the owning side of the relation if necessary
+        if ($farm->getFarmer() !== $this) {
+            $farm->setFarmer($this);
+        }
+
+        $this->farm = $farm;
 
         return $this;
     }

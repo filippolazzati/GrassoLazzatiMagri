@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Suggestions{% endblock %}
+
+{% block toolbar %}
+    <a href="{{ path('suggestions_view') }}" class="btn btn-primary">
+        <i class="bi bi-plus"></i> Refresh
+    </a>
+{% endblock %}
+
+{% block content %}
+    <table class="table table-hover mt-4">
+        <thead>
+        <tr>
+            <th style="width: 10%">Number</th>
+            <th style="width: 60%">Suggestion</th>
+            <th style="width: 30%">Reason</th>
+        </tr>
+        </thead>
+        <tbody>
+   {#     {% for thread in pagination %}
+            <tr data-href="{{ path('forum_thread_view', {thread: thread.id}) }}">
+                <td class="align-middle">
+                    <div class="d-flex align-items-center">
+                        <img src="{{ thread.author.avatarUrl }}" alt="{{ thread.author.fullName }}"
+                             class="rounded-circle" style="width: 32px; height: 32px;">
+                        <strong class="d-block ms-2">{{ thread.author.fullName }}</strong>
+                    </div>
+                </td>
+                <td class="align-middle">
+                    {{ thread.title }}
+                </td>
+                <td class="align-middle">
+                    {{ thread.createdAt|date('d/m/Y H:i') }}
+                </td>
+            </tr>
+        {% endfor %}
+        {% if pagination.totalItemCount == 0 %}
+            <tr>
+                <td colspan="3" class="text-center py-3">
+                    There are currently no threads.
+                    <a href="{{ path('forum_thread_create') }}">Create the first one!</a>
+                </td>
+            </tr>
+        {% endif %}#}
+        </tbody>
+    </table>
+
+
+    {#
+    <div class="navigation">
+        {{ knp_pagination_render(pagination) }}
+    </div>#}
+{% endblock %}

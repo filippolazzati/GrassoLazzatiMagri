@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Farmer;
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -30,9 +31,16 @@ class ProfileType extends AbstractType
                 'widget' => 'single_text',
                 //'format' => 'dMy',
             ])
-
-            ->add('submit', SubmitType::class, ['label' => 'Save'])
         ;
+            $entity = $builder->getData();
+            // If the user is a farmer, insert also the city and the street
+        if($entity instanceof Farmer){
+            $builder->add('farmCity', TextType::class, ['mapped' => false])
+                ->add('farmStreet', TextType::class, ['required' => false, 'mapped' => false])
+            ;
+        }
+
+        $builder->add('submit', SubmitType::class, ['label' => 'Save']);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

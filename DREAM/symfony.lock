@@ -430,6 +430,9 @@
     "symfony/options-resolver": {
         "version": "v6.0.0"
     },
+    "symfony/orm-pack": {
+        "version": "v2.1.0"
+    },
     "symfony/password-hasher": {
         "version": "v6.0.1"
     },

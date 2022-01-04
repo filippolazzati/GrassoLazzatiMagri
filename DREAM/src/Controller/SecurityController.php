@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Farmer;
 use App\Form\ProfileType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -40,6 +41,19 @@ class SecurityController extends AbstractController
         $form = $this->createForm(ProfileType::class, $this->getUser());
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $currentUser = $this->getUser();
+
+            if($currentUser instanceof Farmer) {
+                /** @var $currentFarmer Farmer */
+                $currentFarmer = $this->getUser();
+
+                $city = $form->get('farmCity')->getData();
+                $street = $form->get('farmStreet')->getData();
+
+                $currentFarmer->getFarm()->setCity($city);
+                $currentFarmer->getFarm()->setStreet($street);
+            }
             $this->em->flush();
             $this->addFlash('success', 'Profile updated');
 
