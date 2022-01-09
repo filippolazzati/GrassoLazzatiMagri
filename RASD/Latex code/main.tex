@@ -330,11 +330,16 @@ affected by the machine.
  \hline
  1.0 &  initial version\\ 
  \hline
- 1.1 & revision after DD\footnote{Design Document} submission: added requirement R50.\\
+ 1.1 & revision after DD\footnote{Design Document} submission\\
  \hline
 \end{tabular}
 \end{left}
-
+\newline \newline
+In version 1.1:
+ \begin{itemize}
+     \item added requirement R50 (it was missing in the preceding version)
+     \item removed requirement R14, as it was not properly a requirement, but more a specification on an exception handling situation - not included in our requirements, but specified in the Exceptions sections of the Use Cases
+ \end{itemize}
 \subsection{Reference Documents}
 \begin{itemize}
 \item \textit{IEEE 29148-2018 Requirements engineering}, the IEEE specification document that “provides details for the construct of well-formed textual requirements, to include characteristics and attributes, in the context of system and software engineering”;
@@ -356,11 +361,11 @@ It should be remarked that the structure of this document does not follow a logi
 \section{Overall description}
 \subsection{Product perspective}
 The requirements-level class diagram of \verb|DREAM| is:
-\begin{figure}[H]
+\begin{sidewaysfigure}[H]
     \centering
 	\includegraphics[scale=0.35]{class_diagrams/requirements-level class diagram.png}
     \caption{Requirements-level class diagram of DREAM.}
-\end{figure}
+\end{sidewaysfigure}
 
 The state diagram for the creation of a new help request is:
 \begin{figure}[H]
@@ -599,8 +604,6 @@ R8\label{R} & \verb|DREAM| shall allow farmers to insert data about their planti
   \hline
   R13\label{R} & When a farmer requests a visit of an agronomist, \verb|DREAM| inserts the visit to the farmer into the daily plan of an agronomist assigned to the area of the farmer;\\
   \hline
-  R14\label{R} & When a farmer requests a visit of an agronomist, if no agronomist is available in the area of the farmer during the seven days after the request (excluding the day when the request is made), \verb|DREAM| notifies the farmer about this situation.\\
-  \hline
 R15\label{R} & \verb|DREAM| can use different criteria (namely, productivity in terms of harvested quantity over sowed quantity, productivity in presence of adverse meteorological events, productivity in presence of drought, and so on) and/or combinations of them to rank farmers;\\
   \hline
 R16\label{R} & \verb|DREAM| shall allow policy makers and agronomists to choose the criteria to use for ranking farmers and the associated weights (for combinations of them);\\
@@ -762,8 +765,6 @@ This section is about showing that the previously listed requirements and domain
  R12 &    &   &  &   & X  & X  &   &   &   \\
  \hline
  R13 &    &   &  &   & X  &  X &   &   &   \\
- \hline
- R14 &    &   &  &   & X  & X  &   &   &   \\
  \hline
  R15 &X   &  &   &   &   &   &   &   & X     \\
  \hline
@@ -1077,8 +1078,6 @@ Goal G4 requires that all the relevant data is known to \verb|DREAM| (R1, R2, R3
   \item R12: \verb|DREAM| shall allow farmers to request a visit of an agronomist when inserting a problem;
 
   \item R13: When a farmer requests a visit of an agronomist, \verb|DREAM| inserts the visit to the farmer into the daily plan of an agronomist assigned to the area of the farmer;
-
-  \item R14: When a farmer requests a visit of an agronomist, if no agronomist is available in the area of the farmer during the seven days after the request (excluding the day when the request is made), \verb|DREAM| notifies the farmer about this situation.
     
     \item R18: \verb|DREAM| allows policy makers and agronomists to mark a farmer as best-performing or worst-performing;
     
@@ -1115,7 +1114,7 @@ Goal G4 requires that all the relevant data is known to \verb|DREAM| (R1, R2, R3
     \item D19: Agronomists reply to help requests issued by farmers;
 
 \end{itemize}
-Farmers can ask for help through the \verb|DREAM| system in two ways: by requesting an agronomist's visit when inserting a problem they are facing (R5, R11, R12, R13, R14, R15, R29) or by asking a question to an agronomist or a best performing farmer (R5, R18, R29, R31, R32, R33, R34, R35) .
+Farmers can ask for help through the \verb|DREAM| system in two ways: by requesting an agronomist's visit when inserting a problem they are facing (R5, R11, R12, R13, R15, R29) or by asking a question to an agronomist or a best performing farmer (R5, R18, R29, R31, R32, R33, R34, R35) .
 
 \vspace{5mm}
 \textbf{G6 The agronomists can plan farm visits based on the farmers performances.}
@@ -2663,6 +2662,8 @@ UC5: InsertProductionData &
         \item R9: \verb|DREAM| shall allow farmers to insert data about their harvesting activity;
         
         \item R10: \verb|DREAM| shall allow farmers to insert data about the irrigation of their plantations;
+        
+        \item R50: \verb|DREAM| shall allow farmers to insert data about their fertilizing activity;
     \end{itemize}\\
 \hline
   \item UC6: InsertProblems & 
@@ -2671,9 +2672,7 @@ UC5: InsertProductionData &
     
   \item R12: \verb|DREAM| shall allow farmers to request a visit of an agronomist when inserting a problem;
 
-  \item R13: When a farmer requests a visit of an agronomist, \verb|DREAM| inserts the visit to the farmer into the daily plan of an agronomist assigned to the area of the farmer;
-
-  \item R14: When a farmer requests a visit of an agronomist, if no agronomist is available in the area of the farmer during the seven days after the request (excluding the day when the request is made), \verb|DREAM| notifies the farmer about this situation.
+  \item R13: When a farmer requests a visit of an agronomist, \verb|DREAM| inserts the visit to the farmer into the daily plan of an agronomist assigned to the area of the farmer;.
     \end{itemize}\\
 \hline
 UC7: AcceptDailyPlan & 
