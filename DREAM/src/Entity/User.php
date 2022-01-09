@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -16,6 +17,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
     'agronomist' => Agronomist::class,
     'policy_maker' => PolicyMaker::class,
 ])]
+#[UniqueEntity(fields: ['email'])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -40,6 +42,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'date')]
     private $birthDate;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private $emailVerificationToken;
 
     public function getId(): ?int
     {
@@ -163,5 +168,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getAvatarUrl(): string
     {
         return 'https://eu.ui-avatars.com/api/?name=' . urlencode($this->getFullName());
+    }
+
+    public function getEmailVerificationToken(): ?string
+    {
+        return $this->emailVerificationToken;
+    }
+
+    public function setEmailVerificationToken(?string $emailVerificationToken): self
+    {
+        $this->emailVerificationToken = $emailVerificationToken;
+
+        return $this;
     }
 }

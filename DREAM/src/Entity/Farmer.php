@@ -27,7 +27,6 @@ class Farmer extends User
     {
         $this->forumThreads = new ArrayCollection();
         $this->forumMessages = new ArrayCollection();
-        $this->setFarm(new Farm());
         $this->productionData = new ArrayCollection();
     }
 

@@ -28,6 +28,8 @@ security:
                 check_path: login
                 enable_csrf: true
 
+            user_checker: App\Security\UserChecker
+
             remember_me:
                 secret: '%kernel.secret%'
                 lifetime: 604800
@@ -47,5 +49,6 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/login$, roles: PUBLIC_ACCESS }
+        - { path: ^/register, roles: PUBLIC_ACCESS }
         - { path: ^/forum, roles: ROLE_FARMER }
         - { path: ^/, roles: ROLE_USER }

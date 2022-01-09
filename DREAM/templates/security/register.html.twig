@@ -1,24 +1,60 @@
 {% extends 'base.html.twig' %}
 
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
+
 {% block fullbody %}
     <body class="login-page">
-    <form class="form-login" action="{{ path('login') }}" method="post">
+    <div class="container">
+        {{ form_start(form, {attr: {class: 'form-register'}}) }}
         <h1 class="h2 mb-2 fw-bold">DREAM</h1>
         <h2 class="h5 mb-3 font-weight-normal">Create a new account</h2>
 
         <div class="alert alert-info">
-            This form allows to register a new <strong>farmer account</strong>. For other types of accounts,
-            please contact the local authorities.
+            This form allows to register a new <strong>farmer account</strong>.<br>
+            For other types of accounts, please contact the local authorities.
         </div>
 
-        {% if error %}
-            <div class="alert alert-danger my-3">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-        {% endif %}
+        <h3 class="h5 text-start pb-2 mb-3 border-bottom">Personal data</h3>
+        <div class="row text-start">
+            <div class="col-12 col-lg-6">
+                {{ form_row(form.name) }}
+            </div>
+            <div class="col-12 col-lg-6">
+                {{ form_row(form.surname) }}
+            </div>
+            <div class="col-12 col-lg-6">
+                {{ form_row(form.email) }}
+            </div>
+            <div class="col-12 col-lg-6">
+                {{ form_row(form.birthDate) }}
+            </div>
+        </div>
 
-        <input type="email" class="form-control mb-3" id="email" name="_username" value="{{ last_username }}" placeholder="Email address" required autofocus/>
-        <input type="password" class="form-control mb-3" id="password" name="_password" placeholder="Password"/>
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-    </form>
+        <h3 class="h5 text-start pb-2 mb-3 border-bottom">Password</h3>
+        <div class="row text-start">
+            <div class="col-12 col-lg-6">
+                {{ form_row(form.password.first) }}
+            </div>
+            <div class="col-12 col-lg-6">
+                {{ form_row(form.password.second) }}
+            </div>
+        </div>
+
+        <h3 class="h5 text-start pb-2 mb-3 border-bottom">Farm Info</h3>
+        <div class="row text-start">
+            <div class="col-12 col-lg-6">
+                {{ form_row(form.farmArea) }}
+            </div>
+            <div class="col-12 col-lg-6">
+                {{ form_row(form.farmCity) }}
+            </div>
+            <div class="col-12">
+                {{ form_row(form.farmStreet) }}
+            </div>
+        </div>
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
+        {{ form_end(form) }}
+    </div>
     </body>
 {% endblock %}

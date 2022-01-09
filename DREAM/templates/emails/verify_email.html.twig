@@ -1,0 +1,13 @@
+<h1>Verify your email address</h1>
+
+<p>
+    Hi {{ user.fullName }},
+</p>
+<p>
+    to complete your registration to DREAM, please verify your email address by clicking the link below.
+</p>
+<p>
+    <a href="{{ url('register_verify_email', {token: user.emailVerificationToken}) }}">
+        {{ url('register_verify_email', {token: user.emailVerificationToken}) }}
+    </a>
+</p>

@@ -2,8 +2,10 @@
 
 namespace App\Form;
 
+use App\Entity\Area;
 use App\Entity\Farmer;
 use App\Entity\User;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -20,24 +22,21 @@ class ProfileType extends AbstractType
     {
         $builder
             ->add('email', EmailType::class)
-            /*->add('password', RepeatedType::class, [
-                'type' => PasswordType::class,
-                'first_options' => ['label' => 'Password'],
-                'second_options' => ['label' => 'Repeat Password'],
-            ])*/
             ->add('name', TextType::class)
             ->add('surname', TextType::class)
             ->add('birthDate', DateType::class, [
                 'widget' => 'single_text',
-                //'format' => 'dMy',
-            ])
-        ;
-            $entity = $builder->getData();
-            // If the user is a farmer, insert also the city and the street
-        if($entity instanceof Farmer){
-            $builder->add('farmCity', TextType::class, ['mapped' => false])
-                ->add('farmStreet', TextType::class, ['required' => false, 'mapped' => false])
-            ;
+            ]);
+
+        $entity = $builder->getData();
+        if ($entity instanceof Farmer) {
+            $builder
+                ->add('farmArea', EntityType::class, [
+                    'class' => Area::class,
+                    'mapped' => false
+                ])
+                ->add('farmCity', TextType::class, ['mapped' => false])
+                ->add('farmStreet', TextType::class, ['required' => false, 'mapped' => false]);
         }
 
         $builder->add('submit', SubmitType::class, ['label' => 'Save']);
