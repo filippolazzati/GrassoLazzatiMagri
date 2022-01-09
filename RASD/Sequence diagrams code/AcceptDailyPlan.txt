@@ -1,0 +1,18 @@
+title AcceptDailyPlan
+
+participant Agronomist
+participant DREAM
+activate Agronomist
+Agronomist->DREAM:daily_plan()
+activate DREAM
+Agronomist<<--DREAM:daily plan page
+deactivate DREAM
+opt page received
+Agronomist->DREAM: select_date()
+activate DREAM
+Agronomist<<--DREAM:daily plan details
+opt acceptable daily plan
+Agronomist->DREAM:accept()
+deactivate DREAM
+end 
+end 

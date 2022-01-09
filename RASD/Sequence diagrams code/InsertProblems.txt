@@ -1,0 +1,20 @@
+title InsertProblems
+
+participant Farmer
+participant DREAM
+participant Agronomist
+activate Farmer
+Farmer->DREAM:insert_problem()
+activate DREAM
+Farmer<<--DREAM:insert problem page
+deactivate DREAM
+opt page received
+Farmer->DREAM: insert_problem_data()
+activate DREAM
+Farmer<<--DREAM:ack
+opt see-agronomist option
+DREAM->Agronomist:schedule_visit()
+DREAM->Farmer: visit information
+deactivate DREAM
+end 
+end 

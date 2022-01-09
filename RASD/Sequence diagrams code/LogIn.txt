@@ -1,0 +1,18 @@
+title LogIn
+
+participant User
+participant DREAM
+activate User
+User->DREAM:request_landing_page()
+activate DREAM
+DREAM-->>User: landing page
+deactivate DREAM
+opt page received
+User->DREAM: send_data()
+activate DREAM
+DREAM->DREAM: check()
+opt valid data
+DREAM-->>User: user homepage
+deactivate DREAM
+end
+end

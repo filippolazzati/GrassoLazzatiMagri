@@ -1,0 +1,10 @@
+title DeleteVisitFromDailyPlan
+
+participant Agronomist
+participant DREAM
+activate Agronomist
+Agronomist->DREAM:delete_visit()
+activate DREAM
+Agronomist<<--DREAM:ack
+deactivate Agronomist
+deactivate DREAM

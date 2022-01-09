@@ -1,0 +1,13 @@
+title ViewProductionData
+
+participant Farmer
+participant DREAM
+activate Farmer
+Farmer->DREAM:my_productions()
+activate DREAM
+DREAM-->>Farmer: productions page
+opt page received
+Farmer->DREAM: select_dates()
+DREAM-->>Farmer: productions filtered
+deactivate DREAM
+end

@@ -1,0 +1,20 @@
+title InsertProductionData
+
+participant Farmer
+participant DREAM
+activate Farmer
+Farmer->DREAM:my_productions()
+activate DREAM
+DREAM-->>Farmer: productions page
+opt page received
+Farmer->DREAM: insert_production_data()
+DREAM-->>Farmer: insert production data page
+opt page received
+Farmer->DREAM: insert_data()
+DREAM->DREAM: check()
+opt valid data
+DREAM-->>Farmer: ack
+end
+end
+end
+deactivate DREAM

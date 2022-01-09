@@ -1,0 +1,12 @@
+title MarkBestPerformingFarmer
+
+participant User
+participant DREAM
+participant Farmer
+activate User
+User->DREAM:mark_farmer()
+activate DREAM
+User<<--DREAM:ack
+deactivate User
+DREAM->Farmer: notify()
+deactivate DREAM

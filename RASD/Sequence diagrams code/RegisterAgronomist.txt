@@ -1,0 +1,12 @@
+title RegisterAgronomist
+
+participant Agronomist
+participant DREAM
+activate Agronomist
+Agronomist->DREAM:insert_data()
+activate DREAM
+DREAM->DREAM: check()
+opt valid data
+DREAM-->>Agronomist: agronomist's homepage
+deactivate DREAM
+end 

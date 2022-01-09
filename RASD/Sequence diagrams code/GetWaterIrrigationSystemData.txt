@@ -1,0 +1,22 @@
+title GetWaterIrrigationSystemData
+
+participant DREAM
+participant Hub
+
+activate DREAM
+activate Hub
+loop i < 3 && data is not arrived
+DREAM->Hub:request_data()
+Hub -->> DREAM: answer
+end
+deactivate Hub
+alt data is arrived
+activate DREAM
+DREAM->DREAM: store_data()
+deactivate DREAM
+else data is not arrived
+activate DREAM
+DREAM->DREAM: water_irrigation_system_not_reachable()
+deactivate DREAM
+end
+deactivate DREAM

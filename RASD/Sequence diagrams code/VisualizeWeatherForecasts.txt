@@ -1,0 +1,21 @@
+title VisualizeWeatherForecasts
+
+participant User
+participant DREAM
+participant TSDPSSystem
+activate User
+User->DREAM:weather_forecasts()
+activate DREAM
+User<<--DREAM:weather forecasts page
+deactivate DREAM
+opt page received
+User->DREAM:select_details()
+activate DREAM
+DREAM->TSDPSSystem: get_weather_forecasts()
+activate TSDPSSystem
+DREAM<<--TSDPSSystem: weather forecasts
+User<<--DREAM: weather forecasts
+end
+deactivate TSDPSSystem
+deactivate User
+deactivate DREAM
