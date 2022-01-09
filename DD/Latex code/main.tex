@@ -59,7 +59,7 @@
 A DD\footnote{Design Document. See section \ref{Abbreviations}}, according to the definition provided by the \textbf{IEEE Std 1016™-2009} standard, is \textit{a representation of a software design that is to be used for recording design information, addressing various design concerns, and communicating that information to the design’s stakeholders}. It should be noticed that, in this document, instead of using the abbreviation SDD, which stands for "Software Design Description", is used DD. In other words, a DD is a document that is used by \textit{acquirers, project managers, quality assurance staff, configuration managers, software designers, programmers, testers, and maintainers} to retrieve the specific design information needed by the specific stakeholder.
 \subsection{Purpose}\label{Purpose}
 \verb|DREAM|, the system to-be, aims to help policy makers 
-formulating policies in the field of agriculture.  Moreover, \verb|DREAM| aims to help farmers by putting them in contact with each other so that they can exchange advice and aids. Finally, \verb|DREAM| also schedules the daily work of agronomists. These are the main goals of \verb|DREAM| which shall be data-driven, namely it shall intensively exploits data to perform the tasks it is asked to do. The requirements that allow the system to satisfy the goals as well as a detailed list of all the goals are present respectively in \textit{RASD - 3.2 Functional requirements} and in \textit{RASD - 1.1 Purpose}. In this document the focus is on the design, that is on the description of the components and the interaction among them and with external systems through interfaces which compose the system and allow the satisfaction of the requirements and, at the end, of the goals.
+formulating policies in the field of agriculture.  Moreover, \verb|DREAM| aims to help farmers by putting them in contact with each other so that they can exchange advice and aids. Finally, \verb|DREAM| also schedules the daily work of agronomists. These are the main goals of \verb|DREAM| which shall be data-driven, namely it shall intensively exploit data to perform the tasks it is asked to do. The requirements that allow the system to satisfy the goals as well as a detailed list of all the goals are present respectively in \textit{RASD - 3.2 Functional requirements} and in \textit{RASD - 1.1 Purpose}. In this document the focus is on the design, that is on the description of the components and the interaction among them and with external systems through interfaces which compose the system and allow the satisfaction of the requirements and, at the end, of the goals.
 \subsection{Scope}
 The system to-be has three major stakeholders: the policy makers, the agronomists and the farmers. The needs that \verb|DREAM| aims to satisfy differ among them, and the main goals of the system have been identified in section\ref{Purpose}. For a detailed description and explanation of the context in which \verb|DREAM| operates the reader should refer to the \textit{RASD - 1.2 Scope} section. In here, we briefly tell about the main design concerns of such stakeholders.\\
 First of all, all of them have goals that, in order to be satisfied, require the storage of a large volume of data (after all, \verb|DREAM| is a data-driven system), and therefore scalable technologies suitable to manage the required amount of information have to be used. Furthermore, the stakeholders are not assumed to be expert in computer science, thus a graphical interface is needed; more specifically, the idea is to implement a web application to facilitate the access to the system to all the users and from any kind of device (computer, smartphone, ...).
@@ -191,8 +191,18 @@ This sequence diagram describes the procedure through which a Farmer, starting f
    \includegraphics[scale=0.25]{diagrams/sequence diagrams/AcceptDailyPlan.png}
     \caption{Sequence diagram that describes the AcceptDailyPlan use case.}
 \end{figure}
-This sequence diagram describes the interactions that occur when an agronomist generates and accepts a new daily plan. First of all, the agronomist opens the daily plan dates page and then he selects the date of his next working day. The DailyPlanService asks the ProductionDataService to query the database to retrieve data about the Farmers that he needs to generate a suitable daily plan for the agronomist. In case the daily plan is acceptable to the agronomist, the WebApp invokes the saveDailyPlan method on the DailyPlanService, that stores the new daily plan in the database and then notifies the involved farmers.\\
-OBS.: In order to modify the daily plan, specific methods are offered by the DailyPlanService. See section \ref{Component interfaces} for more details (sequence diagrams are omitted for the sake of simplicity).
+This sequence diagram describes the interactions that occurs when an agronomist visualizes for the first time a new daily plan and accepts it. \newline
+First of all, the agronomist opens the daily plan dates page and then he When he selects the date of the daily plan he wants to visualize, the getDailyPlan interface of the DailyPlan component is invoked. As it is the first time that the agronomist visualizes the daily plan, getDailyPlan generates the daily plan (otherwise, it would just retrieve the already existing one from the database). In order to do so, it retrieves from the database the needed data, regarding:
+\begin{itemize}
+    \item the farmers (and the corresponding farms) in the area of the agronomist
+    \item how many visits each farmer in the area has received from agronomists in the last 365 days
+    \item the date of the last visit from an agronomist for each farmer in the area
+    \item the farmers in the area who requested a visit from an agronomist (when inserting a problem)
+\end{itemize}
+After retrieving these data, the DailyPlanService component generates the new daily plan and saves it into the database. \newline
+Notice that the data retrieved from the database in order to generate a new daily plan depend on the algorithm used by the DailyPlanService component; if this algorithm changes to implement a more sophisticated logic of daily plan generation, also the retrieved data will change. This does not change the fact that data regarding the present and past situation of farmers and visits are needed to generate a new daily plan. \newline
+When the agronomist visualizes the generated daily plan, he/she can modify it by adding, moving or removing visits. While he/she is doing this, invalid daily plan states can exist: for example, overlapping visits. \newline
+When the agronommist accepts the daily plan, the acceptDailyPlan interface of the DailyPlanService component is invoked. If the daily plan is valid, it saves the daily plan state as accepted and notifies the farmers whose farms are going to be visited by the agronomist through the NotificationService component.\\
 
 \newpage
 \begin{figure}[H]
@@ -402,9 +412,9 @@ Service for agronomist daily plans.
 \paragraph{DailyPlan}
 \begin{itemize}
 \item \begin{verbatim}
-generateDailyPlan(agronomist: Agronomist, date: DateTime): DailyPlan
+getDailyPlan(agronomist: Agronomist, date: DateTime): DailyPlan
 \end{verbatim}
-Generates a new daily plan for the specified agronomist and date.
+If the daily plan of the given agronomist in the given date already exists, returns it; otherwise, generates a new daily plan for the given agronomist and date and returns it.
 \item \begin{verbatim}
 addDailyPlanEntry(plan: DailyPlan, farm: Farm, time: Time): FarmVisit
 \end{verbatim}
@@ -418,9 +428,13 @@ moveDailyPlanEntry(entry: FarmVisit, time: Time)
 \end{verbatim}
 Updates the time of the specified farm visit.
 \item \begin{verbatim}
-saveDailyPlan(agronomist: Agronomist, dailyPlan: DailyPlan): void
+acceptDailyPlan(agronomist: Agronomist, dailyPlan: DailyPlan): void
 \end{verbatim}
-Saves the specified daily plan in the database and calls the NotificationService to notify the involved farmer.
+Called when an agronomist accepts a daily plan for a future date, saves the state of the daily plan as accepted and notifies the farmers interested by the visits in the daily plan through the NotificationService component.
+\item\begin{verbatim}
+confirmDailyPlan(agronomist:Agronomist, dailyPlan: DailyPlan): void
+\end{verbatim}
+Called when an agronomist confirms a daily plan after the end of the working day, saves the state of the daily plan as confirmed.
 \end{itemize}
 
 \subsubsection{SuggestionService}
@@ -813,11 +827,7 @@ Here a brief explanation of the mapping presented in the previous table is provi
     \textbf{R4 - DREAM shall allow agronomists to insert feedback about the farmers they
     visited: DailyPlanService}
     \newline\newline
-    Agronomists insert feedback about their visits to the farms when confirming their daily plan, and this operation is managed by the DailyPlanService.
-    \color{red}
-    aggiungere interfaccia: in DailyPlanService manca interfaccia per confermare il daily plan
-    anche nel class diagram si potrebbe aggiungere il feedback tra gli attributi della visita
-    \color{black}\\
+    Agronomists insert feedback about their visits to the farms when confirming their daily plan, and this operation is managed by the DailyPlanService with the confirmDailyPlan interface.
     \hline
     
     \textbf{R5 - DREAM shall allow farmers to insert the location and the area of their plot
@@ -1175,4 +1185,5 @@ Deployment diagram and other design choices & 3.30h\\
     \item \href{https://github.com/}{Github}: to share the files;
 \end{itemize}
 \end{document}
+
 

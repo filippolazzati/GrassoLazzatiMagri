@@ -2,31 +2,41 @@ title AcceptDailyPlan
 
 participant WebApp
 participant DailyPlanService
-participant ProductionDataService
 participant DBAL
 participant DBMS
 participant NotificationService
 
 entryspacing 1.3
 activate WebApp
-WebApp->DailyPlanService: generateDailyPlan(agronomist: Agronomist, date: DateTime)
+WebApp->DailyPlanService: getDailyPlan(agronomist: Agronomist, date: DateTime)
 activate DailyPlanService
-DailyPlanService->ProductionDataService:readDataByArea(area: Area, from: DateTime, to: DateTime): ProductionData[]
-activate ProductionDataService
-ProductionDataService->DBAL: query(q: string)
+
+note over DailyPlanService,DBMS: Retrieve data necessary for generating the daily plan\n       (See the description below for more details)
+DailyPlanService->DBAL: query(q: string)
 activate DBAL
 DBAL->DBMS: query(q: string)
 activate DBMS
-DBAL<<--DBMS: ProductionData[]
-deactivate DBMS
-ProductionDataService<<--DBAL: ProductionData[]
+DBAL<<--DBMS: result 
+deactivate DBMS 
+DailyPlanService<<--DBAL: result 
 deactivate DBAL
-DailyPlanService<<--ProductionDataService:ProductionData[]
-deactivate ProductionDataService
-WebApp<<--DailyPlanService: daily plan details
+
+note over DailyPlanService,DBMS: Insert the generated daily plan in the database
+DailyPlanService->DBAL: insert(d: Data)
+activate DBAL
+DBAL->DBMS: insert(d: Data)
+activate DBMS
+DBAL<<--DBMS: ack
+deactivate DBMS
+DailyPlanService<<--DBAL: ack
+deactivate DBAL
+
+WebApp<<--DailyPlanService: daily plan 
 deactivate DailyPlanService
-opt acceptable daily plan
-WebApp->DailyPlanService: saveDailyPlan(agronomist: Agronomist, dailyPlan: DailyPlan)
+
+loop while the agronomist wants to change the daily plan
+alt the agronomist wants to add a visit to the daily plan
+WebApp->DailyPlanService: addDailyPlanEntry(plan: DailyPlan, farm: Farm, time: Time)
 activate DailyPlanService
 DailyPlanService->DBAL: insert(d: Data)
 activate DBAL
@@ -36,10 +46,58 @@ DBAL<<--DBMS: ack
 deactivate DBMS
 DailyPlanService<<--DBAL: ack
 deactivate DBAL
+WebApp<<--DailyPlanService: daily plan 
+deactivate DailyPlanService
+
+else the agronomist wants to move a visit of the daily plan to a different hour
+WebApp->DailyPlanService: moveDailyPlanEntry(entry: FarmVisit, time: Time)
+activate DailyPlanService
+DailyPlanService->DBAL: update(d: Data)
+activate DBAL
+DBAL->DBMS: update(d: Data)
+activate DBMS
+DBAL<<--DBMS: ack
+deactivate DBMS
+DailyPlanService<<--DBAL: ack
+deactivate DBAL
+WebApp<<--DailyPlanService: daily plan 
+deactivate DailyPlanService
+
+else the agronomist wants to remove a visit from the daily plan
+WebApp->DailyPlanService: removeDailyPlanEntry(entry: FarmVisit)
+activate DailyPlanService
+DailyPlanService->DBAL: delete(d: Data)
+activate DBAL
+DBAL->DBMS: delete(d: Data)
+activate DBMS
+DBAL<<--DBMS: ack
+deactivate DBMS
+DailyPlanService<<--DBAL: ack
+deactivate DBAL
+WebApp<<--DailyPlanService: daily plan 
+deactivate DailyPlanService
+end
+end
+
+opt acceptable daily plan
+WebApp->DailyPlanService: acceptDailyPlan(agronomist: Agronomist, dailyPlan: DailyPlan)
+activate DailyPlanService
+DailyPlanService->DBAL: update(d: Data)
+activate DBAL
+DBAL->DBMS: update(d: Data)
+activate DBMS
+DBAL<<--DBMS: ack
+deactivate DBMS
+DailyPlanService<<--DBAL: ack
+deactivate DBAL
+
+loop for each farmer visited according to the daily plan
 DailyPlanService->NotificationService: notify(user: User, message: Message)
 activate NotificationService
 DailyPlanService<<--NotificationService: ack
 deactivate NotificationService
+end
+
 WebApp<<--DailyPlanService: ack
 end opt
 deactivate DailyPlanService
