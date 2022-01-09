@@ -23,6 +23,10 @@ class Farm
     #[ORM\JoinColumn(nullable: false)]
     private $farmer;
 
+    #[ORM\ManyToOne(targetEntity: Area::class, inversedBy: 'farms')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $area;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +64,18 @@ class Farm
     public function setFarmer(Farmer $farmer): self
     {
         $this->farmer = $farmer;
+
+        return $this;
+    }
+
+    public function getArea(): ?Area
+    {
+        return $this->area;
+    }
+
+    public function setArea(?Area $area): self
+    {
+        $this->area = $area;
 
         return $this;
     }

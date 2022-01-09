@@ -1,3 +1,7 @@
 framework:
     mailer:
+        envelope:
+            sender: 'dream@grasso.io'
         dsn: '%env(MAILER_DSN)%'
+        headers:
+            from: 'DREAM <dream@grasso.io>'

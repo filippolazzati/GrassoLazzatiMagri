@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Entity\Agronomist;
+use App\Entity\Farm;
 use App\Entity\Farmer;
 use App\Entity\PolicyMaker;
 use App\Entity\User;
@@ -63,6 +64,8 @@ class UserCreateCommand extends Command
         $user->setName('');
         $user->setSurname('');
         $user->setBirthDate(new \DateTime());
+
+        $user->setFarm(new Farm());
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();

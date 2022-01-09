@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block fullbody %}
+    <body class="login-page">
+    <div class="container">
+        <h1 class="h2 mb-2 fw-bold">DREAM</h1>
+
+        <div>
+            <i class="d-block bi bi-mailbox bi-3x"></i>
+            <h2 class="h5 mb-3 font-weight-normal">Confirm your email address</h2>
+            <p>
+                A verification email has been sent to {{ email }}.
+                Please check your inbox and click on the link in the email to complete the registration.
+            </p>
+        </div>
+
+        <div>
+            <a href="{{ path('login') }}" class="btn btn-primary">
+                Go to login page
+            </a>
+        </div>
+    </div>
+    </body>
+{% endblock %}
