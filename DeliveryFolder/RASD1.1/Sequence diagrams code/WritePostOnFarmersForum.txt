@@ -1,0 +1,22 @@
+title WritePostOnFarmersForum
+participant Farmer
+participant DREAM
+
+activate Farmer
+Farmer ->> DREAM: forum()
+activate DREAM
+DREAM -->>Farmer: list of threads
+opt page received
+Farmer ->> DREAM: select_thread()
+DREAM -->>Farmer: list of posts
+opt page received
+Farmer ->> DREAM: create_post()
+alt non empty text
+DREAM ->* Post: create
+DREAM -> DiscussionThread: insert_post()
+DREAM -->>Farmer: confirmation
+else empty text
+DREAM -->>Farmer: error
+end alt
+end opt
+end opt

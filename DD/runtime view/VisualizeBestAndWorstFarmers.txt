@@ -10,7 +10,7 @@ participant DBAL
 participant DBMS
 
 activate WebApp
-WebApp->RankingService: rankByWeatherResilience(area: Area, from: DateTime, to: DateTime)
+WebApp->RankingService: rankFarmers(area: Area, from: DateTime, to: DateTime, criteria: Map<Criterion, Integer>)
 activate RankingService
 RankingService->WeatherService:getWeatherReports(area: Area, from: DateTime, to: DateTime)
 activate WeatherService

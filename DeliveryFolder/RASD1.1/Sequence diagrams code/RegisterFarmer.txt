@@ -1,0 +1,28 @@
+title RegisterFarmer
+
+participant Farmer
+participant DREAM
+activate Farmer
+Farmer->DREAM:request_landing_page()
+activate DREAM
+Farmer<<--DREAM:landing page
+deactivate DREAM
+opt page received
+Farmer->DREAM:sign_up_farmer()
+activate DREAM
+Farmer<<--DREAM:sign up farmer page
+opt page received
+Farmer->DREAM:create_farmer_account()
+activate DREAM
+DREAM->DREAM:check()
+opt valid data
+Farmer<<--DREAM:confirmation email
+Farmer->DREAM:confirm()
+deactivate DREAM
+opt e-mail confirmed successfully
+Farmer<<--DREAM: account created
+end
+deactivate DREAM
+end
+end
+end

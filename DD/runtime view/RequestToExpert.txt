@@ -19,7 +19,7 @@ HelpRequestService<<--DBAL: HelpRequest[]
 deactivate DBAL
 WebApp<<--HelpRequestService: "my requests" page
 deactivate HelpRequestService
-WebApp->HelpRequestService: listAvailableExperts()
+WebApp->HelpRequestService: listAvailableExperts(area:Area)
 activate HelpRequestService
 HelpRequestService->DBAL: query(q: string)
 activate DBAL

@@ -1,0 +1,17 @@
+title AddVisitToDailyPlan
+
+participant Agronomist
+participant DREAM
+activate Agronomist
+Agronomist->DREAM:add_visit()
+activate DREAM
+Agronomist<<--DREAM:select visit details page
+opt page received
+Agronomist->DREAM:select_visit_details()
+DREAM->DREAM: check()
+opt valid details
+Agronomist<<--DREAM: ack
+end 
+end 
+deactivate Agronomist
+deactivate DREAM

@@ -1,0 +1,10 @@
+title ViewDetailsOfFarmToVisit
+
+participant Agronomist
+participant DREAM
+activate Agronomist
+Agronomist->DREAM:farm_details()
+activate DREAM
+Agronomist<<--DREAM:farm details page
+deactivate Agronomist
+deactivate DREAM

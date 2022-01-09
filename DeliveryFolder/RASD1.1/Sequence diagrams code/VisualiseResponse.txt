@@ -1,0 +1,13 @@
+title VisualiseResponse
+participant Farmer
+participant DREAM
+
+activate Farmer
+Farmer ->DREAM: my_requests()
+activate DREAM
+DREAM -->>Farmer: list of requests
+opt page received
+DREAM<-Farmer: send_feedback()
+end
+deactivate Farmer
+deactivate DREAM

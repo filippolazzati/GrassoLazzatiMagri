@@ -1,0 +1,21 @@
+title VisualizeBestAndWorstFarmers
+
+participant Policy Maker
+participant DREAM
+participant TSDPSSystem
+activate Policy Maker
+Policy Maker->DREAM:farms()
+activate DREAM
+Policy Maker<<--DREAM:farms page
+opt page received
+Policy Maker->DREAM:rank()
+opt some criteria selected
+DREAM->TSDPSSystem: get_weather_reports_data()
+activate TSDPSSystem
+TSDPSSystem-->>DREAM: weather reports data
+deactivate TSDPSSystem
+Policy Maker<<--DREAM:ranking
+end 
+end
+deactivate Policy Maker
+deactivate DREAM
