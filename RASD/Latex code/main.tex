@@ -321,6 +321,7 @@ affected by the machine.
 \item machine\footnotemark[10] = the portion of system to be developed.
 \item weather report: historical meteorological data (so, referred to the past)
 \item weather forecast: predicted meteorological data (so, referred to the future) 
+\item initiative: either a visit or an help request or a collaboration between a farmer and an agronomist to improve the performances of the harvest.
 \end{itemize}
 \subsection{Revision history}
 \begin{left}
@@ -339,6 +340,7 @@ In version 1.1:
  \begin{itemize}
      \item added requirement R50 (it was missing in the preceding version)
      \item removed requirement R14, as it was not properly a requirement, but more a specification on an exception handling situation - not included in our requirements, but specified in the Exceptions sections of the Use Cases
+     \item added domain assumption D20 and added to the concept of initiative activities different from visits to farms or help requests from farmers to agronomists or best-performing farmers
  \end{itemize}
 \subsection{Reference Documents}
 \begin{itemize}
@@ -510,6 +512,8 @@ a raw daily plan about which farmers they should visit.
   \hline
   D19 & Agronomists reply to help requests issued by farmers.\\
   \hline
+  D20 & Initiatives different from visits to farms or help requests from farmers to agronomists or best-performing farmers are inserted in the database of the \verb|DREAM| system by another application (out-of-scope). \\
+  \hline
   \end{longtable}
   \newpage
 \section{Specific requirements}
@@ -616,9 +620,9 @@ R19\label{R} & \verb|DREAM| can compare different time periods of a farmer work 
   \hline
 R20\label{R} & \verb|DREAM| can compare different time periods of a  farmer work with respect to environmental factors (e.g. weather reports data, soil moisture, ...);\\
   \hline
-R21\label{R} & \verb|DREAM| allows policy makers to choose an initiative taken by an agronomist or a farmer to help a farmer - i.e., visit to the farm or reply to a question - and two time periods of the farmer to compare the two time periods;\\
+R21\label{R} & \verb|DREAM| allows policy makers to choose an initiative taken by an agronomist or a farmer to help a farmer and two time periods of the farmer to compare the two time periods;\\
   \hline
-R22\label{R} & \verb|DREAM| can show the impact of a certain initiative taken by an agronomist or a farmer to help a farmer - i.e., visit to the farm or reply to a question - during a certain time period.\\
+R22\label{R} & \verb|DREAM| can show the impact of a certain initiative taken by an agronomist or a farmer to help a farmer during a certain time period.\\
   \hline
   R23\label{R} & \verb|DREAM| is able to find correlations among environmental factors, fertilisers adopted and crops planted with the volume of production of the farmers;\\
   \hline
@@ -739,6 +743,8 @@ This section is about showing that the previously listed requirements and domain
  D18 &X   & X  &   &   & X  & X  &   &  X & X     \\
  \hline
  D19 &   &   &   &   & X  &   &   &   &      \\
+ \hline
+ D20 &   & X  &   &   & X  &   &   &   &      \\
  \hline
  R1 & X & X &  & X  &  &   &  &   &X    \\
  \hline
@@ -944,9 +950,9 @@ Data used by \verb|DREAM| to rate the farmers should be correct.
   
     \item R20: \verb|DREAM| can compare different time periods of a  farmer work with respect to environmental factors (e.g. weather reports data, soil moisture, ...);
 
-    \item R21: \verb|DREAM| allows policy makers to choose an initiative taken by an agronomist or a farmer to help a farmer - i.e., visit to the farm or reply to a question - and two time periods of the farmer to compare the two time periods;
+    \item R21: \verb|DREAM| allows policy makers to choose an initiative taken by an agronomist or a farmer to help a farmer and two time periods of the farmer to compare the two time periods;
 
-    \item R22: \verb|DREAM| can show the impact of a certain initiative taken by an agronomist or a farmer to help a farmer - i.e., visit to the farm or reply to a question - during a certain time period;
+    \item R22: \verb|DREAM| can show the impact of a certain initiative taken by an agronomist or a farmer to help a farmer during a certain time period;
     
     \item R48: \verb|DREAM| shall allow users to log in the system by using an email and a password;
     
@@ -985,6 +991,8 @@ Data used by \verb|DREAM| to rate the farmers should be correct.
     \item D17: Each agronomist has the competences for properly accessing the \verb|DREAM| system and using it.
    
     \item D18: All the data the agronomists insert is correct.
+    
+    \item D20:Initiatives different from visits to farms or help requests from farmers to agronomists or best-performing farmers are inserted in the database of the \verb|DREAM| system by another application (out-of-scope).
 \end{itemize}
 
 Goal G2 is achieved \verb|DREAM| collecting all the data that may be involved in correlations between initiatives and impact on work (R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R50); furthermore, \verb|DREAM| must be able to compare different periods of farmers work (R19, R20) according to the choice of the policy maker (R21) and to show the results (R22).
@@ -2211,11 +2219,11 @@ OBS.: the use case UnmarkWorstPerformingFarmer is exactly the same.
  \hline
  Actor & Policy Maker, TSDPSSystem\\
  \hline
- Entry condition & The policy maker is logged in the system and wants to analyze the impact of an initiative - i.e., visit to the farm or reply to a question - on the production of a certain farmer.\\
+ Entry condition & The policy maker is logged in the system and wants to analyze the impact of an initiative on the production of a certain farmer.\\
  \hline
  Event flow & \begin{enumerate}
     \item From the homepage, the policy maker accesses the "Initiatives Analysis" section.
-    \item \verb|DREAM| shows a list of initiatives - either visit to a farm or reply to a question of a farmer -, and some input fields to filter the initiatives according to the type (visit or reply), the date, the area of the farmer, the agronomist or best-performing farmer involved.
+    \item \verb|DREAM| shows a list of initiatives  and some input fields to filter the initiatives according to the type, the date, the area of the farmer, the agronomist or best-performing farmer involved.
     \item The policy maker selects one of the initiatives.
     \item \verb|DREAM| fetches weather reports data from the TSDPS system
  \end{enumerate}\\
