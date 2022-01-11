@@ -23,11 +23,15 @@ class Farmer extends User
     #[ORM\OneToMany(mappedBy: 'farmer', targetEntity: ProductionData::class, orphanRemoval: true)]
     private $productionData;
 
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: HelpRequest::class, orphanRemoval: true)]
+    private $helpRequests;
+
     public function __construct()
     {
         $this->forumThreads = new ArrayCollection();
         $this->forumMessages = new ArrayCollection();
         $this->productionData = new ArrayCollection();
+        $this->helpRequests = new ArrayCollection();
     }
 
     /**
@@ -131,6 +135,36 @@ class Farmer extends User
             // set the owning side to null (unless already changed)
             if ($productionData->getFarmer() === $this) {
                 $productionData->setFarmer(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|HelpRequest[]
+     */
+    public function getHelpRequests(): Collection
+    {
+        return $this->helpRequests;
+    }
+
+    public function addHelpRequest(HelpRequest $helpRequest): self
+    {
+        if (!$this->helpRequests->contains($helpRequest)) {
+            $this->helpRequests[] = $helpRequest;
+            $helpRequest->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHelpRequest(HelpRequest $helpRequest): self
+    {
+        if ($this->helpRequests->removeElement($helpRequest)) {
+            // set the owning side to null (unless already changed)
+            if ($helpRequest->getAuthor() === $this) {
+                $helpRequest->setAuthor(null);
             }
         }
 

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -45,6 +47,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $emailVerificationToken;
+
+    #[ORM\OneToMany(mappedBy: 'receiver', targetEntity: HelpRequest::class, orphanRemoval: true)]
+    private $receivedRequests;
+
+    public function __construct()
+    {
+        $this->receivedRequests = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -178,6 +188,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEmailVerificationToken(?string $emailVerificationToken): self
     {
         $this->emailVerificationToken = $emailVerificationToken;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|HelpRequest[]
+     */
+    public function getReceivedRequests(): Collection
+    {
+        return $this->receivedRequests;
+    }
+
+    public function addReceivedRequest(HelpRequest $receivedRequest): self
+    {
+        if (!$this->receivedRequests->contains($receivedRequest)) {
+            $this->receivedRequests[] = $receivedRequest;
+            $receivedRequest->setReceiver($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReceivedRequest(HelpRequest $receivedRequest): self
+    {
+        if ($this->receivedRequests->removeElement($receivedRequest)) {
+            // set the owning side to null (unless already changed)
+            if ($receivedRequest->getReceiver() === $this) {
+                $receivedRequest->setReceiver(null);
+            }
+        }
 
         return $this;
     }
