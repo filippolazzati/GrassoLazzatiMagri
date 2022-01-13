@@ -65,7 +65,9 @@ class UserCreateCommand extends Command
         $user->setSurname('');
         $user->setBirthDate(new \DateTime());
 
-        $user->setFarm(new Farm());
+        if ($user instanceof Farmer) {
+            $user->setFarm(new Farm());
+        }
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();
