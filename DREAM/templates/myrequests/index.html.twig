@@ -1,3 +1,13 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}My Requests{% endblock %}
+
+{% block content %}
+    <ul>
+        {% for help_request in help_requests %}
+            <li>
+                {{ help_request.title }}
+            </li>
+    </ul>
+    <a href = "{{ path('my_requests_select_expert_type') }}">New Request</a>
+{% endblock %}

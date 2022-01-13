@@ -21,6 +21,11 @@
                         Suggestions
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if app.request.attributes.get('_route') starts with 'my_requests' %}active{% endif %}" href="{{ path('suggestions_view') }}">
+                        My Requests
+                    </a>
+                </li>
             </ul>
             <div class="dropdown text-end">
                 <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
