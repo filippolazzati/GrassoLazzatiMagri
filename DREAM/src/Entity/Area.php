@@ -21,6 +21,10 @@ class Area
     #[ORM\OneToMany(mappedBy: 'area', targetEntity: Farm::class)]
     private $farms;
 
+    #[ORM\OneToMany(mappedBy: 'area', targetEntity: Agronomist::class)]
+    private $agronomists;
+
+
     public function __construct(string $name)
     {
         $this->name = $name;
@@ -77,5 +81,35 @@ class Area
     public function __toString(): string
     {
         return $this->getName();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAgronomists() : Collection
+    {
+        return $this->agronomists;
+    }
+
+    public function addAgronomist(Agronomist $agronomist): self
+    {
+        if (!$this->agronomists->contains($agronomist)) {
+            $this->agronomists[] = $agronomist;
+            $agronomist->setArea($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAgronomist(Agronomist $agronomist): self
+    {
+        if ($this->agronomists->removeElement($agronomist)) {
+            // set the owning side to null (unless already changed)
+            if ($agronomist->getArea() === $this) {
+                $agronomist->setArea(null);
+            }
+        }
+
+        return $this;
     }
 }
