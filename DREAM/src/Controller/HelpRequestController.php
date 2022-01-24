@@ -61,7 +61,7 @@ class HelpRequestController extends \Symfony\Bundle\FrameworkBundle\Controller\A
             $formData = $form->getData();
             $helpRequest = $this->em->getRepository(HelpRequest::class)->createHelpRequest(
                 $farmer, $formData['receiver'], $formData['title'], $formData['text']);
-            return $this->redirectToRoute('/confirmation_new_help_request{help_request}',
+            return $this->redirectToRoute('my_requests_confirmation_new_help_request',
                 ['help_request' => $helpRequest]);
         }
         return $this->render('myrequests/new_request.html.twig', [
