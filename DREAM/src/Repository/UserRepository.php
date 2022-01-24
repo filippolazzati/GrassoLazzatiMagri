@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Area;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -34,5 +35,13 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $user->setPassword($newHashedPassword);
         $this->_em->persist($user);
         $this->_em->flush();
+    }
+
+    public function getBestPerformingFarmers() {
+        return $this->getEntityManager()->createQuery(
+            'SELECT f
+                  FROM App\Entity\Farmer f 
+                  WHERE f.best_performing = true'
+        )->getResult();
     }
 }

@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use App\Entity\Farmer;
 use App\Entity\HelpRequest;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,34 +21,10 @@ class HelpRequestRepository extends ServiceEntityRepository
         parent::__construct($registry, HelpRequest::class);
     }
 
-    // /**
-    //  * @return HelpRequest[] Returns an array of HelpRequest objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('h')
-            ->andWhere('h.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('h.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+    public function createHelpRequest(Farmer $author, User $receiver, string $title, string $text) : HelpRequest {
+        $helpRequest = new HelpRequest(new \DateTime(), $title, $text, $author, $receiver);
+        $this->getEntityManager()->persist($helpRequest);
+        $this->getEntityManager()->flush();
+        return $helpRequest;
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?HelpRequest
-    {
-        return $this->createQueryBuilder('h')
-            ->andWhere('h.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
-
-
 }

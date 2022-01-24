@@ -33,6 +33,16 @@ class HelpRequest
     #[ORM\OneToOne(targetEntity: HelpReply::class, cascade: ['persist', 'remove'])]
     private $reply;
 
+    public function __construct(\DateTimeInterface $timestamp, string $title, string $text, Farmer $author,
+                                User $receiver)
+    {
+        $this->timestamp = $timestamp;
+        $this->title = $title;
+        $this->text = $text;
+        $this->author = $author;
+        $this->receiver = $receiver;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

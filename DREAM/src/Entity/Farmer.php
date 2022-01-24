@@ -26,6 +26,12 @@ class Farmer extends User
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: HelpRequest::class, orphanRemoval: true)]
     private $helpRequests;
 
+    #[ORM\Column(type: 'boolean')]
+    private $best_performing;
+
+    #[ORM\Column(type: 'boolean')]
+    private $worst_performing;
+
     public function __construct()
     {
         $this->forumThreads = new ArrayCollection();
@@ -167,6 +173,30 @@ class Farmer extends User
                 $helpRequest->setAuthor(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getBestPerforming(): ?bool
+    {
+        return $this->best_performing;
+    }
+
+    public function setBestPerforming(bool $best_performing): self
+    {
+        $this->best_performing = $best_performing;
+
+        return $this;
+    }
+
+    public function getWorstPerforming(): ?bool
+    {
+        return $this->worst_performing;
+    }
+
+    public function setWorstPerforming(bool $worst_performing): self
+    {
+        $this->worst_performing = $worst_performing;
 
         return $this;
     }

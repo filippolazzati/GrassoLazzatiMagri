@@ -3,6 +3,6 @@
 {% block title %}My Requests{% endblock %}
 
 {% block content %}
-    <a href = "{{ path('my_requests_new_request', {type:'agronomist'}) }}">Request To Agronomist</a>
-    <a href = "{{ path('my_requests_new_request', {type:'best_farmer'}) }}">Request To Best Performing Farmer</a>
+    <a href = "{{ path('my_requests_new_help_request', {type:'agronomist'}) }}">Request To Agronomist</a>
+    <a href = "{{ path('my_requests_new_help_request', {type:'best_farmer'}) }}">Request To Best Performing Farmer</a>
 {% endblock %}
