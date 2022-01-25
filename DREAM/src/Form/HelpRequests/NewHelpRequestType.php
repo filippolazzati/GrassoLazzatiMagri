@@ -7,8 +7,11 @@ use Doctrine\DBAL\Types\TextType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class NewHelpRequestType extends \Symfony\Component\Form\AbstractType
 {
@@ -27,8 +30,21 @@ class NewHelpRequestType extends \Symfony\Component\Form\AbstractType
             'multiple' => false,
             'expanded' => true
         ])
-            ->add('title', TextType::class)
-            ->add('text', TextType::class)
+            ->add('title', TextType::class, [
+                'constraints' => [
+                new NotBlank(),
+                new Length(['min' => 5, 'max' => 50]),
+                ],
+            ])
+            ->add('text', TextareaType::class, [
+                'constraints' => [
+                    new NotBlank(),
+                    new Length(['min' => 5, 'max' => 1500]),
+                ],
+                'attr' => [
+                    'rows' => 10,
+                ],
+            ])
             ->add('send', SubmitType::class, ['label' => 'Send Request']);
     }
 }

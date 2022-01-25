@@ -6,6 +6,7 @@ use App\Entity\Farmer;
 use App\Entity\HelpRequest;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -26,5 +27,31 @@ class HelpRequestRepository extends ServiceEntityRepository
         $this->getEntityManager()->persist($helpRequest);
         $this->getEntityManager()->flush();
         return $helpRequest;
+    }
+
+    public function getHelpRequestsFromFarmerQuery(Farmer $author) : \Doctrine\ORM\Query
+    {
+        return $this->getEntityManager()->createQuery(
+            'SELECT req 
+                 FROM App\Entity\HelpRequest req
+                 WHERE req.author = :author
+                 ORDER BY req.timestamp DESC '
+        )->setParameter('author', $author);
+    }
+
+    public function getMostRecentHelpRequestFromFarmer(Farmer $author) : HelpRequest {
+        // TODO: change to nested query
+        $maxTimestamp = $this->getEntityManager()->createQuery(
+            'SELECT MAX(req.timestamp)
+                 FROM App\Entity\HelpRequest req
+                 WHERE req.author = :author'
+        )->setParameter('author', $author)->getScalarResult();
+        return $this->getEntityManager()->createQuery(
+            'SELECT req
+                FROM App\Entity\HelpRequest req
+                WHERE (req.author = :author) AND (req.timestamp = :max_timestamp)'
+        )->setParameter('author', $author)
+        ->setParameter('max_timestamp', $maxTimestamp)
+        ->getSingleResult();
     }
 }

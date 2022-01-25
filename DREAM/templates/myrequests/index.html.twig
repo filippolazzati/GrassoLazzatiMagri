@@ -3,11 +3,20 @@
 {% block title %}My Requests{% endblock %}
 
 {% block content %}
-    <ul>
-        {% for help_request in help_requests %}
-            <li>
-                {{ help_request.title }}
-            </li>
-    </ul>
+    <div>
+        {{ knp_pagination_render(pagination) }}
+    </div>
+
+    <div>
+        {% for help_request in pagination %}
+            <a href="{{ path('my_requests_index', {help_request : help_request.id}) }}">{{ help_request.title }}</a>
+        {% endfor %}
+    </div>
+    {% if help_request.reply is not null  and help_request.needsFeedback%}
+        {{ form(form) }}
+    {% endif %}
+    <div class="navigation">
+        {{ knp_pagination_render(pagination) }}
+    </div>
     <a href = "{{ path('my_requests_select_expert_type') }}">New Request</a>
 {% endblock %}

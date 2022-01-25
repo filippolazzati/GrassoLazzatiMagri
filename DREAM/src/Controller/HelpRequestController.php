@@ -5,9 +5,11 @@ namespace App\Controller;
 use App\Entity\Farmer;
 use App\Entity\HelpRequest;
 use App\Entity\User;
+use App\Form\HelpRequests\InsertFeedbackType;
 use App\Form\HelpRequests\NewHelpRequestType;
 use AssertionError;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Service\Attribute\Required;
@@ -16,17 +18,43 @@ use Symfony\Contracts\Service\Attribute\Required;
 class HelpRequestController extends \Symfony\Bundle\FrameworkBundle\Controller\AbstractController
 {
     #[Required] public EntityManagerInterface $em;
+    #[Required] public PaginatorInterface $paginator;
 
-    #[Route('/{help_request?}', name: 'index', methods: ['GET'])]
+    #[Route('/{help_request?}', name: 'index', methods: ['GET', 'POST'])]
     public function index(Request $request, ?HelpRequest $help_request): \Symfony\Component\HttpFoundation\Response
     {
+        // if the user is not a farmer, error
         $farmer = $this->getUser();
         if (!($farmer instanceof Farmer)) {
             throw new AssertionError();
         }
-        $helpRequests = $farmer->getHelpRequests();
+
+        // retrieve help requests of the user, paginating them in group of 20
+        $helpRequestsQuery = $this->em->getRepository(HelpRequest::class)->getHelpRequestsFromFarmerQuery($farmer);
+        $pagination = $this->paginator->paginate($helpRequestsQuery, $request->query->getInt('page', 1), 20);
+
+        // if no help request selected (parameter $help_request = null), show as a default the most recent one
+        // if the farmer has no help requests, help_request is left to null
+        if (is_null($help_request) && !$farmer->getHelpRequests()->isEmpty()) {
+            $help_request = $this->em->getRepository(HelpRequest::class)->getMostRecentHelpRequestFromFarmer($farmer);
+        }
+
+        // form for inserting the feedback for the response to the selected help request
+        // (if it has already been replied and has not a feedback)
+        if (!is_null($help_request) && $help_request->needsFeedback()) {
+            $form = $this->createForm(InsertFeedbackType::class);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $formData = $form->getData();
+                $help_request->getReply()->setFeedback($formData['feedback']);
+                $this->em->flush();
+                return $this->redirectToRoute('my_requests_index', ['help_request' => $help_request]);
+            }
+        }
+
+
         return $this->render('myrequests/index.html.twig',
-            ['help_requests' => $helpRequests]);
+            ['pagination' => $pagination, 'help_request' => $help_request, 'form' => $form->createView()]);
     }
 
     #[Route('/select_expert_type', name: 'select_expert_type', methods: ['GET'])]
@@ -34,6 +62,7 @@ class HelpRequestController extends \Symfony\Bundle\FrameworkBundle\Controller\A
     {
         return $this->render('myrequests/select_expert_type.html.twig', []);
     }
+
 
     #[Route('/new_help_request{type}', name: 'new_help_request',
         requirements: ['type' => '/(agronomist | best_farmer)/'], methods: ['GET', 'POST'])]
