@@ -23,9 +23,10 @@ class WeatherForecastRepository extends ServiceEntityRepository
     public function findNextThreeForecasts($currentDate, $city): array
     {
         return $this->createQueryBuilder('w')
-            ->andWhere('w.date >= $currentDate')
-            ->andWhere('w.city = $city')
-            ->setMaxResults(3)
+            ->andWhere('w.date >= :currentDate')
+            ->setParameter('currentDate', $currentDate)
+            ->andWhere('w.city = :city')
+            ->setParameter('city', $city)
             ->getQuery()
             ->getResult()
         ;

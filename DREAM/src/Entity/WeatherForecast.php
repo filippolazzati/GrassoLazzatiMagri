@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\WeatherForecastRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: WeatherForecastRepository::class)]
 class WeatherForecast
@@ -19,6 +21,7 @@ class WeatherForecast
     #[ORM\Column(type: 'string', length: 50)]
     private $city;
 
+    // sunny/foggy/cloudy/...
     #[ORM\Column(type: 'string', length: 50)]
     private $weather;
 
@@ -34,17 +37,51 @@ class WeatherForecast
     #[ORM\Column(type: 'integer')]
     private $rain_mm;
 
+    // km/h
     #[ORM\Column(type: 'float')]
     private $windSpeed;
 
+    // n/s/e/o/ne/no/se/so
     #[ORM\Column(type: 'string', length: 3)]
     private $windDirection;
 
+    // 40 stands for 40%
     #[ORM\Column(type: 'integer')]
     private $humidity;
 
+    // in millibar (mbar)
     #[ORM\Column(type: 'integer')]
     private $pressure;
+
+    /**
+     * WeatherForecast constructor.
+     * @param $date
+     * @param $city
+     * @param $weather
+     * @param $t_max
+     * @param $t_min
+     * @param $t_avg
+     * @param $rain_mm
+     * @param $windSpeed
+     * @param $windDirection
+     * @param $humidity
+     * @param $pressure
+     */
+    public function __construct($date, $city, $weather, $t_max, $t_min, $t_avg, $rain_mm, $windSpeed, $windDirection, $humidity, $pressure)
+    {
+        $this->date = $date;
+        $this->city = $city;
+        $this->weather = $weather;
+        $this->t_max = $t_max;
+        $this->t_min = $t_min;
+        $this->t_avg = $t_avg;
+        $this->rain_mm = $rain_mm;
+        $this->windSpeed = $windSpeed;
+        $this->windDirection = $windDirection;
+        $this->humidity = $humidity;
+        $this->pressure = $pressure;
+    }
+
 
     public function getId(): ?int
     {

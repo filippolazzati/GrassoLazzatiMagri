@@ -46,6 +46,35 @@ class WeatherReport
     #[ORM\Column(type: 'integer')]
     private $pressure;
 
+    /**
+     * WeatherReport constructor.
+     * @param $date
+     * @param $city
+     * @param $weather
+     * @param $t_max
+     * @param $t_min
+     * @param $t_avg
+     * @param $rain_mm
+     * @param $windSpeed
+     * @param $windDirection
+     * @param $humidity
+     * @param $pressure
+     */
+    public function __construct($date, $city, $weather, $t_max, $t_min, $t_avg, $rain_mm, $windSpeed, $windDirection, $humidity, $pressure)
+    {
+        $this->date = $date;
+        $this->city = $city;
+        $this->weather = $weather;
+        $this->t_max = $t_max;
+        $this->t_min = $t_min;
+        $this->t_avg = $t_avg;
+        $this->rain_mm = $rain_mm;
+        $this->windSpeed = $windSpeed;
+        $this->windDirection = $windDirection;
+        $this->humidity = $humidity;
+        $this->pressure = $pressure;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
