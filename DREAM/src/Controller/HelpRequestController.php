@@ -39,6 +39,8 @@ class HelpRequestController extends \Symfony\Bundle\FrameworkBundle\Controller\A
             $help_request = $this->em->getRepository(HelpRequest::class)->getMostRecentHelpRequestFromFarmer($farmer);
         }
 
+        $renderParameters = ['pagination' => $pagination, 'help_request' => $help_request];
+
         // form for inserting the feedback for the response to the selected help request
         // (if it has already been replied and has not a feedback)
         if (!is_null($help_request) && $help_request->needsFeedback()) {
@@ -50,11 +52,10 @@ class HelpRequestController extends \Symfony\Bundle\FrameworkBundle\Controller\A
                 $this->em->flush();
                 return $this->redirectToRoute('my_requests_index', ['help_request' => $help_request]);
             }
+            $renderParameters += array('form' => $form->createView());
         }
 
-
-        return $this->render('myrequests/index.html.twig',
-            ['pagination' => $pagination, 'help_request' => $help_request, 'form' => $form->createView()]);
+        return $this->render('myrequests/index.html.twig', $renderParameters);
     }
 
     #[Route('/select_expert_type', name: 'select_expert_type', methods: ['GET'])]
