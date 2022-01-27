@@ -3,6 +3,7 @@
 namespace App\Form\HelpRequests;
 
 use App\Entity\Agronomist;
+use App\Entity\User;
 use Doctrine\DBAL\Types\TextType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -30,7 +31,7 @@ class NewHelpRequestType extends \Symfony\Component\Form\AbstractType
             'multiple' => false,
             'expanded' => true
         ])
-            ->add('title', TextType::class, [
+            ->add('title', TextareaType::class, [
                 'constraints' => [
                 new NotBlank(),
                 new Length(['min' => 5, 'max' => 50]),

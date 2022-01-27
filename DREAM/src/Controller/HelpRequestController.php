@@ -20,7 +20,7 @@ class HelpRequestController extends \Symfony\Bundle\FrameworkBundle\Controller\A
     #[Required] public EntityManagerInterface $em;
     #[Required] public PaginatorInterface $paginator;
 
-    #[Route('/{help_request?}', name: 'index', methods: ['GET', 'POST'])]
+    #[Route('/view/{help_request?}', name: 'index', methods: ['GET', 'POST'])]
     public function index(Request $request, ?HelpRequest $help_request): \Symfony\Component\HttpFoundation\Response
     {
         // if the user is not a farmer, error
@@ -50,7 +50,7 @@ class HelpRequestController extends \Symfony\Bundle\FrameworkBundle\Controller\A
                 $formData = $form->getData();
                 $help_request->getReply()->setFeedback($formData['feedback']);
                 $this->em->flush();
-                return $this->redirectToRoute('my_requests_index', ['help_request' => $help_request]);
+                return $this->redirectToRoute('my_requests_index', ['help_request' => $help_request->getId()]);
             }
             $renderParameters += array('form' => $form->createView());
         }
@@ -66,7 +66,7 @@ class HelpRequestController extends \Symfony\Bundle\FrameworkBundle\Controller\A
 
 
     #[Route('/new_help_request{type}', name: 'new_help_request',
-        requirements: ['type' => '/(agronomist | best_farmer)/'], methods: ['GET', 'POST'])]
+        /*requirements: ['type' => 'agronomist | best_farmer'],*/ methods: ['GET', 'POST'])]
     public function newHelpRequest(Request $request, string $type): \Symfony\Component\HttpFoundation\Response
     {
         // the user must be a farmer
@@ -79,7 +79,7 @@ class HelpRequestController extends \Symfony\Bundle\FrameworkBundle\Controller\A
         if (strcmp($type, 'agronomist') == 0) { // type = agronomist
             $experts = $farmer->getFarm()->getArea()->getAgronomists()->toArray();
         } else { // type = best_farmer
-            $experts = $this->em->getRepository(User::class)->getBestPerformingFarmers();
+            $experts = $this->em->getRepository(User::class)->getBestPerformingFarmersExcept($farmer);
         }
         $options = array('experts' => $experts);
         $form = $this->createForm(NewHelpRequestType::class, null, $options);
@@ -92,7 +92,7 @@ class HelpRequestController extends \Symfony\Bundle\FrameworkBundle\Controller\A
             $helpRequest = $this->em->getRepository(HelpRequest::class)->createHelpRequest(
                 $farmer, $formData['receiver'], $formData['title'], $formData['text']);
             return $this->redirectToRoute('my_requests_confirmation_new_help_request',
-                ['help_request' => $helpRequest]);
+                ['help_request' => $helpRequest->getId()]);
         }
         return $this->render('myrequests/new_request.html.twig', [
             'form' => $form->createView(),
@@ -100,7 +100,8 @@ class HelpRequestController extends \Symfony\Bundle\FrameworkBundle\Controller\A
     }
 
     #[Route('/confirmation_new_help_request{help_request}', name: 'confirmation_new_help_request', methods: ['GET'])]
-    public function getConfirmPageForNewHelpRequest() {
-
+    public function getConfirmPageForNewHelpRequest(Request $request, HelpRequest $help_request) : \Symfony\Component\HttpFoundation\Response
+    {
+        return $this->render('myrequests/confirm_insert_request.html.twig', ['help_request' => $help_request]);
     }
 }

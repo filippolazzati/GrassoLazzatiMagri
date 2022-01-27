@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Confirmation For Inserting New Help Request{% endblock %}
+
+{% block content %}
+    <div>
+                Title : {{ help_request.title }}
+                Timestamp : {{ help_request.timestamp | date('Y-m-d H:i:s') }}
+                Receiver : {{ help_request.receiver.fullname }}
+                Text : {{ help_request.text }}
+            </div>
+{% endblock %}

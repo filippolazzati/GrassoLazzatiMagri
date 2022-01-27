@@ -17,12 +17,12 @@
     {% if help_request is not null %}
         <!-- Help request details -->
         <div>
-            {{ help_request.title }}
-            {{ help_request.timestamp }}
-            {{ help_request.receiver }}
-            {{ help_request.text }}
+            Title : {{ help_request.title }}
+            Timestamp : {{ help_request.timestamp | date('Y-m-d H:i:s') }}
+            Receiver : {{ help_request.receiver.fullname }}
+            Text : {{ help_request.text }}
             {% if help_request.reply is not null %}
-                {{ help_request.reply }}
+                Reply : {{ help_request.reply }}
             {% endif %}
         </div>
 

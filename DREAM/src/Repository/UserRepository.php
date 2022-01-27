@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Area;
+use App\Entity\Farmer;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -37,11 +38,11 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->_em->flush();
     }
 
-    public function getBestPerformingFarmers() {
+    public function getBestPerformingFarmersExcept(Farmer $farmer) {
         return $this->getEntityManager()->createQuery(
             'SELECT f
                   FROM App\Entity\Farmer f 
-                  WHERE f.best_performing = true'
-        )->getResult();
+                  WHERE f.best_performing = true and f.id != :farmerId'
+        )->setParameter('farmerId', $farmer->getId())->getResult();
     }
 }
