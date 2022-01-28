@@ -20,9 +20,6 @@ class Farmer extends User
     #[ORM\OneToOne(mappedBy: 'farmer', targetEntity: Farm::class, cascade: ['persist', 'remove'])]
     private $farm;
 
-    #[ORM\OneToMany(mappedBy: 'farmer', targetEntity: ProductionData::class, orphanRemoval: true)]
-    private $productionData;
-
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: HelpRequest::class, orphanRemoval: true)]
     private $helpRequests;
 
@@ -34,9 +31,9 @@ class Farmer extends User
 
     public function __construct()
     {
+        parent::__construct();
         $this->forumThreads = new ArrayCollection();
         $this->forumMessages = new ArrayCollection();
-        $this->productionData = new ArrayCollection();
         $this->helpRequests = new ArrayCollection();
     }
 
@@ -113,36 +110,6 @@ class Farmer extends User
         }
 
         $this->farm = $farm;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|ProductionData[]
-     */
-    public function getProductionData(): Collection
-    {
-        return $this->productionData;
-    }
-
-    public function addProductionData(ProductionData $productionData): self
-    {
-        if (!$this->productionData->contains($productionData)) {
-            $this->productionData[] = $productionData;
-            $productionData->setFarmer($this);
-        }
-
-        return $this;
-    }
-
-    public function removeProductionData(ProductionData $productionData): self
-    {
-        if ($this->productionData->removeElement($productionData)) {
-            // set the owning side to null (unless already changed)
-            if ($productionData->getFarmer() === $this) {
-                $productionData->setFarmer(null);
-            }
-        }
 
         return $this;
     }

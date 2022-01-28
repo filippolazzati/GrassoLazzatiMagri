@@ -53,20 +53,7 @@ class WeatherForecast
     #[ORM\Column(type: 'integer')]
     private $pressure;
 
-    /**
-     * WeatherForecast constructor.
-     * @param $date
-     * @param $city
-     * @param $weather
-     * @param $t_max
-     * @param $t_min
-     * @param $t_avg
-     * @param $rain_mm
-     * @param $windSpeed
-     * @param $windDirection
-     * @param $humidity
-     * @param $pressure
-     */
+
     public function __construct($date, $city, $weather, $t_max, $t_min, $t_avg, $rain_mm, $windSpeed, $windDirection, $humidity, $pressure)
     {
         $this->date = $date;

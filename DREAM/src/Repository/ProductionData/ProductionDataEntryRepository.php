@@ -1,26 +1,26 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\ProductionData;
 
-use App\Entity\ProductionData;
+use App\Entity\ProductionData\ProductionDataEntry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method ProductionData|null find($id, $lockMode = null, $lockVersion = null)
- * @method ProductionData|null findOneBy(array $criteria, array $orderBy = null)
- * @method ProductionData[]    findAll()
- * @method ProductionData[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method ProductionDataEntry|null find($id, $lockMode = null, $lockVersion = null)
+ * @method ProductionDataEntry|null findOneBy(array $criteria, array $orderBy = null)
+ * @method ProductionDataEntry[]    findAll()
+ * @method ProductionDataEntry[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ProductionDataRepository extends ServiceEntityRepository
+class ProductionDataEntryRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, ProductionData::class);
+        parent::__construct($registry, ProductionDataEntry::class);
     }
 
     // /**
-    //  * @return ProductionData[] Returns an array of ProductionData objects
+    //  * @return ProductionDataEntry[] Returns an array of ProductionDataEntry objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class ProductionDataRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?ProductionData
+    public function findOneBySomeField($value): ?ProductionDataEntry
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.exampleField = :val')
