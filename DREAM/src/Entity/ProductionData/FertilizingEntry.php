@@ -2,6 +2,7 @@
 
 namespace App\Entity\ProductionData;
 
+use App\Entity\ProductionData\PlantingSeedingRelationTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
