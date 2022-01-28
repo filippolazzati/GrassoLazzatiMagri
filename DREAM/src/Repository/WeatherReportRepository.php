@@ -22,8 +22,9 @@ class WeatherReportRepository extends ServiceEntityRepository
     public function findAllPastReports($city): array
     {
         return $this->createQueryBuilder('w')
-            ->andWhere('w.city = $city')
-            ->setMaxResults(100)
+            ->andWhere('w.city = :city')
+            ->setParameter('city', $city)
+            ->setMaxResults(24)
             ->getQuery()
             ->getResult()
             ;
