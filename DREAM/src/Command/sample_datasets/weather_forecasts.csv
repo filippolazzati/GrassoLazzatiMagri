@@ -1,0 +1,79 @@
+date,city,weather,t_max,t_min,t_avg,rain_mm,windSpeed,windDirection,humidity,pressure
+2022-01-28,Hyderabad,partially cloudy,21,12,17,0,4.8,ne,39,964
+2022-01-29,Hyderabad,sunny,24,15,19,0,5.2,s,58,996
+2022-01-30,Hyderabad,rainy,12,2,7,128,7.1,o,60,956
+2022-01-31,Hyderabad,sunny,26,12,15,0,9.5,se,13,988
+2022-02-01,Hyderabad,partially cloudy,10,0,7,0,8.3,o,30,1124
+2022-02-02,Hyderabad,stormy,26,9,16,164,14.6,s,19,1135
+2022-01-28,Warangal,rainy,12,1,5,115,12.9,o,56,1186
+2022-01-29,Warangal,sunny,27,10,13,0,7.2,n,49,1112
+2022-01-30,Warangal,sunny,19,9,14,0,6.4,so,58,1072
+2022-01-31,Warangal,sunny,13,4,9,0,5.2,e,45,1111
+2022-02-01,Warangal,partially cloudy,14,3,10,0,4.7,s,51,1089
+2022-02-02,Warangal,sunny,10,2,7,0,1.8,no,35,996
+2022-01-28,Nizamabad,sunny,18,9,14,0,8.6,se,28,1143
+2022-01-29,Nizamabad,partially cloudy,27,7,22,0,1.0,s,36,1098
+2022-01-30,Nizamabad,sunny,29,15,23,0,5.3,ne,63,1146
+2022-01-31,Nizamabad,sunny,12,0,9,0,7.6,no,22,1046
+2022-02-01,Nizamabad,sunny,17,8,13,0,8.4,s,10,1175
+2022-02-02,Nizamabad,partially cloudy,10,0,3,0,14.8,ne,53,1064
+2022-01-28,Khammam,rainy,16,4,10,52,12.9,ne,57,1013
+2022-01-29,Khammam,sunny,22,2,17,0,1.4,so,33,1026
+2022-01-30,Khammam,rainy,29,14,22,57,14.7,o,37,1127
+2022-01-31,Khammam,partially cloudy,14,6,9,0,9.6,ne,39,951
+2022-02-01,Khammam,sunny,22,7,18,0,10.9,no,43,1153
+2022-02-02,Khammam,foggy,21,13,18,0,7.2,ne,40,1086
+2022-01-28,Karimnagar,tornado,24,16,19,0,9.5,so,23,998
+2022-01-29,Karimnagar,sunny,21,11,17,0,14.5,no,12,1181
+2022-01-30,Karimnagar,rainy,22,5,9,157,3.5,n,49,1175
+2022-01-31,Karimnagar,sunny,30,21,27,0,6.2,e,44,1032
+2022-02-01,Karimnagar,rainy,28,14,21,134,13.5,so,51,1029
+2022-02-02,Karimnagar,sunny,29,16,25,0,5.9,so,47,1156
+2022-01-28,Ramagundam,rainy,23,8,13,19,7.2,se,59,1123
+2022-01-29,Ramagundam,hurricane,25,0,20,196,6.6,n,67,1062
+2022-01-30,Ramagundam,partially cloudy,30,15,27,0,12.9,o,42,1029
+2022-01-31,Ramagundam,sunny,26,7,10,0,0.8,so,69,1125
+2022-02-01,Ramagundam,sunny,14,5,8,0,6.3,ne,65,957
+2022-02-02,Ramagundam,stormy,19,3,11,145,14.5,no,10,1167
+2022-01-28,Mahabubnagar,sunny,20,10,16,0,8.2,so,34,1170
+2022-01-29,Mahabubnagar,rainy,22,1,17,90,8.3,se,17,1093
+2022-01-30,Mahabubnagar,sunny,21,3,14,0,3.5,o,64,963
+2022-01-31,Mahabubnagar,sunny,10,2,7,0,11.4,s,49,1182
+2022-02-01,Mahabubnagar,sunny,17,1,4,0,10.3,o,54,1051
+2022-02-02,Mahabubnagar,sunny,23,13,18,0,9.4,e,39,1074
+2022-01-28,Nalgonda,foggy,16,1,10,0,3.6,so,61,1192
+2022-01-29,Nalgonda,rainy,13,5,10,184,3.5,s,18,968
+2022-01-30,Nalgonda,sunny,30,0,7,0,5.5,o,10,976
+2022-01-31,Nalgonda,sunny,10,0,7,0,5.8,so,66,977
+2022-02-01,Nalgonda,partially cloudy,22,6,10,0,13.3,so,51,1020
+2022-02-02,Nalgonda,rainy,12,3,7,158,4.1,so,33,952
+2022-01-28,Adilabad,stormy,21,11,15,105,6.6,so,10,954
+2022-01-29,Adilabad,rainy,15,2,6,142,9.7,se,24,1047
+2022-01-30,Adilabad,hurricane,13,5,8,114,1.6,se,42,1088
+2022-01-31,Adilabad,foggy,11,0,6,0,9.2,n,22,1200
+2022-02-01,Adilabad,partially cloudy,21,0,12,0,4.5,se,22,1026
+2022-02-02,Adilabad,rainy,27,11,19,83,1.7,s,24,1014
+2022-01-28,Suryapet,sunny,12,0,6,0,7.0,e,38,977
+2022-01-29,Suryapet,sunny,28,18,23,0,13.6,e,17,1108
+2022-01-30,Suryapet,sunny,26,4,18,0,12.0,s,43,1088
+2022-01-31,Suryapet,rainy,21,10,14,165,10.9,n,31,1148
+2022-02-01,Suryapet,partially cloudy,19,10,14,0,4.1,e,19,1033
+2022-02-02,Suryapet,rainy,22,7,15,74,13.7,o,16,974
+2022-01-28,Siddipet,sunny,19,5,16,0,3.4,se,52,986
+2022-01-29,Siddipet,rainy,21,13,17,43,11.4,n,48,1068
+2022-01-30,Siddipet,tornado,30,14,23,0,12.4,o,18,1163
+2022-01-31,Siddipet,sunny,13,3,8,0,14.8,o,38,1106
+2022-02-01,Siddipet,rainy,14,4,10,196,12.6,so,39,1096
+2022-02-02,Siddipet,partially cloudy,11,0,4,0,13.7,o,29,1056
+2022-01-28,Nalgonda,sunny,27,9,16,0,12.4,s,35,1040
+2022-01-29,Nalgonda,sunny,27,2,18,0,3.3,se,64,1114
+2022-01-30,Nalgonda,sunny,19,10,15,0,7.8,se,15,1026
+2022-01-31,Nalgonda,rainy,19,8,12,55,6.9,e,36,1050
+2022-02-01,Nalgonda,sunny,22,4,18,0,12.6,o,53,1171
+2022-02-02,Nalgonda,rainy,26,8,15,43,2.1,e,39,951
+2022-01-28,Jagtial,sunny,19,7,13,0,11.2,n,23,994
+2022-01-29,Jagtial,cloudy,15,1,11,0,2.6,se,49,975
+2022-01-30,Jagtial,partially cloudy,23,15,19,0,7.4,n,32,1049
+2022-01-31,Jagtial,rainy,24,8,15,61,13.2,so,60,1010
+2022-02-01,Jagtial,sunny,21,12,18,0,4.5,so,52,1049
+2022-02-02,Jagtial,sunny,11,0,6,0,9.9,o,45,1095
