@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Farmer;
+use App\Entity\HelpReply;
 use App\Entity\HelpRequest;
 use App\Entity\User;
 use App\Form\HelpRequests\InsertFeedbackType;
@@ -48,8 +49,7 @@ class HelpRequestController extends \Symfony\Bundle\FrameworkBundle\Controller\A
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
                 $formData = $form->getData();
-                $help_request->getReply()->setFeedback($formData['feedback']);
-                $this->em->flush();
+                $this->em->getRepository(HelpReply::class)->addFeedbackToReply($help_request, $formData['feedback']);
                 return $this->redirectToRoute('my_requests_index', ['help_request' => $help_request->getId()]);
             }
             $renderParameters += array('form' => $form->createView());

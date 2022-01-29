@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\HelpReply;
+use App\Entity\HelpRequest;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,4 +20,18 @@ class HelpReplyRepository extends ServiceEntityRepository
         parent::__construct($registry, HelpReply::class);
     }
 
+    public function createHelpReply (string $text, HelpRequest $helpRequest) : HelpReply
+    {
+        $helpReply = new HelpReply($text, new \DateTime());
+        $this->getEntityManager()->persist($helpReply);
+        $helpRequest->setReply($helpReply);
+        $this->getEntityManager()->flush();
+        return $helpReply;
+    }
+
+    public function addFeedbackToReply(HelpRequest $helpRequest, string $feedback) : void
+    {
+        $helpRequest->getReply()->setFeedback($feedback);
+        $this->getEntityManager()->flush();
+    }
 }

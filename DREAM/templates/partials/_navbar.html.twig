@@ -26,6 +26,13 @@
                         My Requests
                     </a>
                 </li>
+                {% if app.user.myReplies%}
+                    <li class="nav-item">
+                        <a class="nav-link {% if app.request.attributes.get('_route') starts with 'my_replies' %}active{% endif %}" href="{{ path('my_replies_index') }}">
+                            My Replies
+                        </a>
+                    </li>
+                {% endif %}
             </ul>
             <div class="dropdown text-end">
                 <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">

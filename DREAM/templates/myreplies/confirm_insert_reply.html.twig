@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Confirmation For Inserting Reply{% endblock %}
+
+{% block content %}
+    <div>
+        Title : {{ help_request.title }}
+        Request Timestamp : {{ help_request.timestamp | date('Y-m-d H:i:s') }}
+        Author : {{ help_request.author.fullName}}
+        Text : {{ help_request.text }}
+        Reply : {{ help_request.reply.text }}
+        Reply Timestamp : {{ help_request.reply.timestamp | date('Y-m-d H:i:s')}}
+    </div>
+{% endblock %}

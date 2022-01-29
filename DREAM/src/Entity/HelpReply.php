@@ -22,6 +22,12 @@ class HelpReply
     #[ORM\Column(type: 'string', length: 300, nullable: true)]
     private $feedback;
 
+    public function __construct(string $text, \DateTimeInterface $timestamp)
+    {
+        $this->text = $text;
+        $this->timestamp = $timestamp;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

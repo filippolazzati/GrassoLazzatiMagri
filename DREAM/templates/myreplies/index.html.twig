@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}My Requests{% endblock %}
+{% block title %}My Replies{% endblock %}
 
 {% block content %}
     <!-- Help request list -->
@@ -10,7 +10,7 @@
 
     <div>
         {% for help_request in pagination %}
-            <a href="{{ path('my_requests_index', {help_request : help_request.id}) }}">{{ help_request.title }}</a>
+            <a href="{{ path('my_replies_index', {help_request : help_request.id}) }}">{{ help_request.title }}</a>
         {% endfor %}
     </div>
 
@@ -19,7 +19,7 @@
         <div>
             Title : {{ help_request.title }}
             Timestamp : {{ help_request.timestamp | date('Y-m-d H:i:s') }}
-            Receiver : {{ help_request.receiver.fullname }}
+            Author : {{ help_request.author.fullname }}
             Text : {{ help_request.text }}
             {% if help_request.reply is not null %}
                 Reply : {{ help_request.reply.text }}
@@ -30,8 +30,8 @@
             {% endif %}
         </div>
 
-        <!-- Form for inserting feedback -->
-        {% if help_request.reply is not null  and help_request.needsFeedback%}
+        <!-- Form for inserting reply -->
+        {% if help_request.needsReply %}
             {{ form(form) }}
         {% endif %}
     {% else %}
@@ -39,8 +39,4 @@
             You haven't got any help requests!
         </div>
     {% endif %}
-
-
-
-    <a href = "{{ path('my_requests_select_expert_type') }}">New Request</a>
 {% endblock %}

@@ -120,6 +120,11 @@ class HelpRequest
         return $this;
     }
 
+    public function needsReply() : bool
+    {
+        return is_null($this->reply);
+    }
+
     public function needsFeedback(): bool
     {
         return !is_null($this->reply) && is_null($this->reply->getFeedback());

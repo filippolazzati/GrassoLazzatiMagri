@@ -200,4 +200,13 @@ class Farmer extends User
 
         return $this;
     }
+
+    public function hasMyReplies(): bool
+    {
+        // the farmer has the "my replies" section if he/she is best-performing or if he/she has ever
+        // received a help_request (that is, he/she was best performing in the past)
+        // in this way, a farmer who was best performing and now is not can visualize his/her old
+        // replies, if there were any
+        return $this->best_performing || !($this->getReceivedRequests()->isEmpty());
+    }
 }

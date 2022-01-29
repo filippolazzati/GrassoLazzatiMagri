@@ -22,14 +22,15 @@ class HelpRequestRepository extends ServiceEntityRepository
         parent::__construct($registry, HelpRequest::class);
     }
 
-    public function createHelpRequest(Farmer $author, User $receiver, string $title, string $text) : HelpRequest {
+    public function createHelpRequest(Farmer $author, User $receiver, string $title, string $text): HelpRequest
+    {
         $helpRequest = new HelpRequest(new \DateTime(), $title, $text, $author, $receiver);
         $this->getEntityManager()->persist($helpRequest);
         $this->getEntityManager()->flush();
         return $helpRequest;
     }
 
-    public function getHelpRequestsFromFarmerQuery(Farmer $author) : \Doctrine\ORM\Query
+    public function getHelpRequestsFromFarmerQuery(Farmer $author): \Doctrine\ORM\Query
     {
         return $this->getEntityManager()->createQuery(
             'SELECT req 
@@ -39,7 +40,8 @@ class HelpRequestRepository extends ServiceEntityRepository
         )->setParameter('author', $author);
     }
 
-    public function getMostRecentHelpRequestFromFarmer(Farmer $author) : HelpRequest {
+    public function getMostRecentHelpRequestFromFarmer(Farmer $author): HelpRequest
+    {
         // TODO: change to nested query
         $maxTimestamp = $this->getEntityManager()->createQuery(
             'SELECT MAX(req.timestamp)
@@ -51,7 +53,34 @@ class HelpRequestRepository extends ServiceEntityRepository
                 FROM App\Entity\HelpRequest req
                 WHERE (req.author = :author) AND (req.timestamp = :max_timestamp)'
         )->setParameter('author', $author)
-        ->setParameter('max_timestamp', $maxTimestamp)
-        ->getSingleResult();
+            ->setParameter('max_timestamp', $maxTimestamp)
+            ->getSingleResult();
+    }
+
+    public function getHelpRequestsToUserQuery(User $receiver): \Doctrine\ORM\Query
+    {
+        return $this->getEntityManager()->createQuery(
+            'SELECT req 
+                 FROM App\Entity\HelpRequest req
+                 WHERE req.receiver = :receiver
+                 ORDER BY req.timestamp DESC '
+        )->setParameter('receiver', $receiver);
+    }
+
+    public function getMostRecentHelpRequestToUser(User $receiver): HelpRequest
+    {
+        // TODO: change to nested query
+        $maxTimestamp = $this->getEntityManager()->createQuery(
+            'SELECT MAX(req.timestamp)
+                 FROM App\Entity\HelpRequest req
+                 WHERE req.receiver = :receiver'
+        )->setParameter('receiver', $receiver)->getScalarResult();
+        return $this->getEntityManager()->createQuery(
+            'SELECT req
+                FROM App\Entity\HelpRequest req
+                WHERE (req.receiver = :receiver) AND (req.timestamp = :max_timestamp)'
+        )->setParameter('receiver', $receiver)
+            ->setParameter('max_timestamp', $maxTimestamp)
+            ->getSingleResult();
     }
 }
