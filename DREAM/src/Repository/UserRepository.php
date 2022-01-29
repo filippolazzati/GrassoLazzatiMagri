@@ -38,7 +38,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->_em->flush();
     }
 
-    public function getBestPerformingFarmersExcept(Farmer $farmer) {
+    public function getBestPerformingFarmersExcept(Farmer $farmer) : array {
         return $this->getEntityManager()->createQuery(
             'SELECT f
                   FROM App\Entity\Farmer f 

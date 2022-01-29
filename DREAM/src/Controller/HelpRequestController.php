@@ -75,12 +75,19 @@ class HelpRequestController extends \Symfony\Bundle\FrameworkBundle\Controller\A
             throw new AssertionError();
         }
 
+        $errorMessage = null;
+
         // create the form for creating a new help request
         if (strcmp($type, 'agronomist') == 0) { // type = agronomist
             $experts = $farmer->getFarm()->getArea()->getAgronomists()->toArray();
+            if (empty($experts)) {
+                $errorMessage = 'Sorry, there are not agronomists in your area. Try a request to a best-performing farmer.';
+            }
         } else { // type = best_farmer
             $experts = $this->em->getRepository(User::class)->getBestPerformingFarmersExcept($farmer);
+            $errorMessage = 'Sorry, there are not any best-performing farmers at the moment. Try a request to an agronomist';
         }
+
         $options = array('experts' => $experts);
         $form = $this->createForm(NewHelpRequestType::class, null, $options);
 
@@ -96,6 +103,7 @@ class HelpRequestController extends \Symfony\Bundle\FrameworkBundle\Controller\A
         }
         return $this->render('myrequests/new_request.html.twig', [
             'form' => $form->createView(),
+            'error_message' => $errorMessage
         ]);
     }
 

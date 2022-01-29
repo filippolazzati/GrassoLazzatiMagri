@@ -3,5 +3,9 @@
 {% block title %}New Help Request{% endblock %}
 
 {% block content %}
+    {% if error_message is null  %}
     {{ form(form) }}
+    {% else %}
+        {{ error_message }}
+    {% endif %}
 {% endblock %}
