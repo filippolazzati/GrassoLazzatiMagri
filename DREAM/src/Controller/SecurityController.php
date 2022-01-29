@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Agronomist;
 use App\Entity\Farm;
 use App\Entity\Farmer;
 use App\Form\ProfileType;

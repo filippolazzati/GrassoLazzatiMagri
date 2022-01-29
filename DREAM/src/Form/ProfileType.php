@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Agronomist;
 use App\Entity\Area;
 use App\Entity\Farmer;
 use App\Entity\User;
@@ -37,6 +38,12 @@ class ProfileType extends AbstractType
                 ])
                 ->add('farmCity', TextType::class, ['mapped' => false])
                 ->add('farmStreet', TextType::class, ['required' => false, 'mapped' => false]);
+        }
+        if($entity instanceof Agronomist) {
+            $builder
+                ->add('area', EntityType::class, [
+                    'class' => Area::class
+                ]);
         }
 
         $builder->add('submit', SubmitType::class, ['label' => 'Save']);
