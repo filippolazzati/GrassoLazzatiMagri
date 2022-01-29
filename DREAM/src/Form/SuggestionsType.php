@@ -38,7 +38,8 @@ class SuggestionsType extends AbstractType
                 'constraints' => [new Positive()],
                 'required' => $type === 'crop',
             ])
-            ->add('search', SubmitType::class, ['label' => 'Go']);
-
+            ->add('search', SubmitType::class, [
+                'label' => 'Go',
+            ]);
     }
 }
