@@ -221,4 +221,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function isFarmer(): bool
+    {
+        return $this instanceof Farmer;
+    }
+
+    public function isAgronomist() : bool
+    {
+        return $this instanceof Agronomist;
+    }
 }
