@@ -16,3 +16,5 @@
 ###< phpunit/phpunit ###
 
 node_modules
+
+src/Controller/suggestions/sample.csv
