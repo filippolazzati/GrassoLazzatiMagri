@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\WeatherReport;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -31,10 +32,10 @@ class WeatherReportRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param $month
-     * @param $day
+     * @param $date
      * @param $city
      * @return WeatherReport with the specified city and the specified date per month
+     * @throws NonUniqueResultException
      */
     public function findOneByMonth($date, $city)
     {
@@ -45,8 +46,7 @@ class WeatherReportRepository extends ServiceEntityRepository
             ->setParameter('city', $city)
             ->setMaxResults(1)
             ->getQuery()
-            ->getResult()
-            ;
+            ->getOneOrNullResult();
     }
 
     // /**

@@ -3,17 +3,11 @@
 {% block title %}Suggestions{% endblock %}
 
 {% block content %}
-    Select if you want a suggestion about what <b>fertilizer</b> to use (and in that case insert into data the crop (e.g. potatoes) you want to fertilize) or about the <b>crop</b> to plan (and in that case insert into data the size of the area to crop).
-    <p></p> {# to add space between text and the form. #}
-    {{ form(form) }}
-    {% if not_inserted_yet == false %}
-    {% if error %}
-        <div class="alert alert-danger my-3">{{ error_message }}</div>
-    {% endif %}
-    {% endif %}
+    <p>
+        These suggestions are generated automatically, so be careful when using them.
+        Higher reliability means higher expected results from that choice.
+    </p>
 
-    {% if error == false %}
-        These suggestions are generated automatically, so be careful when using them. Higher reliability means higher expected results from that choice.
     <table class="table table-hover mt-4">
         <thead>
         <tr>
@@ -23,7 +17,7 @@
         </tr>
         </thead>
         <tbody>
-       {% for suggestion in pagination %}
+        {% for suggestion in pagination %}
             <tr>
                 <td class="align-middle">
                     {{ suggestion.number }}
@@ -43,8 +37,6 @@
                 </td>
             </tr>
         {% endif %}
-       {% endif %}
         </tbody>
     </table>
-
 {% endblock %}

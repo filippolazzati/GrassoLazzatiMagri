@@ -34,10 +34,18 @@ class ProfileType extends AbstractType
             $builder
                 ->add('farmArea', EntityType::class, [
                     'class' => Area::class,
-                    'mapped' => false
+                    'mapped' => false,
+                    'data' => $builder->getData()?->getFarm()?->getArea(),
                 ])
-                ->add('farmCity', TextType::class, ['mapped' => false])
-                ->add('farmStreet', TextType::class, ['required' => false, 'mapped' => false]);
+                ->add('farmCity', TextType::class, [
+                    'mapped' => false,
+                    'data' => $builder->getData()?->getFarm()?->getCity(),
+                ])
+                ->add('farmStreet', TextType::class, [
+                    'required' => false,
+                    'mapped' => false,
+                    'data' => $builder->getData()?->getFarm()?->getStreet(),
+                ]);
         }
         if($entity instanceof Agronomist) {
             $builder

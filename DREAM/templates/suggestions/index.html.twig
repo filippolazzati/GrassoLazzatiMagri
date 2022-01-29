@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Suggestions{% endblock %}
+
+{% block content %}
+    <p>
+        Select if you want a suggestion about what <b>fertilizer</b> to use (and in that case choose which crop you want
+        to fertilize) or about the <b>crop</b> to plant (and in that case insert the size of the area to crop).
+    </p>
+
+    {% if app.user.farm.city %}
+        {{ form_start(form) }}
+        <div>{{ form_row(form.type) }}</div>
+        <div id="suggestion-form-crop-wrap">{{ form_row(form.crop) }}</div>
+        <div id="suggestion-form-area-wrap">{{ form_row(form.area) }}</div>
+        {{ form_end(form) }}
+    {% else %}
+        <div class="alert alert-warning">
+            Please enter a farm city in your profile to use suggestions.
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const suggestionSelect = document.getElementById('suggestions_type');
+            const cropWrap = document.getElementById('suggestion-form-crop-wrap');
+            const areaWrap = document.getElementById('suggestion-form-area-wrap');
+
+            function updateFormVisibility() {
+                const val = suggestionSelect.value
+                cropWrap.style.display = val === 'fertilizer' ? 'block' : 'none';
+                document.getElementById('suggestions_crop').required = val === 'fertilizer';
+                areaWrap.style.display = val === 'crop' ? 'block' : 'none';
+                document.getElementById('suggestions_area').required = val === 'crop';
+            }
+
+            suggestionSelect.addEventListener('change', () => updateFormVisibility());
+            updateFormVisibility();
+        })
+    </script>
+{% endblock %}
