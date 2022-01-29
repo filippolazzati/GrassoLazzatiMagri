@@ -13,36 +13,35 @@
         <thead>
         <tr>
             <th style="width: 10%">Number</th>
-            <th style="width: 60%">Suggestion</th>
-            <th style="width: 30%">Reason</th>
+            <th style="width: 10%">Suggestion</th>
+            <th style="width: 40%">Reliability</th>
+            <th style="width: 30%">Type</th>
         </tr>
         </thead>
         <tbody>
-   {#     {% for thread in pagination %}
-            <tr data-href="{{ path('forum_thread_view', {thread: thread.id}) }}">
+       {% for suggestion in pagination %}
+            <tr>
                 <td class="align-middle">
-                    <div class="d-flex align-items-center">
-                        <img src="{{ thread.author.avatarUrl }}" alt="{{ thread.author.fullName }}"
-                             class="rounded-circle" style="width: 32px; height: 32px;">
-                        <strong class="d-block ms-2">{{ thread.author.fullName }}</strong>
-                    </div>
+                    {{ suggestion.number }}
                 </td>
                 <td class="align-middle">
-                    {{ thread.title }}
+                    {{ suggestion.data }}
                 </td>
                 <td class="align-middle">
-                    {{ thread.createdAt|date('d/m/Y H:i') }}
+                    {{ suggestion.reliability }}%
+                </td>
+                <td class="align-middle">
+                    {{suggestion.type}}
                 </td>
             </tr>
         {% endfor %}
         {% if pagination.totalItemCount == 0 %}
             <tr>
                 <td colspan="3" class="text-center py-3">
-                    There are currently no threads.
-                    <a href="{{ path('forum_thread_create') }}">Create the first one!</a>
+                    There are currently no suggestions.
                 </td>
             </tr>
-        {% endif %}#}
+        {% endif %}
         </tbody>
     </table>
 
