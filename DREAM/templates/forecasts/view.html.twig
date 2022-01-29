@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Weather Forecasts{% endblock %}
+
+{% block content %}
+    Select the city for which you want to visualize the forecasts.
+    <p></p> {# to add space between text and the form. #}
+    {{ form(form) }}
+
+    <table class="table table-hover mt-4">
+        <thead>
+        <tr>
+            <th style="width: 10%">Date</th>
+            <th style="width: 20%">Weather</th>
+            <th style="width: 8%">T_max</th>
+            <th style="width: 8%">T_min</th>
+            <th style="width: 8%">T_avg</th>
+            <th style="width: 8%">rain</th>
+            <th style="width: 13%">Wind speed</th>
+            <th style="width: 10%">Wind direction</th>
+            <th style="width: 10%">Humidity</th>
+            <th style="width: 15%">pressure</th>
+        </tr>
+        </thead>
+        <tbody>
+       {% for forecast in pagination %}
+            <tr>
+                <td class="align-middle">
+                    {{ forecast.date }}
+                </td>
+                <td class="align-middle">
+                    {{ forecast.weather }}
+                </td>
+                <td class="align-middle">
+                    {{ forecast.t_max }}°C
+                </td>
+                <td class="align-middle">
+                    {{ forecast.t_min }}°C
+                </td>
+                <td class="align-middle">
+                    {{ forecast.t_avg }}°C
+                </td>
+                <td class="align-middle">
+                    {{ forecast.rain_mm }}mm
+                </td>
+                <td class="align-middle">
+                    {{ forecast.windSpeed }}km/h
+                </td>
+                <td class="align-middle">
+                    {{ forecast.windDirection }}
+                </td>
+                <td class="align-middle">
+                    {{ forecast.humidity }}%
+                </td>
+                <td class="align-middle">
+                    {{ forecast.pressure }}mbar
+                </td>
+            </tr>
+        {% endfor %}
+        {% if pagination.totalItemCount == 0 %}
+            <tr>
+                <td colspan="3" class="text-center py-3">
+                    There are currently no forecasts for this city.
+                </td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+
+{% endblock %}
