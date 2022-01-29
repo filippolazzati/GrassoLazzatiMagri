@@ -8,8 +8,6 @@ class Suggestion
 {
     private $data;
 
-    private $type;
-
     private $number;
 
     private $reliability;
@@ -17,14 +15,12 @@ class Suggestion
     /**
      * Suggestion constructor.
      * @param $data
-     * @param $type
      * @param $number
      * @param $reliability
      */
-    public function __construct($data, $type, $number, $reliability)
+    public function __construct($data, $number, $reliability)
     {
         $this->data = $data;
-        $this->type = $type;
         $this->number = $number;
         $this->reliability = $reliability;
     }
@@ -77,22 +73,5 @@ class Suggestion
     {
         $this->data = $data;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param mixed $type
-     */
-    public function setType($type): void
-    {
-        $this->type = $type;
-    }
-
 
 }

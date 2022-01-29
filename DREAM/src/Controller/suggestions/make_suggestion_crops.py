@@ -17,39 +17,40 @@ def trunc(values, decs=0):
     return np.trunc(values*10**decs)/(10**decs)
 
 def convert_label_to_number(label):
+  # ['potatoes', 'tomatoes', 'salad', 'onions', 'radishes', 'cucumber', 'cauliflower']
   number = -1
-  if label == 'Ammonium chloride':
+  if label == 'potatoes':
     number = 0
-  if label == 'Ammonium sulphate':
+  if label == 'tomatoes':
     number = 1
-  if label == 'CAN':
+  if label == 'salad':
     number = 2
-  if label == 'DAP':
+  if label == 'onions':
     number = 3
-  if label == 'NP / NPK complexes':
+  if label == 'radishes':
     number = 4
-  if label == 'SSP':
+  if label == 'cucumber':
     number = 5
-  if label == 'Urea':
+  if label == 'cauliflower':
     number = 6
   return number
 
 def convert_number_to_label(number):
   label = ''
   if number == 0:
-    label = 'Ammonium chloride'
+    label = 'potatoes'
   if number == 1:
-    label = 'Ammonium sulphate'
+    label = 'tomatoes'
   if number == 2:
-    label = 'CAN'
+    label = 'salad'
   if number == 3:
-    label = 'DAP'
+    label = 'onions'
   if number == 4:
-    label = 'NP / NPK complexes'
+    label = 'radishes'
   if number == 5:
-    label = 'SSP'
+    label = 'cucumber'
   if number == 6:
-    label = 'Urea'
+    label = 'cauliflower'
   return label
 
 def direction_to_number(label):
@@ -93,37 +94,17 @@ def weather_to_number(label):
     number = 7
   return number
 
-def crop_to_number(label):
-  # ['potatoes', 'tomatoes', 'salad', 'onions', 'radishes', 'cucumber', 'cauliflower']
-  number = -1
-  if label == 'potatoes':
-    number = 0
-  if label == 'tomatoes':
-    number = 1
-  if label == 'salad':
-    number = 2
-  if label == 'onions':
-    number = 3
-  if label == 'radishes':
-    number = 4
-  if label == 'cucumber':
-    number = 5
-  if label == 'cauliflower':
-    number = 6
-  return number
-
 # import the params
 params = list()
 for i in range(6):
-    params.append(np.loadtxt('../src/Controller/suggestions/params-mean-std-fertilizers/params'+str(i)+'.csv', delimiter=','))
-data_mean = np.loadtxt('../src/Controller/suggestions/params-mean-std-fertilizers/mean.csv', delimiter=',')
-data_std = np.loadtxt('../src/Controller/suggestions/params-mean-std-fertilizers/std.csv', delimiter=',')
+    params.append(np.loadtxt('../src/Controller/suggestions/params-mean-std-crops/params'+str(i)+'.csv', delimiter=','))
+data_mean = np.loadtxt('../src/Controller/suggestions/params-mean-std-crops/mean.csv', delimiter=',')
+data_std = np.loadtxt('../src/Controller/suggestions/params-mean-std-crops/std.csv', delimiter=',')
 
 # import the sample
 sample = pd.read_csv('../src/Controller/suggestions/sample.csv', header=None)
 
 # convert sample to numeric
-sample.iloc[0,0] = crop_to_number(sample.iloc[0,0])
 w = 1 # index for weather
 d = 7 # index for directions
 for i in range(24):
@@ -145,9 +126,9 @@ suggestion = suggestion * 100
 suggestion = np.sort(suggestion)[::-1]
 
 # print the suggestions (they come back to SuggestionsController.php)
-fertilizers = ['Ammonium chloride', 'Ammonium sulphate', 'CAN', 'DAP', 'NP / NPK complexes', 'SSP', 'Urea']
+crops = ['potatoes', 'tomatoes', 'salad', 'onions', 'radishes', 'cucumber', 'cauliflower']
 for i in range(len(suggestion)):
-    print(fertilizers[i])
+    print(crops[i])
     print(',')
     print(round(suggestion[i],1))
     if i is not len(suggestion)-1:

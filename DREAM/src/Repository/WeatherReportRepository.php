@@ -30,6 +30,25 @@ class WeatherReportRepository extends ServiceEntityRepository
             ;
     }
 
+    /**
+     * @param $month
+     * @param $day
+     * @param $city
+     * @return WeatherReport with the specified city and the specified date per month
+     */
+    public function findOneByMonth($date, $city)
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.date = :date')
+            ->setParameter('date', $date)
+            ->andWhere('r.city = :city')
+            ->setParameter('city', $city)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     // /**
     //  * @return WeatherReport[] Returns an array of WeatherReport objects
     //  */
