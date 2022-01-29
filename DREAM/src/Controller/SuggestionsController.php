@@ -74,7 +74,7 @@ class SuggestionsController extends AbstractController
 
         // write data to file to find the suggestion
         $sampleFile = fopen("../src/Controller/suggestions/sample.csv", "wb");
-        fwrite($sampleFile, $crop); // use the
+        fwrite($sampleFile, $type === 'fertilizer' ? $crop : $area);
         foreach ($reports as $report) {
             fwrite($sampleFile, ',');
             fwrite($sampleFile, $report->getWeather() . ',');
