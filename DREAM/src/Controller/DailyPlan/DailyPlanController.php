@@ -29,5 +29,11 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
 
         return $this->render('dailyplan/index.html.twig', ['working_days' => $workingDays]);
     }
+
+    #[Route('/daily_plan{date}', name: 'date', methods: ['GET', 'POST'])]
+    public function dailyPlan(Request $request, \DateTime $date) : \Symfony\Component\HttpFoundation\Response
+    {
+        return $this->render('dailyplan/daily_plan.html.twig', []);
+    }
 }
 

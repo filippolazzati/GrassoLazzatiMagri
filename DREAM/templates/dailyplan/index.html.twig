@@ -6,7 +6,9 @@
     <ul>
         {% for working_day in working_days %}
             <li>
-                {{ working_day | date('Y-m-d') }}
+                <a href = {{ path('daily_plan_date', {date : (working_day.format('Y-m-d')) })}}>
+                    {{ working_day | date('Y-m-d') }}
+                </a>
             </li>
         {% endfor %}
     </ul>
