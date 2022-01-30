@@ -40,6 +40,13 @@
                         </a>
                     </li>
                 {% endif %}
+                {% if app.user.agronomist %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if app.request.attributes.get('_route') starts with 'daily_plan' %}active{% endif %}" href="{{ path('daily_plan_index') }}">
+                            Daily Plan
+                        </a>
+                    </li>
+                {% endif %}
             </ul>
             <div class="dropdown text-end">
                 <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">

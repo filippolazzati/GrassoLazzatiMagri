@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Daily Plan Dates{% endblock %}
+
+{% block content %}
+    <ul>
+        {% for working_day in working_days %}
+            <li>
+                {{ working_day | date('Y-m-d') }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
