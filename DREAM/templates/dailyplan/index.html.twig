@@ -6,9 +6,16 @@
     <ul>
         {% for working_day in working_days %}
             <li>
-                <a href = {{ path('daily_plan_date', {date : (working_day.format('Y-m-d')) })}}>
-                    {{ working_day | date('Y-m-d') }}
-                </a>
+                {{ working_day | date('Y-m-d') }}
+                    {% if daily_plans[(working_day.format('Y-m-d') )]  is not null%}
+                        <a href = {{ path('daily_plan_date', {daily_plan : daily_plans[(working_day.format('Y-m-d'))] })}}>
+                            View Daily Plan
+                        </a>
+                    {% else %}
+                        <a href = {{ path('daily_plan_create', {date : (working_day.format('Y-m-d')) })}}>
+                            Create Daily Plan
+                        </a>
+                    {% endif %}
             </li>
         {% endfor %}
     </ul>

@@ -9,40 +9,17 @@ use Doctrine\ORM\Mapping as ORM;
 class FarmVisit
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\ManyToOne(targetEntity: DailyPlan::class, inversedBy: 'farmVisits')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $dailyPlan;
 
-    #[ORM\Column(type: 'date')]
-    private $date;
-
+    #[ORM\Id]
     #[ORM\Column(type: 'time')]
     private $startTime;
-
-    #[ORM\ManyToOne(targetEntity: Agronomist::class)]
-    #[ORM\JoinColumn(nullable: false)]
-    private $agronomist;
 
     #[ORM\ManyToOne(targetEntity: Farm::class)]
     #[ORM\JoinColumn(nullable: false)]
     private $farm;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getDate(): ?\DateTimeInterface
-    {
-        return $this->date;
-    }
-
-    public function setDate(\DateTimeInterface $date): self
-    {
-        $this->date = $date;
-
-        return $this;
-    }
 
     public function getStartTime(): ?\DateTimeInterface
     {
@@ -56,18 +33,6 @@ class FarmVisit
         return $this;
     }
 
-    public function getAgronomist(): ?Agronomist
-    {
-        return $this->agronomist;
-    }
-
-    public function setAgronomist(?Agronomist $agronomist): self
-    {
-        $this->agronomist = $agronomist;
-
-        return $this;
-    }
-
     public function getFarm(): ?Farm
     {
         return $this->farm;
@@ -76,6 +41,18 @@ class FarmVisit
     public function setFarm(?Farm $farm): self
     {
         $this->farm = $farm;
+
+        return $this;
+    }
+
+    public function getDailyPlan(): ?DailyPlan
+    {
+        return $this->dailyPlan;
+    }
+
+    public function setDailyPlan(?DailyPlan $dailyPlan): self
+    {
+        $this->dailyPlan = $dailyPlan;
 
         return $this;
     }

@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Area;
 use App\Entity\FarmVisit;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -19,32 +20,28 @@ class FarmVisitRepository extends ServiceEntityRepository
         parent::__construct($registry, FarmVisit::class);
     }
 
-    // /**
-    //  * @return FarmVisit[] Returns an array of FarmVisit objects
-    //  */
     /*
-    public function findByExampleField($value)
+    public function getMinNumberOfVisitsInYearBefore(Area $area, \DateTime $date)
     {
-        return $this->createQueryBuilder('f')
-            ->andWhere('f.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('f.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        // TODO: to avoid inefficiency in queries, a view would be necessary
+        $numberOfVisitsInLastYear = $this->_em->createQuery(
+            'SELECT COUNT(fv)
+                 FROM App\Entity\FarmVisit fv
+                 WHERE fv.dailyPlan.date >= :date AND fv.farm.area = :area
+                 GROUP BY fv.farm'
+        )->setParameter('date', $date->sub(new \DateInterval('P1Y')))
+            ->setParameter('area', $area)
+            ->getResult();
 
-    /*
-    public function findOneBySomeField($value): ?FarmVisit
-    {
-        return $this->createQueryBuilder('f')
-            ->andWhere('f.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        return min($numberOfVisitsInLastYear);
     }
-    */
+
+    public function getFarmsWithNumberOfVisits(Area $area, int $numberOfVisits)
+    {
+        return $this->_em->createQuery(
+            'SELECT fv.farm
+                 FROM App\Entity\FarmVisit
+                 WHERE fv.farm.area = :area and '
+        )
+    }*/
 }
