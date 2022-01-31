@@ -45,13 +45,8 @@ class WeatherForecastsController extends AbstractController
         $forecastsRepo = $this->em->getRepository(WeatherForecast::class);
         $forecasts = $forecastsRepo->findAllForecasts($city);
 
-        // rewrite the forecasts to convert datetime objects to string
-        $forecasts_to_show = array();
-        foreach($forecasts as $forecast){
-            array_push($forecasts_to_show, new Forecast(($forecast->getDate())->format('Y-m-d'),$forecast->getWeather(), $forecast->getTMax(),$forecast->getTMin(),$forecast->getTAvg(),$forecast->getRainMm(), $forecast->getWindSpeed(), $forecast->getWindDirection(), $forecast->getHumidity(), $forecast->getPressure() ));
-        }
         // paginate and show the results
-        $pagination = $this->paginator->paginate($forecasts_to_show, $request->query->getInt('page', 1), 25);
+        $pagination = $this->paginator->paginate($forecasts, $request->query->getInt('page', 1), 25);
         return $this->render('forecasts/view.html.twig', ['pagination' => $pagination, 'form' => $form->createView()]);
 
     }
