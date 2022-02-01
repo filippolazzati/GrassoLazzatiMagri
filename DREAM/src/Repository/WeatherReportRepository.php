@@ -12,6 +12,9 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method WeatherReport|null findOneBy(array $criteria, array $orderBy = null)
  * @method WeatherReport[]    findAll()
  * @method WeatherReport[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ *
+ * This class represents a repository of WeatherReport objects to interact with. It provides some methods
+ * to query the repository.
  */
 class WeatherReportRepository extends ServiceEntityRepository
 {
@@ -20,22 +23,9 @@ class WeatherReportRepository extends ServiceEntityRepository
         parent::__construct($registry, WeatherReport::class);
     }
 
-    public function findAllPastReports($city): array
-    {
-        return $this->createQueryBuilder('w')
-            ->andWhere('w.city = :city')
-            ->setParameter('city', $city)
-            ->setMaxResults(24)
-            ->getQuery()
-            ->getResult()
-            ;
-    }
-
     /**
-     * @param $date
-     * @param $city
-     * @return WeatherReport with the specified city and the specified date per month
-     * @throws NonUniqueResultException
+     * It returns the WeatherReport that matches the date passed in input and
+     * that is relative to the city passed in input.
      */
     public function findOneByMonth($date, $city)
     {
@@ -48,33 +38,4 @@ class WeatherReportRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
-
-    // /**
-    //  * @return WeatherReport[] Returns an array of WeatherReport objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('w')
-            ->andWhere('w.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('w.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?WeatherReport
-    {
-        return $this->createQueryBuilder('w')
-            ->andWhere('w.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

@@ -3,13 +3,28 @@
 
 namespace App\Controller\suggestions;
 
-
+/**
+ * Class Suggestion
+ * @package App\Controller\suggestions
+ *
+ * Helper class used to show the suggestions to the user. It contains
+ * three attributes that represents the fields that will be shown to the user.
+ */
 class Suggestion
 {
+    /**
+     * It represents the out-and-out suggestion to the user.
+     */
     private $data;
 
+    /**
+     * A number representing the "ranking" of this suggestion.
+     */
     private $number;
 
+    /**
+     * The reliability of the suggestion, i.e. the output of the last layer of the net.
+     */
     private $reliability;
 
     /**

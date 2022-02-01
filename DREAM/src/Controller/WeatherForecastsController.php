@@ -22,10 +22,17 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Service\Attribute\Required;
 
+/**
+ * Class WeatherForecastsController
+ * @package App\Controller
+ *
+ * This controller receives the request of the user (farmer or agronomist) to view the weather forecasts.
+ * It gets the city, queries the database (since it is a demo, but it should connect to Telangana website) and
+ * renders the template forecasts/view.html.twig to show the weather forecasts for the selected city.
+ */
 #[Route('/forecasts', name: 'forecasts_')]
 class WeatherForecastsController extends AbstractController
 {
-
     #[Required] public EntityManagerInterface $em;
     #[Required] public PaginatorInterface $paginator;
 

@@ -3,11 +3,16 @@
 
 namespace App\Controller\forecasts;
 
-
+/**
+ * Class ForecastsChoice
+ * @package App\Controller\forecasts
+ *
+ * This class is used to retrieve the city data from the form.
+ */
 class ForecastsChoice
 {
     /**
-     * the city of the weather forecast to visualize
+     * The city of the weather forecast to visualize.
      */
     private $city;
 
@@ -26,8 +31,4 @@ class ForecastsChoice
     {
         $this->city = $city;
     }
-
-
-
-
 }
