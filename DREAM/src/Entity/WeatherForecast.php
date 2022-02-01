@@ -26,16 +26,16 @@ class WeatherForecast
     private $weather;
 
     #[ORM\Column(type: 'integer')]
-    private $t_max;
+    private $tMax;
 
     #[ORM\Column(type: 'integer')]
-    private $t_min;
+    private $tMin;
 
     #[ORM\Column(type: 'integer')]
-    private $t_avg;
+    private $tAvg;
 
     #[ORM\Column(type: 'integer')]
-    private $rain_mm;
+    private $rainMm;
 
     // km/h
     #[ORM\Column(type: 'float')]
@@ -59,10 +59,10 @@ class WeatherForecast
         $this->date = $date;
         $this->city = $city;
         $this->weather = $weather;
-        $this->t_max = $t_max;
-        $this->t_min = $t_min;
-        $this->t_avg = $t_avg;
-        $this->rain_mm = $rain_mm;
+        $this->tMax = $t_max;
+        $this->tMin = $t_min;
+        $this->tAvg = $t_avg;
+        $this->rainMm = $rain_mm;
         $this->windSpeed = $windSpeed;
         $this->windDirection = $windDirection;
         $this->humidity = $humidity;
@@ -113,48 +113,48 @@ class WeatherForecast
 
     public function getTMax(): ?int
     {
-        return $this->t_max;
+        return $this->tMax;
     }
 
-    public function setTMax(int $t_max): self
+    public function setTMax(int $tMax): self
     {
-        $this->t_max = $t_max;
+        $this->tMax = $tMax;
 
         return $this;
     }
 
     public function getTMin(): ?int
     {
-        return $this->t_min;
+        return $this->tMin;
     }
 
-    public function setTMin(int $t_min): self
+    public function setTMin(int $tMin): self
     {
-        $this->t_min = $t_min;
+        $this->tMin = $tMin;
 
         return $this;
     }
 
     public function getTAvg(): ?int
     {
-        return $this->t_avg;
+        return $this->tAvg;
     }
 
-    public function setTAvg(int $t_avg): self
+    public function setTAvg(int $tAvg): self
     {
-        $this->t_avg = $t_avg;
+        $this->tAvg = $tAvg;
 
         return $this;
     }
 
     public function getRainMm(): ?int
     {
-        return $this->rain_mm;
+        return $this->rainMm;
     }
 
-    public function setRainMm(int $rain_mm): self
+    public function setRainMm(int $rainMm): self
     {
-        $this->rain_mm = $rain_mm;
+        $this->rainMm = $rainMm;
 
         return $this;
     }
