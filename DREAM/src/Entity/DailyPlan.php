@@ -25,7 +25,10 @@ class DailyPlan
     #[ORM\Column(type: 'string', length: 10)]
     private $state;
 
-    #[ORM\OneToMany(mappedBy: 'dailyPlan', targetEntity: FarmVisit::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'dailyPlan',
+        targetEntity: FarmVisit::class,
+        cascade: ['persist', 'remove', 'merge'],
+        orphanRemoval: true)]
     private $farmVisits;
 
     public function __construct()

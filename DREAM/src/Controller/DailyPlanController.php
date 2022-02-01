@@ -1,9 +1,12 @@
 <?php
 
-namespace App\Controller\DailyPlan;
+namespace App\Controller;
 
+use App\DailyPlan\Calendar;
+use App\DailyPlan\DailyPlanService;
 use App\Entity\Agronomist;
 use App\Entity\DailyPlan;
+use App\Entity\FarmVisit;
 use App\Form\DailyPlan\CreateDailyPlanType;
 use AssertionError;
 use Doctrine\ORM\EntityManagerInterface;
@@ -14,8 +17,6 @@ use Symfony\Contracts\Service\Attribute\Required;
 #[Route('/daily_plan', name: 'daily_plan_')]
 class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\AbstractController
 {
-    const MAX_VISITS = 8;
-
     #[Required] public EntityManagerInterface $em;
 
     #[Route('/dates', name: 'index', methods: ['GET'])]
@@ -43,7 +44,7 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
             ['working_days' => $workingDays, 'daily_plans' => $dailyPlans]);
     }
 
-    #[Route('/daily_plan/create{date}', name: 'create', methods: ['GET', 'POST'])]
+    #[Route('/daily_plan/create/{date}', name: 'create', methods: ['GET', 'POST'])]
     public function createDailyPlan(Request $request, \DateTime $date): \Symfony\Component\HttpFoundation\Response
     {
         // if the user is not an agronomist, error
@@ -53,7 +54,7 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
         }
 
         // create the form for new daily plan
-        $options = ['maxVisits' => self::MAX_VISITS, 'date' => $date->format('Y-m-d')];
+        $options = ['maxVisits' => DailyPlanService::MAX_VISITS_IN_A_DAY];
         $form = $this->createForm(CreateDailyPlanType::class, null, $options);
 
         $form->handleRequest($request);
@@ -62,13 +63,13 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
         if($form->isSubmitted() && $form->isValid()) {
             $formData = $form->getData();
             $numberOfVisits = $formData['numberOfVisits'];
-            $selectedDate = new \DateTime($formData['date']);
             // the form is valid if the number of visits is less than or equal MAX_VISITS and if the date is not
             // in the past
-            if ($numberOfVisits <= self::MAX_VISITS || $date > new \DateTime('yesterday')) {
+            if ($numberOfVisits <= DailyPlanService::MAX_VISITS_IN_A_DAY && $date > new \DateTime('yesterday')) {
                 // the daily plan can be created if the user has not already got a daily plan for that day
-                if (!$this->em->getRepository(DailyPlan::class)->hasDailyPlan($agronomist, $selectedDate)) {
-                    $dailyPla = $this->em->getRepository(DailyPlan::class)->createDailyPlan($agronomist, $selectedDate, $numberOfVisits);
+                if (!$this->em->getRepository(DailyPlan::class)->hasDailyPlan($agronomist, $date)) {
+                    $dpService = new DailyPlanService($this->em->getRepository(FarmVisit::class));
+                    $dailyPlan = $dpService->generateDailyPlan($agronomist, $date, $numberOfVisits);
                 }
             }
         }
@@ -76,7 +77,7 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
         return $this->render('dailyplan/create_daily_plan.html.twig', []);
     }
 
-    #[Route('/daily_plan{daily_plan}', name: 'date', methods: ['GET', 'POST'])]
+    #[Route('/daily_plan/{daily_plan}', name: 'date', methods: ['GET', 'POST'])]
     public function dailyPlan(Request $request, DailyPlan $daily_plan) : \Symfony\Component\HttpFoundation\Response
     {
         return $this->render('dailyplan/daily_plan.html.twig', []);

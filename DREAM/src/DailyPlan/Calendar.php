@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\DailyPlan;
+namespace App\DailyPlan;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -18,7 +18,7 @@ class Calendar
     public function __construct()
     {
         // TODO: move holidays.json to a resources directory
-        $this->nationalHolidays = (new ArrayCollection(json_decode(file_get_contents(__DIR__.'/holidays.json'))))
+        $this->nationalHolidays = (new ArrayCollection(json_decode(file_get_contents(__DIR__ . '/holidays.json'))))
             ->map(function ($value) {
                 return new \DateTime($value);
             });
