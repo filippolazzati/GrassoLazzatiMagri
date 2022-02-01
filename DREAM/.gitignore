@@ -18,3 +18,5 @@
 node_modules
 
 src/Controller/suggestions/sample.csv
+src/Command/sample_datasets/weather_forecasts.csv
+src/Command/sample_datasets/weather_reports.csv
