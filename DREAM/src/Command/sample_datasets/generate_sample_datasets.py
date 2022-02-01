@@ -4,66 +4,6 @@ from datetime import date
 import numpy as np
 from random import randint, uniform
 
-def direction_to_number(label):
-  # ['n', 's', 'e', 'o', 'ne', 'se', 'no', 'so']
-  number = -1
-  if label == 'n':
-    number = 0
-  if label == 's':
-    number = 1
-  if label == 'e':
-    number = 2
-  if label == 'o':
-    number = 3
-  if label == 'ne':
-    number = 4
-  if label == 'se':
-    number = 5
-  if label == 'no':
-    number = 6
-  if label == 'so':
-    number = 7
-  return number
-
-def weather_to_number(label):
-  number = -1
-  if label == 'sunny':
-    number = 0
-  if label == 'partially cloudy':
-    number = 1
-  if label == 'cloudy':
-    number = 2
-  if label == 'rainy':
-    number = 3
-  if label == 'foggy':
-    number = 4
-  if label == 'stormy':
-    number = 5
-  if label == 'tornado':
-    number = 6
-  if label == 'hurricane':
-    number = 7
-  return number
-
-def crop_to_number(label):
-  # ['potatoes', 'tomatoes', 'salad', 'onions', 'radishes', 'cucumber', 'cauliflower']
-  number = -1
-  if label == 'potatoes':
-    number = 0
-  if label == 'tomatoes':
-    number = 1
-  if label == 'salad':
-    number = 2
-  if label == 'onions':
-    number = 3
-  if label == 'radishes':
-    number = 4
-  if label == 'cucumber':
-    number = 5
-  if label == 'cauliflower':
-    number = 6
-  return number
-
 # date
 today = date.today()
 

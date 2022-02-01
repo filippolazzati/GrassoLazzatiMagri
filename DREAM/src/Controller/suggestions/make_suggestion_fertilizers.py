@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 
+# artificial neural network that implements the suggestion
 def ANN(x, params):
   W = params[0::2]
   b = params[1::2]
@@ -16,6 +17,7 @@ def ANN(x, params):
 def trunc(values, decs=0):
     return np.trunc(values*10**decs)/(10**decs)
 
+# some utility functions for moving between labels and numbers and vice versa
 def convert_label_to_number(label):
   number = -1
   if label == 'Ammonium chloride':

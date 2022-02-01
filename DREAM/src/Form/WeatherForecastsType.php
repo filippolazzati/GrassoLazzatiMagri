@@ -11,6 +11,12 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Class WeatherForecastsType
+ * @package App\Form
+ *
+ * It is the form used to get what the city for which the user wants to visualize the weather forecasts.
+ */
 class WeatherForecastsType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -18,6 +24,7 @@ class WeatherForecastsType extends AbstractType
         $builder
             ->add('city',  ChoiceType::class, [
                 'choices'  => [
+                    '' => 'null', // at the beginning, no forecast is shown
                     'Hyderabad' => 'Hyderabad', // return 'Hyderabad' if 'Hyderabad' is selected
                     'Warangal' => 'Warangal',
                     'Nizamabad' => 'Nizamabad',

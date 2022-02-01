@@ -22,10 +22,17 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Service\Attribute\Required;
 
+/**
+ * Class WeatherForecastsController
+ * @package App\Controller
+ *
+ * This controller receives the request of the user (farmer or agronomist) to view the weather forecasts.
+ * It gets the city, queries the database (since it is a demo, but it should connect to Telangana website) and
+ * renders the template forecasts/view.html.twig to show the weather forecasts for the selected city.
+ */
 #[Route('/forecasts', name: 'forecasts_')]
 class WeatherForecastsController extends AbstractController
 {
-
     #[Required] public EntityManagerInterface $em;
     #[Required] public PaginatorInterface $paginator;
 
@@ -45,13 +52,8 @@ class WeatherForecastsController extends AbstractController
         $forecastsRepo = $this->em->getRepository(WeatherForecast::class);
         $forecasts = $forecastsRepo->findAllForecasts($city);
 
-        // rewrite the forecasts to convert datetime objects to string
-        $forecasts_to_show = array();
-        foreach($forecasts as $forecast){
-            array_push($forecasts_to_show, new Forecast(($forecast->getDate())->format('Y-m-d'),$forecast->getWeather(), $forecast->getTMax(),$forecast->getTMin(),$forecast->getTAvg(),$forecast->getRainMm(), $forecast->getWindSpeed(), $forecast->getWindDirection(), $forecast->getHumidity(), $forecast->getPressure() ));
-        }
         // paginate and show the results
-        $pagination = $this->paginator->paginate($forecasts_to_show, $request->query->getInt('page', 1), 25);
+        $pagination = $this->paginator->paginate($forecasts, $request->query->getInt('page', 1), 25);
         return $this->render('forecasts/view.html.twig', ['pagination' => $pagination, 'form' => $form->createView()]);
 
     }
