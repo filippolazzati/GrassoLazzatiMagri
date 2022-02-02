@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\DailyPlan;
 
-use App\Repository\DailyPlanRepository;
+use App\DailyPlan\DailyPlanService;
+use App\Entity\Agronomist;
+use App\Repository\DailyPlan\DailyPlanRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,6 +12,10 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: DailyPlanRepository::class)]
 class DailyPlan
 {
+    const NEW = 'NEW';
+    const ACCEPTED = 'ACCEPTED';
+    const CONFIRMED = 'CONFIRMED';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -27,7 +33,7 @@ class DailyPlan
 
     #[ORM\OneToMany(mappedBy: 'dailyPlan',
         targetEntity: FarmVisit::class,
-        cascade: ['persist', 'remove', 'merge'],
+        cascade: ['persist', 'remove'],
         orphanRemoval: true)]
     private $farmVisits;
 
@@ -105,5 +111,20 @@ class DailyPlan
         }
 
         return $this;
+    }
+
+    public function isNew() : bool
+    {
+        return strcmp($this->state, self::NEW) == 0;
+    }
+
+    public function isAccepted() : bool
+    {
+        return strcmp($this->state, self::ACCEPTED) == 0;
+    }
+
+    public function isConfirmed() : bool
+    {
+        return strcmp($this->state, self::CONFIRMED) == 0;
     }
 }

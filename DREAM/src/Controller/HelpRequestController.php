@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Farmer;
-use App\Entity\HelpReply;
-use App\Entity\HelpRequest;
+use App\Entity\HelpRequest\HelpReply;
+use App\Entity\HelpRequest\HelpRequest;
 use App\Entity\User;
 use App\Form\HelpRequests\InsertFeedbackType;
 use App\Form\HelpRequests\NewHelpRequestType;
@@ -34,6 +34,11 @@ class HelpRequestController extends \Symfony\Bundle\FrameworkBundle\Controller\A
         $helpRequestsQuery = $this->em->getRepository(HelpRequest::class)->getHelpRequestsFromFarmerQuery($farmer);
         $pagination = $this->paginator->paginate($helpRequestsQuery, $request->query->getInt('page', 1), 20);
 
+        // if a help_request not belonging to the farmer has been selected, error
+        if ( !is_null($help_request) && !$help_request->getAuthor()->equals($farmer)) {
+            throw new AssertionError();
+        }
+
         // if no help request selected (parameter $help_request = null), show as a default the most recent one
         // if the farmer has no help requests, help_request is left to null
         if (is_null($help_request) && !$farmer->getHelpRequests()->isEmpty()) {
@@ -49,6 +54,10 @@ class HelpRequestController extends \Symfony\Bundle\FrameworkBundle\Controller\A
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
                 $formData = $form->getData();
+                // if the help_request does not to the farmer, error
+                if (!$help_request->getAuthor()->equals($farmer)) {
+                    throw new AssertionError();
+                }
                 $this->em->getRepository(HelpReply::class)->addFeedbackToReply($help_request, $formData['feedback']);
                 return $this->redirectToRoute('my_requests_index', ['help_request' => $help_request->getId()]);
             }
@@ -110,6 +119,15 @@ class HelpRequestController extends \Symfony\Bundle\FrameworkBundle\Controller\A
     #[Route('/confirmation_new_help_request{help_request}', name: 'confirmation_new_help_request', methods: ['GET'])]
     public function getConfirmPageForNewHelpRequest(Request $request, HelpRequest $help_request) : \Symfony\Component\HttpFoundation\Response
     {
+        // the user must be a farmer
+        $farmer = $this->getUser();
+        if (!($farmer instanceof Farmer)) {
+            throw new AssertionError();
+        }
+        // if the help_request does not to the farmer, error
+        if (!$help_request->getAuthor()->equals($farmer)) {
+            throw new AssertionError();
+        }
         return $this->render('myrequests/confirm_insert_request.html.twig', ['help_request' => $help_request]);
     }
 }

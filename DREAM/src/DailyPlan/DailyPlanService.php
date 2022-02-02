@@ -3,10 +3,12 @@
 namespace App\DailyPlan;
 
 use App\Entity\Agronomist;
-use App\Entity\DailyPlan;
-use App\Entity\FarmVisit;
-use App\Repository\FarmVisitRepository;
+use App\Entity\DailyPlan\DailyPlan;
+use App\Entity\DailyPlan\FarmVisit;
+use App\Entity\Farm;
+use App\Repository\DailyPlan\FarmVisitRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Knp\Component\Pager\Event\AfterEvent;
 
 class DailyPlanService
 {
@@ -14,7 +16,8 @@ class DailyPlanService
     const MIN_VISITS_IN_A_YEAR = 2;
     const MIN_VISITS_IN_A_MONTH_FOR_WORST_FARMERS = 1;
     const START_WORKDAY = '08:00';
-    const END_WORKDAY = '17:00';
+    const BEGIN_LUNCH_BREAK = '12:30';
+    const LAST_POSSIBLE_WORK_HOUR = '19:00';
     const WORKING_HOURS = 8;
     const MINUTES_PER_HOUR = 60;
 
@@ -34,7 +37,7 @@ class DailyPlanService
         }
 
         // date of last visit scheduled in the area
-        $dateOfLastVisit = $this->farmVisitRepository->getDateOfLastVisit($agronomist->getArea());
+        $dateOfLastVisit = $this->farmVisitRepository->getDateOfLastVisitToArea($agronomist->getArea());
 
         // farms with less than MIN_VISITS_IN_A_YEAR in the year before $dateOfLastVisit need to be visited
         $farmsToVisit = $this->farmVisitRepository->getFarmsWithNumberOfVisitsLessThan($agronomist->getArea(),
@@ -55,7 +58,7 @@ class DailyPlanService
             $dateOfLastVisit->sub(new \DateInterval('P1M')), $dateOfLastVisit,
             self::MIN_VISITS_IN_A_MONTH_FOR_WORST_FARMERS, $numberOfVisits, true);
 
-        $farmsToVisit = $this->mergeCollections($farmsToVisit, $farmsToAdd, $numberOfVisits);
+        $farmsToVisit = $this->addFarmsToVisit($farmsToVisit, $farmsToAdd, $numberOfVisits);
 
         // if the farms to visit are $numberOfVisits, create daily plan
         if ($farmsToVisit->count() == $numberOfVisits) {
@@ -71,9 +74,43 @@ class DailyPlanService
                   // uses < and not <=
             $farmsToAdd = $this->farmVisitRepository->getFarmsWithNumberOfVisitsLessThan($agronomist->getArea(),
                 $dateOfLastVisit->sub(new \DateInterval('P1Y')), $dateOfLastVisit, $i, $numberOfVisits, false);
-            $farmsToVisit = $this->mergeCollections($farmsToVisit, $farmsToAdd, $numberOfVisits);
+            $farmsToVisit = $this->addFarmsToVisit($farmsToVisit, $farmsToAdd, $numberOfVisits);
         }
         return $this->createDailyPlan($agronomist, $date, $farmsToVisit);
+    }
+
+    public function moveVisit(Agronomist $agronomist, DailyPlan $dailyPlan, FarmVisit $farmVisit, \DateTime $newStartHour) : void {
+        if (!$dailyPlan->getAgronomist()->equals($agronomist) || $dailyPlan->isConfirmed() ||
+                $newStartHour <= new \DateTime(self::START_WORKDAY) || $newStartHour >= new \DateTime(self::LAST_POSSIBLE_WORK_HOUR)) {
+            throw new \Exception('Operation "move visit" illegal');
+        }
+
+        $farmVisit->setStartTime($newStartHour);
+    }
+
+    public function addVisit(Agronomist $agronomist, DailyPlan $dailyPlan, Farm $farm, \DateTime $startHour)
+    {
+        if (!$dailyPlan->getAgronomist()->equals($agronomist) || $dailyPlan->isConfirmed() ||
+            $startHour <= new \DateTime(self::START_WORKDAY) || $startHour >= new \DateTime(self::LAST_POSSIBLE_WORK_HOUR) ||
+            $agronomist->getArea()->equals($farm->getArea())) {
+            throw new \Exception('Operation "add visit" illegal');
+        }
+
+        $farmVisit = new FarmVisit();
+        $farmVisit->setStartTime($startHour);
+        $farmVisit->setFarm($farm);
+        $dailyPlan->addFarmVisit($farmVisit);
+    }
+
+    public function removeVisit(Agronomist $agronomist, DailyPlan $dailyPlan, FarmVisit $farmVisit) {
+        if (!$dailyPlan->getAgronomist()->equals($agronomist) || $dailyPlan->isConfirmed() ||
+            !$dailyPlan->getFarmVisits()->exists(function ($key, $value) use ($farmVisit) {
+                return $value->equals($farmVisit);
+            }) || ($dailyPlan->isNew() && $this->isVisitNecessary($farmVisit))) {
+            throw new \Exception('Operation "remove visit" illegal');
+        }
+
+        $dailyPlan->removeFarmVisit($farmVisit);
     }
 
     private function createDailyPlan(Agronomist $agronomist, \DateTime $date, ArrayCollection $farms): DailyPlan
@@ -81,7 +118,7 @@ class DailyPlanService
         $dailyPlan = new DailyPlan();
         $dailyPlan->setAgronomist($agronomist);
         $dailyPlan->setDate($date);
-        $dailyPlan->setState('NEW');
+        $dailyPlan->setState(DailyPlan::NEW);
         $startingHour = new \DateTime(self::START_WORKDAY);
         // time in minutes between a visit and another one
         // visits are homogeneously distributed among the day, starting from 8:00 AM (travel time not considered)
@@ -89,7 +126,11 @@ class DailyPlanService
         for ($i = 0; $i < $farms->count(); $i++) {
             $farmVisit = new FarmVisit();
             $farmVisit->setFarm($farms->get($i));
-            $farmVisit->setStartTime($startingHour->add(new \DateInterval('PT' . ($offsetInMinutes * $i) . 'M')));
+            $startTime = $startingHour->add(new \DateInterval('PT' . ($offsetInMinutes * $i) . 'M'));
+            if ($startTime >= new \DateTime(self::BEGIN_LUNCH_BREAK)){ // to take into account lunch break
+                $startTime = $startTime->add(new \DateInterval('PT1H'));
+            }
+            $farmVisit->setStartTime($startTime);
             $dailyPlan->addFarmVisit($farmVisit);
         }
         return $dailyPlan;
@@ -102,7 +143,7 @@ class DailyPlanService
      * @param int $size
      * @return ArrayCollection
      */
-    private function mergeCollections(ArrayCollection $farmsToVisit, ArrayCollection $farmsToAdd, int $size) : ArrayCollection
+    private function addFarmsToVisit(ArrayCollection $farmsToVisit, ArrayCollection $farmsToAdd, int $size) : ArrayCollection
     {
         $i = 0;
         while ($i < $farmsToAdd->count() && $farmsToVisit->count() <= $size) {
@@ -113,5 +154,21 @@ class DailyPlanService
         }
 
         return $farmsToVisit;
+    }
+
+    private function isVisitNecessary(FarmVisit $farmVisit): bool
+    {
+        // date of last visit scheduled in the area
+        $dateOfLastVisitInArea = $this->farmVisitRepository->getDateOfLastVisitToArea($farmVisit->getFarm()->getArea());
+
+        if ($farmVisit->getFarm()->getFarmer()->getWorstPerforming()) {
+            return $this->farmVisitRepository->getNumberOfVisitsToFarmInPeriod($farmVisit->getFarm(),
+                $dateOfLastVisitInArea->sub(new \DateInterval('P1M')), $dateOfLastVisitInArea)
+                < self::MIN_VISITS_IN_A_MONTH_FOR_WORST_FARMERS;
+        } else {
+            return $this->farmVisitRepository->getNumberOfVisitsToFarmInPeriod($farmVisit->getFarm(),
+                $dateOfLastVisitInArea->sub(new \DateInterval('P1Y')), $dateOfLastVisitInArea)
+                < self::MIN_VISITS_IN_A_YEAR;
+        }
     }
 }

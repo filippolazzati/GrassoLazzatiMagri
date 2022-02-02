@@ -5,9 +5,12 @@ namespace App\Controller;
 use App\DailyPlan\Calendar;
 use App\DailyPlan\DailyPlanService;
 use App\Entity\Agronomist;
-use App\Entity\DailyPlan;
-use App\Entity\FarmVisit;
+use App\Entity\DailyPlan\DailyPlan;
+use App\Entity\DailyPlan\FarmVisit;
+use App\Form\DailyPlan\AddVisitType;
 use App\Form\DailyPlan\CreateDailyPlanType;
+use App\Form\DailyPlan\MoveVisitType;
+use App\Form\DailyPlan\RemoveVisitType;
 use AssertionError;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -70,17 +73,110 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
                 if (!$this->em->getRepository(DailyPlan::class)->hasDailyPlan($agronomist, $date)) {
                     $dpService = new DailyPlanService($this->em->getRepository(FarmVisit::class));
                     $dailyPlan = $dpService->generateDailyPlan($agronomist, $date, $numberOfVisits);
+                    $this->em->persist($dailyPlan);
+                    $this->em->flush();
+                    return $this->redirectToRoute('daily_plan_date', ['daily_plan' => $dailyPlan->getId()]);
                 }
             }
         }
 
-        return $this->render('dailyplan/create_daily_plan.html.twig', []);
+        return $this->render('dailyplan/create_daily_plan.html.twig', ['date' => $date]);
     }
 
-    #[Route('/daily_plan/{daily_plan}', name: 'date', methods: ['GET', 'POST'])]
-    public function dailyPlan(Request $request, DailyPlan $daily_plan) : \Symfony\Component\HttpFoundation\Response
+    #[Route('/daily_plan/{daily_plan}/{visit_to_move?}', name: 'date', methods: ['GET', 'POST'])]
+    public function getDailyPlan(Request $request, DailyPlan $daily_plan, ?FarmVisit $visit_to_move) : \Symfony\Component\HttpFoundation\Response
     {
-        return $this->render('dailyplan/daily_plan.html.twig', []);
+        // if the user is not an agronomist, error
+        $agronomist = $this->getUser();
+        if (!($agronomist instanceof Agronomist)) {
+            throw new AssertionError();
+        }
+
+        // if the daily plan requested does not belong to the user, error
+        if (!$daily_plan->getAgronomist()->equals($agronomist)) {
+            throw new AssertionError();
+        }
+
+        $dpService = new DailyPlanService($this->em->getRepository(FarmVisit::class));
+
+        $errorMsg = null;
+        $renderParameters =  ['daily_plan' => $daily_plan, 'error_msg' => $errorMsg];
+
+        // if the user has selected a visit to move (and the selected visit actually belongs to the daily plan),
+        // and the daily plan is in state NEW or ACCEPTED, show the form and process it
+        if (!is_null($visit_to_move) && $daily_plan->getFarmVisits()->exists(function ($key, $value) use ($visit_to_move) {
+                $value->getStartTime() == $visit_to_move;
+            }) && !$daily_plan->isConfirmed() ) {
+            $formToMoveVisit = $this->createForm(MoveVisitType::class);
+            $renderParameters += ['form_move_visit' => $formToMoveVisit];
+
+            $formToMoveVisit->handleRequest($request);
+
+            if ($formToMoveVisit->isSubmitted() && $formToMoveVisit->isValid()) {
+                $formData = $formToMoveVisit->getData();
+                $newStartHour = $formData['newStartHour'];
+                try {
+                    $dpService->moveVisit($agronomist, $daily_plan, $visit_to_move, $newStartHour);
+                    $this->em->persist($daily_plan);
+                    $this->em->flush();
+
+                } catch(\Exception $e) {
+                    $errorMsg = 'The visit cannot be moved to the selected hour';
+                    return $this->render('dailyplan/daily_plan.html.twig', $renderParameters);
+                }
+            }
+        }
+
+        // if the daily plan is in state NEW or ACCEPTED, show the form for adding a visit
+        if (!$daily_plan->isConfirmed()) {
+            $farmsInTheArea = $agronomist->getArea()->getFarms();
+            $options = array('farmsInTheArea' => $farmsInTheArea);
+            $formToAddVisit =  $this->createForm(AddVisitType::class, null, $options);
+            $renderParameters += ['form_add_visit' => $formToAddVisit];
+
+            $formToAddVisit->handleRequest($request);
+
+            if($formToAddVisit->isSubmitted() && $formToAddVisit->isValid()) {
+                $formData = $formToAddVisit->getData();
+                try {
+                    $dpService->addVisit($agronomist, $daily_plan, $formData['farm'], $formData['startingHour']);
+                    $this->em->persist($daily_plan);
+                    $this->em->flush();
+                } catch (\Exception $e) {
+                    $errorMsg = 'The visit cannot be added';
+                    return $this->render('dailyplan/daily_plan.html.twig', $renderParameters);
+                }
+            }
+        }
+
+        // if the daily plan is in state NEW or ACCEPTED, show for each visit a form to remove it
+        if (!$daily_plan->isConfirmed()) {
+            $formsToRemoveVisits = array();
+            $renderParameters += ['forms_remove_visits' => $formsToRemoveVisits];
+
+            foreach ($daily_plan->getFarmVisits() as $farmVisit) {
+                $formToRemoveVisit = $this->createForm(RemoveVisitType::class, null, [$farmVisit]);
+                $formsToRemoveVisits += [$farmVisit => $formToRemoveVisit];
+
+                $formToAddVisit->handleRequest($request);
+
+                if($formToAddVisit->isSubmitted() && $formToAddVisit->isValid()) {
+                    $formData = $formToAddVisit->getData();
+                    try {
+                        $dpService->removeVisit($agronomist, $daily_plan, $farmVisit);
+                        $this->em->persist($daily_plan);
+                        $this->em->flush();
+                    } catch (\Exception $e) {
+                        $errorMsg = 'The visit cannot be removed';
+                        return $this->render('dailyplan/daily_plan.html.twig', $renderParameters);
+                    }
+                }
+            }
+        }
+
+        // TODO: add form to accept and confirm daily plan
+
+        return $this->render('dailyplan/daily_plan.html.twig', $renderParameters);
     }
 
 }

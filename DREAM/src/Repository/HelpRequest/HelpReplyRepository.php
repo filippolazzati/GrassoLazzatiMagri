@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\HelpRequest;
 
-use App\Entity\HelpReply;
-use App\Entity\HelpRequest;
+use App\Entity\HelpRequest\HelpReply;
+use App\Entity\HelpRequest\HelpRequest;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

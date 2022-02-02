@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Entity\Forum\Message;
 use App\Entity\Forum\Thread;
+use App\Entity\HelpRequest\HelpRequest;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;

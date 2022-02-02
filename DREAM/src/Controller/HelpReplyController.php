@@ -4,8 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Agronomist;
 use App\Entity\Farmer;
-use App\Entity\HelpReply;
-use App\Entity\HelpRequest;
+use App\Entity\HelpRequest\HelpReply;
+use App\Entity\HelpRequest\HelpRequest;
 use App\Form\HelpRequests\InsertReplyType;
 use AssertionError;
 use Doctrine\ORM\EntityManagerInterface;
@@ -33,6 +33,11 @@ class HelpReplyController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
         $helpRequestsQuery = $this->em->getRepository(HelpRequest::class)->getHelpRequestsToUserQuery($user);
         $pagination = $this->paginator->paginate($helpRequestsQuery, $request->query->getInt('page', 1), 20);
 
+        // if a help request has been selected and its receiver is different from the user, error
+        if(!is_null($help_request) && !$help_request->getReceiver()->equals($user)) {
+            throw new AssertionError();
+        }
+
         // if no help request selected (parameter $help_request = null), show as a default the most recent one
         // if the user has no help requests, help_request is left to null
         if (is_null($help_request) && !$user->getReceivedRequests()->isEmpty()) {
@@ -48,6 +53,10 @@ class HelpReplyController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
                 $formData = $form->getData();
+                // if the help_request is not directed to the user
+                if(!$help_request->getReceiver()->equals($user)) {
+                    throw new AssertionError();
+                }
                 $this->em->getRepository(HelpReply::class)->createHelpReply($formData['reply'], $help_request);
                 return $this->redirectToRoute('my_replies_confirmation_insert_help_reply', ['help_request' => $help_request->getId()]);
             }
@@ -60,6 +69,16 @@ class HelpReplyController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
     #[Route('/confirmation_insert_help_reply{help_request}', name: 'confirmation_insert_help_reply', methods: ['GET'])]
     public function getConfirmPageForInsertReply(HelpRequest $help_request) : \Symfony\Component\HttpFoundation\Response
     {
+        // if the user is not a farmer or agronomist, error
+        $user = $this->getUser();
+        if (!($user instanceof Farmer || $user instanceof Agronomist)) {
+            throw new AssertionError();
+        }
+
+        // if a help request has been selected and its receiver is different from the user, error
+        if(!$help_request->getReceiver()->equals($user)) {
+            throw new AssertionError();
+        }
         return $this->render('myreplies/confirm_insert_reply.html.twig', ['help_request' => $help_request]);
     }
 }

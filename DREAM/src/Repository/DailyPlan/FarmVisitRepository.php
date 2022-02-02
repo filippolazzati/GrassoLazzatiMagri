@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\DailyPlan;
 
 use App\Entity\Area;
-use App\Entity\FarmVisit;
-use DateInterval;
+use App\Entity\DailyPlan\FarmVisit;
+use App\Entity\Farm;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -39,16 +39,15 @@ class FarmVisitRepository extends ServiceEntityRepository
      * @return ArrayCollection
      */
     public function getFarmsWithNumberOfVisitsLessThan(
-        Area $area, DateTime $minDate, DateTime $maxDate, int $numVisits, int $maxResults, bool $onlyWorstPerforming)
-        : ArrayCollection
+        Area $area, DateTime $minDate, DateTime $maxDate, int $numVisits, int $maxResults, bool $onlyWorstPerforming): ArrayCollection
     {
         $qb = $this->_em->createQueryBuilder()
             ->select('fv.farm, COUNT(fv.dailyPlan.id)')
-            ->from('App\Entity\FarmVisit', 'fv')
+            ->from('App\Entity\DailyPlan\FarmVisit', 'fv')
             ->where('fv.dailyPlan.date BETWEEN :minDate AND :maxDate')
             ->andWhere('fv.farm.area = :area');
 
-        if($onlyWorstPerforming) {
+        if ($onlyWorstPerforming) {
             $qb = $qb->andWhere('fv.farm.farmer.worst_performing = true');
         }
 
@@ -70,14 +69,14 @@ class FarmVisitRepository extends ServiceEntityRepository
      * @param Area $area
      * @return DateTime
      */
-    public function getDateOfLastVisit(Area $area) : DateTime
+    public function getDateOfLastVisitToArea(Area $area): DateTime
     {
         return $this->_em->createQuery(
             'SELECT MAX(fv.dailyPlan.date)
-                 FROM App\Entity\FarmVisit fv
+                 FROM App\Entity\Dailyplan\FarmVisit fv
                  WHERE fv.farm.area = :area'
         )->setParameter('area', $area)
-         ->getOneOrNullResult();
+            ->getOneOrNullResult();
     }
 
     /**
@@ -92,9 +91,9 @@ class FarmVisitRepository extends ServiceEntityRepository
     {
         // TODO :CHANGE TO NESTED QUERY
 
-        $numberOfVisitsInLastYear = $this->_em->createQuery(
+        $numberOfVisitsInPeriod = $this->_em->createQuery(
             'SELECT COUNT(fv)
-                 FROM App\Entity\FarmVisit fv
+                 FROM App\Entity\DailyPlan\FarmVisit fv
                  WHERE (fv.dailyPlan.date BETWEEN :minDate AND :maxDate) AND (fv.farm.area = :area)
                  GROUP BY fv.farm'
         )->setParameter('minDate', $minDate)
@@ -102,7 +101,18 @@ class FarmVisitRepository extends ServiceEntityRepository
             ->setParameter('area', $area)
             ->getResult();
 
-        return min($numberOfVisitsInLastYear);
+        return min($numberOfVisitsInPeriod);
     }
 
+    public function getNumberOfVisitsToFarmInPeriod(Farm $farm, \DateTime $minDate, DateTime $maxDate): int
+    {
+        return $this->_em->createQuery(
+            'SELECT COUNT(fv)
+                FROM App\Entity\DailyPlan\FarmVisit fv
+                WHERE (fv.dailyPlan.date BETWEEN :minDate AND :maxDate) AND fv.farm = :farm'
+        )->setParameter('farm', $farm)
+            ->setParameter('minDate', $minDate)
+            ->setParameter('maxDate', $maxDate)
+            ->getScalarResult();
+    }
 }

@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\HelpRequest;
 
 use App\Entity\Farmer;
-use App\Entity\HelpRequest;
+use App\Entity\HelpRequest\HelpRequest;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\AbstractQuery;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**

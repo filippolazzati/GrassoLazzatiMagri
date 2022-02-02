@@ -112,4 +112,9 @@ class Area
 
         return $this;
     }
+
+    public function equals(Area $other) : bool
+    {
+        return $this->id == $other->getId();
+    }
 }

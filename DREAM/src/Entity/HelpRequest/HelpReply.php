@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\HelpRequest;
 
-use App\Repository\HelpReplyRepository;
+use App\Repository\HelpRequest\HelpReplyRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: HelpReplyRepository::class)]

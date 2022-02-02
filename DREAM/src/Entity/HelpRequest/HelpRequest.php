@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\HelpRequest;
 
-use App\Repository\HelpRequestRepository;
+use App\Entity\Farmer;
+use App\Entity\User;
+use App\Repository\HelpRequest\HelpRequestRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: HelpRequestRepository::class)]

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\HelpRequest\HelpRequest;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -230,5 +231,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function isAgronomist() : bool
     {
         return $this instanceof Agronomist;
+    }
+
+    public function equals(User $other) : bool
+    {
+        return $this->id == $other->getId();
     }
 }
