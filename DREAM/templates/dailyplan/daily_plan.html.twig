@@ -26,21 +26,23 @@
                     <td>{{ farmVisit.farm.city}}, {{ farmVisit.farm.street }}</td>
                     <td>{{ farmVisit.farm.farmer.fullName }}</td>
                     <td><a href={{ path('daily_plan_farm_details', {farm: farmVisit.farm.id}) }}>FarmDetails</a></td>
-                    {% if daily_plan.new or daily_plan.accepted %}
+                    {% if forms_move_visits is not null %}
                         <td>{{ form(forms_move_visits[(farmVisit.id)]) }}</td>
+                    {% endif %}
+                    {% if forms_remove_visits is not null %}
                         <td>{{ form(forms_remove_visits[(farmVisit.id)]) }}</td>
                     {% endif %}
                 </tr>
             {% endfor %}
         </tbody>
     </table>
-    {% if daily_plan.new or daily_plan.accepted %}
+    {% if form_add_visit is not null %}
         {{ form(form_add_visit) }}
     {% endif %}
-    {% if daily_plan.new %}
+    {% if form_accept_daily_plan is not null %}
         {{ form(form_accept_daily_plan)  }}
     {% endif %}
-    {% if daily_plan.accepted %}
+    {% if form_confirm_daily_plan is not null %}
         {{ form(form_confirm_daily_plan)  }}
     {% endif %}
 {% endblock %}
