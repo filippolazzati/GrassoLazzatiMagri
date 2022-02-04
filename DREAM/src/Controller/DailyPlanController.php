@@ -56,8 +56,11 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
             }
         }
 
+        // retrieve past daily plans in state new or confirmed
+        $pastDailyPlans = $this->em->getRepository(DailyPlan::class)->findNotConfirmedPastDailyPlansOfAgronomist($agronomist, new \DateTime());
+
         return $this->render('dailyplan/index.html.twig',
-            ['working_days' => $workingDays, 'daily_plans' => $dailyPlans]);
+            ['working_days' => $workingDays, 'daily_plans' => $dailyPlans, 'past_daily_plans' => $pastDailyPlans]);
     }
 
     #[Route('/daily_plan/create/{date}', name: 'create', methods: ['GET', 'POST'])]

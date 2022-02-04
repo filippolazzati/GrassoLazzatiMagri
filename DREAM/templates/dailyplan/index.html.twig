@@ -3,20 +3,36 @@
 {% block title %}Daily Plan Dates{% endblock %}
 
 {% block content %}
-    <ul>
+    <ul class="list-group">
         {% for working_day in working_days %}
-            <li>
+            <li class="list-group-item">
                 {{ working_day | date('Y-m-d') }}
                     {% if daily_plans[(working_day.format('Y-m-d') )]  is not null%}
-                        <a href = {{ path('daily_plan_date', {daily_plan : daily_plans[(working_day.format('Y-m-d'))] })}}>
+                        <a href = "{{ path('daily_plan_date', {daily_plan : daily_plans[(working_day.format('Y-m-d'))] })}}"
+                           class="btn btn-primary">
                             View Daily Plan
                         </a>
                     {% else %}
-                        <a href = {{ path('daily_plan_create', {date : (working_day.format('Y-m-d')) })}}>
+                        <a href = "{{ path('daily_plan_create', {date : (working_day.format('Y-m-d')) })}}"
+                           class="btn btn-primary">
                             Create Daily Plan
                         </a>
                     {% endif %}
             </li>
         {% endfor %}
     </ul>
+    {% if past_daily_plans is not empty %}
+        <h1>Daily plans of the past to accept or confirm</h1>
+        <ul class="list-group">
+            {% for past_daily_plan in past_daily_plans %}
+                <li class="list-group-item">
+                    {{ past_daily_plan.date | date('Y-m-d') }}
+                    <a href = "{{ path('daily_plan_date', {daily_plan : past_daily_plan.id })}}"
+                       class="btn btn-primary">
+                        View Daily Plan
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 {% endblock %}
