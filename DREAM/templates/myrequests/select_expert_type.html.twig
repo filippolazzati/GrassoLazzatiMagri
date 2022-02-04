@@ -2,7 +2,15 @@
 
 {% block title %}Select Expert Type{% endblock %}
 
+{% block subheader %}
+    <div class="mb-3">
+        <a class="btn btn-light btn-sm" href="{{ path('my_requests_index') }}">
+            <i class="bi bi-arrow-left-short"></i> Back to My Requests
+        </a>
+    </div>
+{% endblock %}
+
 {% block content %}
-    <a href = "{{ path('my_requests_new_help_request', {type:'agronomist'}) }}">Request To Agronomist</a>
-    <a href = "{{ path('my_requests_new_help_request', {type:'best_farmer'}) }}">Request To Best Performing Farmer</a>
+    <a href = "{{ path('my_requests_new_help_request', {type:'agronomist'}) }}" class="btn btn-primary">Request To Agronomist</a>
+    <a href = "{{ path('my_requests_new_help_request', {type:'best_farmer'}) }}" class="btn btn-primary">Request To Best Performing Farmer</a>
 {% endblock %}

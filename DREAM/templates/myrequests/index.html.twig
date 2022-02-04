@@ -2,45 +2,70 @@
 
 {% block title %}My Requests{% endblock %}
 
+{% block toolbar %}
+    <a href = "{{ path('my_requests_select_expert_type') }}" class="btn btn-primary">
+        <i class="bi bi-plus"></i> New Request
+    </a>
+{% endblock %}
+
 {% block content %}
-    <!-- Help request list -->
-    <div>
-        {{ knp_pagination_render(pagination) }}
-    </div>
 
-    <div>
-        {% for help_request in pagination %}
-            <a href="{{ path('my_requests_index', {help_request : help_request.id}) }}">{{ help_request.title }}</a>
-        {% endfor %}
-    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <!-- Help request list -->
+                {% for help_request in pagination %}
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-body">
+                            <p class="card-text">
+                                Title : {{ help_request.title }}
+                            </p>
+                            <p class="card-text">
+                                Sent To : {{ help_request.receiver.fullName }}
+                            </p>
+                            <a href="{{ path('my_requests_index', {help_request : help_request.id}) }}"
+                                    {% if help_request.needsFeedback %} class="btn btn-primary" {% else %} class="btn btn-secondary" {% endif %}>
+                                See Details
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+                <div>
+                    {{ knp_pagination_render(pagination) }}
+                </div>
+            </div>
+            <div class="col">
+                {% if help_request is not null %}
+                    <!-- Help request details -->
+                    <div>
+                        <p> Title : {{ help_request.title }} </p>
+                        <p> Request Timestamp : {{ help_request.timestamp | date('Y-m-d H:i:s') }} </p>
+                        <p> Receiver : {{ help_request.receiver.fullname }} </p>
+                        <p> Text : {{ help_request.text }} </p>
+                        {% if help_request.reply is not null %}
+                            <p> Reply : {{ help_request.reply.text }} </p>
+                            <p> Reply Timestamp : {{ help_request.reply.timestamp | date('Y-m-d H:i:s')}} </p>
+                            {% if help_request.reply.feedback is not null %}
+                            <p> Feedback : {{ help_request.reply.feedback }} </p>
+                            {% endif %}
+                        {% endif %}
+                    </div>
 
-    {% if help_request is not null %}
-        <!-- Help request details -->
-        <div>
-            Title : {{ help_request.title }}
-            Timestamp : {{ help_request.timestamp | date('Y-m-d H:i:s') }}
-            Receiver : {{ help_request.receiver.fullname }}
-            Text : {{ help_request.text }}
-            {% if help_request.reply is not null %}
-                Reply : {{ help_request.reply.text }}
-                {{ help_request.reply.timestamp | date('Y-m-d H:i:s')}}
-                {% if help_request.reply.feedback is not null %}
-                    Feedback : {{ help_request.reply.feedback }}
+                    <!-- Form for inserting feedback -->
+                    {% if help_request.reply is not null  and help_request.needsFeedback%}
+                        {{ form(form) }}
+                    {% endif %}
+                {% else %}
+                    <div>
+                        You haven't got any help requests!
+                    </div>
                 {% endif %}
-            {% endif %}
+            </div>
         </div>
-
-        <!-- Form for inserting feedback -->
-        {% if help_request.reply is not null  and help_request.needsFeedback%}
-            {{ form(form) }}
-        {% endif %}
-    {% else %}
-        <div>
-            You haven't got any help requests!
-        </div>
-    {% endif %}
+    </div>
 
 
 
-    <a href = "{{ path('my_requests_select_expert_type') }}">New Request</a>
+
+
 {% endblock %}

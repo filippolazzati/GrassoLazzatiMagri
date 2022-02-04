@@ -7,6 +7,7 @@ use App\Entity\Farmer;
 use App\Entity\HelpRequest\HelpReply;
 use App\Entity\HelpRequest\HelpRequest;
 use App\Form\HelpRequests\InsertReplyType;
+use App\HelpRequests\HelpRequestsService;
 use AssertionError;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -19,6 +20,7 @@ class HelpReplyController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
 {
     #[Required] public EntityManagerInterface $em;
     #[Required] public PaginatorInterface $paginator;
+    #[Required] public HelpRequestsService $helpRequestsService;
 
     #[Route('/view/{help_request?}', name: 'index', methods: ['GET', 'POST'])]
     public function index(Request $request, ?HelpRequest $help_request): \Symfony\Component\HttpFoundation\Response
@@ -26,7 +28,7 @@ class HelpReplyController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
         // if the user is not a farmer or agronomist, error
         $user = $this->getUser();
         if (!($user instanceof Farmer || $user instanceof Agronomist)) {
-            throw new AssertionError();
+            $this->createNotFoundException();
         }
 
         // retrieve help requests sent to the user, paginating them in group of 20
@@ -35,7 +37,7 @@ class HelpReplyController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
 
         // if a help request has been selected and its receiver is different from the user, error
         if(!is_null($help_request) && !$help_request->getReceiver()->equals($user)) {
-            throw new AssertionError();
+            $this->createNotFoundException();
         }
 
         // if no help request selected (parameter $help_request = null), show as a default the most recent one
@@ -53,11 +55,9 @@ class HelpReplyController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
                 $formData = $form->getData();
-                // if the help_request is not directed to the user
-                if(!$help_request->getReceiver()->equals($user)) {
-                    throw new AssertionError();
-                }
-                $this->em->getRepository(HelpReply::class)->createHelpReply($formData['reply'], $help_request);
+                $this->helpRequestsService->createHelpReply($formData['reply'], $help_request);
+                $this->em->persist($help_request);
+                $this->em->flush();
                 return $this->redirectToRoute('my_replies_confirmation_insert_help_reply', ['help_request' => $help_request->getId()]);
             }
             $renderParameters += array('form' => $form->createView());
@@ -72,12 +72,12 @@ class HelpReplyController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
         // if the user is not a farmer or agronomist, error
         $user = $this->getUser();
         if (!($user instanceof Farmer || $user instanceof Agronomist)) {
-            throw new AssertionError();
+            $this->createNotFoundException();
         }
 
         // if a help request has been selected and its receiver is different from the user, error
         if(!$help_request->getReceiver()->equals($user)) {
-            throw new AssertionError();
+            $this->createNotFoundException();
         }
         return $this->render('myreplies/confirm_insert_reply.html.twig', ['help_request' => $help_request]);
     }

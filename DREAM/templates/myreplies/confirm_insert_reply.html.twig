@@ -2,13 +2,21 @@
 
 {% block title %}Confirmation For Inserting Reply{% endblock %}
 
+{% block subheader %}
+    <div class="mb-3">
+        <a class="btn btn-light btn-sm" href="{{ path('my_replies_index') }}">
+            <i class="bi bi-arrow-left-short"></i> Back to My Replies
+        </a>
+    </div>
+{% endblock %}
+
 {% block content %}
     <div>
-        Title : {{ help_request.title }}
-        Request Timestamp : {{ help_request.timestamp | date('Y-m-d H:i:s') }}
-        Author : {{ help_request.author.fullName}}
-        Text : {{ help_request.text }}
-        Reply : {{ help_request.reply.text }}
-        Reply Timestamp : {{ help_request.reply.timestamp | date('Y-m-d H:i:s')}}
+        <p>Title : {{ help_request.title }}</p>
+        <p>Request Timestamp : {{ help_request.timestamp | date('Y-m-d H:i:s') }}</p>
+        <p>Author : {{ help_request.author.fullName}}</p>
+        <p>Text : {{ help_request.text }}</p>
+        <p>Reply : {{ help_request.reply.text }}</p>
+        <p>Reply Timestamp : {{ help_request.reply.timestamp | date('Y-m-d H:i:s')}}</p>
     </div>
 {% endblock %}

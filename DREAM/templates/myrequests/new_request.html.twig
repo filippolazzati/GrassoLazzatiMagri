@@ -2,6 +2,14 @@
 
 {% block title %}New Help Request{% endblock %}
 
+{% block subheader %}
+    <div class="mb-3">
+        <a class="btn btn-light btn-sm" href="{{ path('my_requests_index') }}">
+            <i class="bi bi-arrow-left-short"></i> Back to My Requests
+        </a>
+    </div>
+{% endblock %}
+
 {% block content %}
     {% if error_message is null  %}
     {{ form(form) }}

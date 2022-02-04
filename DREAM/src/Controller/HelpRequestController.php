@@ -8,10 +8,13 @@ use App\Entity\HelpRequest\HelpRequest;
 use App\Entity\User;
 use App\Form\HelpRequests\InsertFeedbackType;
 use App\Form\HelpRequests\NewHelpRequestType;
+use App\HelpRequests\HelpRequestsService;
 use AssertionError;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Service\Attribute\Required;
 
@@ -20,6 +23,7 @@ class HelpRequestController extends \Symfony\Bundle\FrameworkBundle\Controller\A
 {
     #[Required] public EntityManagerInterface $em;
     #[Required] public PaginatorInterface $paginator;
+    #[Required] public HelpRequestsService $helpRequestsService;
 
     #[Route('/view/{help_request?}', name: 'index', methods: ['GET', 'POST'])]
     public function index(Request $request, ?HelpRequest $help_request): \Symfony\Component\HttpFoundation\Response
@@ -27,7 +31,7 @@ class HelpRequestController extends \Symfony\Bundle\FrameworkBundle\Controller\A
         // if the user is not a farmer, error
         $farmer = $this->getUser();
         if (!($farmer instanceof Farmer)) {
-            throw new AssertionError();
+            $this->createNotFoundException();
         }
 
         // retrieve help requests of the user, paginating them in group of 20
@@ -36,7 +40,7 @@ class HelpRequestController extends \Symfony\Bundle\FrameworkBundle\Controller\A
 
         // if a help_request not belonging to the farmer has been selected, error
         if ( !is_null($help_request) && !$help_request->getAuthor()->equals($farmer)) {
-            throw new AssertionError();
+            $this->createNotFoundException();
         }
 
         // if no help request selected (parameter $help_request = null), show as a default the most recent one
@@ -54,11 +58,9 @@ class HelpRequestController extends \Symfony\Bundle\FrameworkBundle\Controller\A
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
                 $formData = $form->getData();
-                // if the help_request does not to the farmer, error
-                if (!$help_request->getAuthor()->equals($farmer)) {
-                    throw new AssertionError();
-                }
-                $this->em->getRepository(HelpReply::class)->addFeedbackToReply($help_request, $formData['feedback']);
+                $this->helpRequestsService->addFeedbackToReply($help_request, $formData['feedback']);
+                $this->em->persist($help_request);
+                $this->em->flush();
                 return $this->redirectToRoute('my_requests_index', ['help_request' => $help_request->getId()]);
             }
             $renderParameters += array('form' => $form->createView());
@@ -74,14 +76,13 @@ class HelpRequestController extends \Symfony\Bundle\FrameworkBundle\Controller\A
     }
 
 
-    #[Route('/new_help_request{type}', name: 'new_help_request',
-        /*requirements: ['type' => 'agronomist | best_farmer'],*/ methods: ['GET', 'POST'])]
+    #[Route('/new_help_request{type}', name: 'new_help_request', methods: ['GET', 'POST'])]
     public function newHelpRequest(Request $request, string $type): \Symfony\Component\HttpFoundation\Response
     {
         // the user must be a farmer
         $farmer = $this->getUser();
         if (!($farmer instanceof Farmer)) {
-            throw new AssertionError();
+            $this->createNotFoundException();
         }
 
         $errorMessage = null;
@@ -105,10 +106,16 @@ class HelpRequestController extends \Symfony\Bundle\FrameworkBundle\Controller\A
         // when the user submits the form, create the new help request
         if($form->isSubmitted() && $form->isValid()) {
             $formData = $form->getData();
-            $helpRequest = $this->em->getRepository(HelpRequest::class)->createHelpRequest(
-                $farmer, $formData['receiver'], $formData['title'], $formData['text']);
-            return $this->redirectToRoute('my_requests_confirmation_new_help_request',
-                ['help_request' => $helpRequest->getId()]);
+            try {
+                $helpRequest = $this->helpRequestsService->createHelpRequest(
+                    $farmer, $formData['receiver'], $formData['title'], $formData['text']);
+                $this->em->persist($helpRequest);
+                $this->em->flush();
+                return $this->redirectToRoute('my_requests_confirmation_new_help_request',
+                    ['help_request' => $helpRequest->getId()]);
+            } catch (\Exception $e) {
+                throw new BadRequestException($e->getMessage());
+            }
         }
         return $this->render('myrequests/new_request.html.twig', [
             'form' => $form->createView(),
@@ -122,11 +129,11 @@ class HelpRequestController extends \Symfony\Bundle\FrameworkBundle\Controller\A
         // the user must be a farmer
         $farmer = $this->getUser();
         if (!($farmer instanceof Farmer)) {
-            throw new AssertionError();
+            $this->createNotFoundException();
         }
         // if the help_request does not to the farmer, error
         if (!$help_request->getAuthor()->equals($farmer)) {
-            throw new AssertionError();
+            $this->createNotFoundException();
         }
         return $this->render('myrequests/confirm_insert_request.html.twig', ['help_request' => $help_request]);
     }

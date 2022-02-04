@@ -6,6 +6,9 @@ use App\Entity\Farmer;
 use App\Entity\HelpRequest\HelpRequest;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -21,65 +24,88 @@ class HelpRequestRepository extends ServiceEntityRepository
         parent::__construct($registry, HelpRequest::class);
     }
 
-    public function createHelpRequest(Farmer $author, User $receiver, string $title, string $text): HelpRequest
-    {
-        $helpRequest = new HelpRequest(new \DateTime(), $title, $text, $author, $receiver);
-        $this->getEntityManager()->persist($helpRequest);
-        $this->getEntityManager()->flush();
-        return $helpRequest;
-    }
-
-    public function getHelpRequestsFromFarmerQuery(Farmer $author): \Doctrine\ORM\Query
+    /**
+     * Returns a Query object for retrieving from the database the HelpRequests sent by the given farmer.
+     * @param Farmer $author the author of the help requests to retrieve
+     * @return Query a query for retrieving from the database the HelpRequests sent by the given farmer
+     */
+    public function getHelpRequestsFromFarmerQuery(Farmer $author): Query
     {
         return $this->getEntityManager()->createQuery(
             'SELECT req 
-                 FROM App\Entity\HelpRequest req
+                 FROM App\Entity\HelpRequest\HelpRequest req
                  WHERE req.author = :author
                  ORDER BY req.timestamp DESC '
         )->setParameter('author', $author);
     }
 
-    public function getMostRecentHelpRequestFromFarmer(Farmer $author): HelpRequest
+    /**
+     * Returns the most recent help request sent by the given farmer, or null if the farmer has never sent
+     * a help request.
+     * @param Farmer $author the author of the help request to retrieve
+     * @return HelpRequest|null the most recent help request sent by the farmer, or null if the farmeer
+     * has never sent a help request
+     */
+    public function getMostRecentHelpRequestFromFarmer(Farmer $author): ?HelpRequest
     {
-        // TODO: change to nested query
         $maxTimestamp = $this->getEntityManager()->createQuery(
             'SELECT MAX(req.timestamp)
-                 FROM App\Entity\HelpRequest req
+                 FROM App\Entity\HelpRequest\HelpRequest req
                  WHERE req.author = :author'
-        )->setParameter('author', $author)->getScalarResult();
-        return $this->getEntityManager()->createQuery(
-            'SELECT req
-                FROM App\Entity\HelpRequest req
+        )->setParameter('author', $author)->getOneOrNullResult();
+
+        if (is_null($maxTimestamp)) { // the farmer has never sent a help request
+            return null;
+        } else {
+            return $this->getEntityManager()->createQuery(
+                'SELECT req
+                FROM App\Entity\HelpRequest\HelpRequest req
                 WHERE (req.author = :author) AND (req.timestamp = :max_timestamp)'
-        )->setParameter('author', $author)
-            ->setParameter('max_timestamp', $maxTimestamp)
-            ->getSingleResult();
+            )->setParameter('author', $author)
+                ->setParameter('max_timestamp', $maxTimestamp)
+                ->getSingleResult();
+        }
     }
 
-    public function getHelpRequestsToUserQuery(User $receiver): \Doctrine\ORM\Query
+    /**
+     * Returns a Query object to retrieve the help requests having the provided user as the receiver.
+     * @param User $receiver the receiver of the help requests to retrieve
+     * @return Query a query to retrieve the help requests having the provided user as the receiver
+     */
+    public function getHelpRequestsToUserQuery(User $receiver): Query
     {
         return $this->getEntityManager()->createQuery(
             'SELECT req 
-                 FROM App\Entity\HelpRequest req
+                 FROM App\Entity\HelpRequest\HelpRequest req
                  WHERE req.receiver = :receiver
                  ORDER BY req.timestamp DESC '
         )->setParameter('receiver', $receiver);
     }
 
-    public function getMostRecentHelpRequestToUser(User $receiver): HelpRequest
+    /**
+     * Returns the most recent help request sent to the user, or null if the user never received a
+     * help request.
+     * @param User $receiver the receiver of the help request to retrieve
+     * @return HelpRequest|null the most recent help request sent to the user, or null if the user
+     * never received a help request
+     */
+    public function getMostRecentHelpRequestToUser(User $receiver): ?HelpRequest
     {
-        // TODO: change to nested query
         $maxTimestamp = $this->getEntityManager()->createQuery(
             'SELECT MAX(req.timestamp)
-                 FROM App\Entity\HelpRequest req
+                 FROM App\Entity\HelpRequest\HelpRequest req
                  WHERE req.receiver = :receiver'
-        )->setParameter('receiver', $receiver)->getScalarResult();
-        return $this->getEntityManager()->createQuery(
-            'SELECT req
-                FROM App\Entity\HelpRequest req
+        )->setParameter('receiver', $receiver)->getOneOrNullResult();
+        if (is_null($maxTimestamp)) {
+            return null;
+        } else {
+            return $this->getEntityManager()->createQuery(
+                'SELECT req
+                FROM App\Entity\HelpRequest\HelpRequest req
                 WHERE (req.receiver = :receiver) AND (req.timestamp = :max_timestamp)'
-        )->setParameter('receiver', $receiver)
-            ->setParameter('max_timestamp', $maxTimestamp)
-            ->getSingleResult();
+            )->setParameter('receiver', $receiver)
+                ->setParameter('max_timestamp', $maxTimestamp)
+                ->getSingleResult();
+        }
     }
 }
