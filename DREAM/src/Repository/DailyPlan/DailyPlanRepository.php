@@ -23,7 +23,7 @@ class DailyPlanRepository extends ServiceEntityRepository
     {
         return $this->_em->createQuery(
             'SELECT dp
-                 FROM App\Entity\DailyPlan dp
+                 FROM App\Entity\DailyPlan\DailyPlan dp
                  WHERE dp.agronomist = :agronomist AND dp.date = :date'
             )->setParameter('agronomist', $agronomist)
             ->setParameter('date', $date)
@@ -35,9 +35,4 @@ class DailyPlanRepository extends ServiceEntityRepository
         return !is_null($this->findDailyPlanByAgronomistAndDate($agronomist, $date));
     }
 
-    public function createDailyPlan($agronomist, $date, $numberOfVisits)
-    {
-        // farm to visit in daily plan: farm with fewer visits in last year; if more farms than $numberOfVisits,
-        // take the ones with the min date of last visit
-    }
 }

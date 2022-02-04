@@ -25,6 +25,9 @@ class FarmVisit
     #[ORM\JoinColumn(nullable: false)]
     private $farm;
 
+    #[ORM\Column(type: 'string', length: 1000, nullable: true)]
+    private $feedback;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -69,5 +72,17 @@ class FarmVisit
     public function equals(FarmVisit $other) : bool
     {
         return $this->id == $other->getId();
+    }
+
+    public function getFeedback(): ?string
+    {
+        return $this->feedback;
+    }
+
+    public function setFeedback(?string $feedback): self
+    {
+        $this->feedback = $feedback;
+
+        return $this;
     }
 }

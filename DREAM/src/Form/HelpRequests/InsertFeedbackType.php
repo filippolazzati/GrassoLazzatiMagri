@@ -21,7 +21,7 @@ class InsertFeedbackType extends AbstractType
             ],
             'attr' => [
                 'rows' => 5,
-            ],
+            ]
         ])
             ->add('send', SubmitType::class, ['label' => 'Send']);
     }

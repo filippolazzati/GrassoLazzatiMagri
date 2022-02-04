@@ -8,7 +8,10 @@ use App\Entity\DailyPlan\FarmVisit;
 use App\Entity\Farm;
 use App\Repository\DailyPlan\FarmVisitRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Exception;
 use Knp\Component\Pager\Event\AfterEvent;
+use Psr\Log\LoggerInterface;
 
 class DailyPlanService
 {
@@ -20,6 +23,7 @@ class DailyPlanService
     const LAST_POSSIBLE_WORK_HOUR = '19:00';
     const WORKING_HOURS = 8;
     const MINUTES_PER_HOUR = 60;
+    const MIN_VISIT_DURATION = 'PT15M';
 
     private FarmVisitRepository $farmVisitRepository;
 
@@ -33,7 +37,7 @@ class DailyPlanService
         // if there are less than $numberOfVisits farms in the area, simply all farms should be visited
         // (very particular case)
         if ($numberOfVisits <= $agronomist->getArea()->getFarms()->count()) {
-            return $this->createDailyPlan($agronomist, $date, new ArrayCollection($agronomist->getArea()->getFarms()));
+            return $this->createDailyPlan($agronomist, $date, $agronomist->getArea()->getFarms());
         }
 
         // date of last visit scheduled in the area
@@ -79,9 +83,10 @@ class DailyPlanService
         return $this->createDailyPlan($agronomist, $date, $farmsToVisit);
     }
 
-    public function moveVisit(Agronomist $agronomist, DailyPlan $dailyPlan, FarmVisit $farmVisit, \DateTime $newStartHour) : void {
-        if (!$dailyPlan->getAgronomist()->equals($agronomist) || $dailyPlan->isConfirmed() ||
-                $newStartHour <= new \DateTime(self::START_WORKDAY) || $newStartHour >= new \DateTime(self::LAST_POSSIBLE_WORK_HOUR)) {
+    public function moveVisit(Agronomist $agronomist, DailyPlan $dailyPlan, FarmVisit $farmVisit, \DateTime $newStartHour, LoggerInterface $logger) : void {
+        if (!$dailyPlan->getAgronomist()->equals($agronomist) || $dailyPlan->isConfirmed() || !$dailyPlan->equals($farmVisit->getDailyPlan()) ||
+                $this->compareTime($newStartHour, new \DateTime(self::START_WORKDAY)) ||
+                $this->compareTime(new \DateTime(self::LAST_POSSIBLE_WORK_HOUR), $newStartHour)) {
             throw new \Exception('Operation "move visit" illegal');
         }
 
@@ -91,7 +96,8 @@ class DailyPlanService
     public function addVisit(Agronomist $agronomist, DailyPlan $dailyPlan, Farm $farm, \DateTime $startHour)
     {
         if (!$dailyPlan->getAgronomist()->equals($agronomist) || $dailyPlan->isConfirmed() ||
-            $startHour <= new \DateTime(self::START_WORKDAY) || $startHour >= new \DateTime(self::LAST_POSSIBLE_WORK_HOUR) ||
+            $this->compareTime($startHour, new \DateTime(self::START_WORKDAY)) ||
+            $this->compareTime(new \DateTime(self::LAST_POSSIBLE_WORK_HOUR), $startHour) ||
             $agronomist->getArea()->equals($farm->getArea())) {
             throw new \Exception('Operation "add visit" illegal');
         }
@@ -104,16 +110,49 @@ class DailyPlanService
 
     public function removeVisit(Agronomist $agronomist, DailyPlan $dailyPlan, FarmVisit $farmVisit) {
         if (!$dailyPlan->getAgronomist()->equals($agronomist) || $dailyPlan->isConfirmed() ||
-            !$dailyPlan->getFarmVisits()->exists(function ($key, $value) use ($farmVisit) {
-                return $value->equals($farmVisit);
-            }) || ($dailyPlan->isNew() && $this->isVisitNecessary($farmVisit))) {
+            !$dailyPlan->equals($farmVisit->getDailyPlan()) || ($dailyPlan->isNew() && $this->isVisitNecessary($farmVisit))) {
             throw new \Exception('Operation "remove visit" illegal');
         }
 
         $dailyPlan->removeFarmVisit($farmVisit);
     }
 
-    private function createDailyPlan(Agronomist $agronomist, \DateTime $date, ArrayCollection $farms): DailyPlan
+    public function acceptDailyPlan(Agronomist $agronomist, DailyPlan $dailyPlan)
+    {
+        if ($dailyPlan->getAgronomist()->equals($agronomist) && $dailyPlan->isNew() &&
+            $this->noOverlappingVisits($dailyPlan->getFarmVisits())) {
+            $dailyPlan->setState(DailyPlan::ACCEPTED);
+        } else {
+            throw new Exception("Daily plan not acceptable");
+        }
+    }
+
+    public function confirmDailyPlan(Agronomist $agronomist, DailyPlan $dailyPlan)
+    {
+        if ($dailyPlan->getAgronomist()->equals($agronomist) && $dailyPlan->isAccepted() &&
+            $this->noOverlappingVisits($dailyPlan->getFarmVisits())) {
+            $dailyPlan->setState(DailyPlan::CONFIRMED);
+        } else {
+            throw new Exception("Daily plan not confirmable");
+        }
+    }
+
+    public function insertVisitsFeedbacks(Agronomist $agronomist, DailyPlan $dailyPlan, ArrayCollection $feedbacks)
+    {
+        if(!$dailyPlan->getAgronomist()->equals($agronomist)) {
+            throw new Exception('Invalid access');
+        }
+
+        foreach ($feedbacks as $visitId => $feedback) {
+            foreach ($dailyPlan->getFarmVisits() as $farmVisit) {
+                if ($farmVisit->getId() == $visitId) {
+                    $farmVisit->setFeedback($feedback);
+                }
+            }
+        }
+    }
+
+    private function createDailyPlan(Agronomist $agronomist, \DateTime $date, Collection $farms): DailyPlan
     {
         $dailyPlan = new DailyPlan();
         $dailyPlan->setAgronomist($agronomist);
@@ -170,5 +209,33 @@ class DailyPlanService
                 $dateOfLastVisitInArea->sub(new \DateInterval('P1Y')), $dateOfLastVisitInArea)
                 < self::MIN_VISITS_IN_A_YEAR;
         }
+    }
+
+    private function noOverlappingVisits(Collection $farmVisits) : bool
+    {
+        $startingHours = $farmVisits->map(function ($value) {
+            return new \DateTime($value->getStartTime()->format('H:i'));
+        });
+        $iterator = $startingHours->getIterator();
+        $iterator->asort();
+        $prec = $iterator->current();
+        $iterator->next();
+        while($iterator->valid()) {
+            $current = $iterator->current();
+            if ($this->compareTime($current->add(new \DateInterval(self::MIN_VISIT_DURATION)), $prec)) {
+                return false;
+            }
+            $prec = $current;
+            $iterator->next();
+        }
+        return true;
+    }
+
+    private function compareTime(\DateTime $first, \DateTime $second) : bool
+    {
+        // to compare only time, create two new objects DateTime with the same date and compare them
+        $firstOnlyTime = new \DateTime('1970-01-01 ' . $first->format('H:i'));
+        $secondOnlyTime = new \DateTime('1970-01-01 ' . $second->format('H:i'));
+        return $firstOnlyTime < $secondOnlyTime;
     }
 }

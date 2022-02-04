@@ -3,9 +3,9 @@
 namespace App\Form\DailyPlan;
 
 use App\Entity\Farm;
-use Doctrine\DBAL\Types\TimeType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -33,6 +33,6 @@ class AddVisitType extends \Symfony\Component\Form\AbstractType
             'widget' => 'choice',
             'hours' => [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
         ])
-            ->add('send', SubmitType::class, ['label' => 'Add Visit']);;
+            ->add('send', SubmitType::class, ['label' => 'Add Visit']);
     }
 }

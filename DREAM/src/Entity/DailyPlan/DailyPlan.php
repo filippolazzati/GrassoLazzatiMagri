@@ -2,7 +2,6 @@
 
 namespace App\Entity\DailyPlan;
 
-use App\DailyPlan\DailyPlanService;
 use App\Entity\Agronomist;
 use App\Repository\DailyPlan\DailyPlanRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -126,5 +125,9 @@ class DailyPlan
     public function isConfirmed() : bool
     {
         return strcmp($this->state, self::CONFIRMED) == 0;
+    }
+
+    public function equals(DailyPlan $other) {
+        return $this->id == $other->getId();
     }
 }

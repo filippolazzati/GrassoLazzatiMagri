@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Daily Plan of {{ daily_plan.date | date('Y-m-d')}} {% endblock %}
+
+{% block content %}
+    <div>
+        State : {{ daily_plan.state }}
+    </div>
+    {% if error_msg is not null %}
+        <div>
+            {{ error_msg }}
+        </div>
+    {% endif %}
+    <table>
+        <thead>
+            <tr>
+                <th>Start Time</th>
+                <th>Farm Address</th>
+                <th>Farmer</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for farmVisit in daily_plan.farmVisits %}
+                <tr>
+                    <td>{{ farmVisit.startTime | date('H:i') }}</td>
+                    <td>{{ farmVisit.farm.city}}, {{ farmVisit.farm.street }}</td>
+                    <td>{{ farmVisit.farm.farmer.fullName }}</td>
+                    <td><a href={{ path('daily_plan_farm_details', {farm: farmVisit.farm.id}) }}>FarmDetails</a></td>
+                    {% if daily_plan.new or daily_plan.accepted %}
+                        <td>{{ form(forms_move_visits[(farmVisit.id)]) }}</td>
+                        <td>{{ form(forms_remove_visits[(farmVisit.id)]) }}</td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if daily_plan.new or daily_plan.accepted %}
+        {{ form(form_add_visit) }}
+    {% endif %}
+    {% if daily_plan.new %}
+        {{ form(form_accept_daily_plan)  }}
+    {% endif %}
+    {% if daily_plan.accepted %}
+        {{ form(form_confirm_daily_plan)  }}
+    {% endif %}
+{% endblock %}
