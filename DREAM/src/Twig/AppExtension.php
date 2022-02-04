@@ -13,7 +13,7 @@ class AppExtension extends AbstractExtension
 {
     #[Required] public Security $security;
 
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('is_user_type', [$this, 'isUserType']),

@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Production Data{% endblock %}
+
+{% block toolbar %}
+    <a href="{{ path('production_data_add') }}" class="btn btn-primary">
+        <i class="bi bi-plus"></i> New Production Data
+    </a>
+{% endblock %}
+
+{% block content %}
+    <table class="table table-hover mt-4">
+        <thead>
+        <tr>
+            <th style="width: 25%">Date/Time</th>
+            <th style="width: 60%">Entries</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for data in pagination %}
+            <tr data-href="{{ path('production_data_view', {data: data.id}) }}">
+                <td class="align-middle">
+                    <div class="d-flex align-items-center">
+                        {{ data.createdAt|date('d/m/Y H:i') }}
+                    </div>
+                </td>
+                <td class="align-middle">
+                    {{ data.entries.count }}
+                </td>
+            </tr>
+        {% endfor %}
+        {% if pagination.totalItemCount == 0 %}
+            <tr>
+                <td colspan="3" class="text-center py-3">
+                    There is currently no production data.
+                </td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+    <div class="navigation">
+        {{ knp_pagination_render(pagination) }}
+    </div>
+{% endblock %}

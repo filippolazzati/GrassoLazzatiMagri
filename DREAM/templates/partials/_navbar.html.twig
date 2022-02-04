@@ -8,45 +8,50 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 {% if app.user.farmer %}
                     <li class="nav-item">
-                        <a class="nav-link {% if app.request.attributes.get('_route') == 'index' %}active{% endif %}" href="{{ path('index') }}">
+                        <a class="nav-link mx-1 {% if app.request.attributes.get('_route') == 'index' %}active{% endif %}" href="{{ path('index') }}">
                             Home
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if app.request.attributes.get('_route') starts with 'forum' %}active{% endif %}" href="{{ path('forum_index') }}">
+                        <a class="nav-link mx-1 {% if app.request.attributes.get('_route') starts with 'production' %}active{% endif %}" href="{{ path('production_data_index') }}">
+                            Production Data
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link mx-1 {% if app.request.attributes.get('_route') starts with 'forum' %}active{% endif %}" href="{{ path('forum_index') }}">
                             Forum
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if app.request.attributes.get('_route') starts with 'suggestions' %}active{% endif %}" href="{{ path('suggestions_view') }}">
+                        <a class="nav-link mx-1 {% if app.request.attributes.get('_route') starts with 'suggestions' %}active{% endif %}" href="{{ path('suggestions_view') }}">
                             Suggestions
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if app.request.attributes.get('_route') starts with 'my_requests' %}active{% endif %}" href="{{ path('my_requests_index') }}">
+                        <a class="nav-link mx-1 {% if app.request.attributes.get('_route') starts with 'my_requests' %}active{% endif %}" href="{{ path('my_requests_index') }}">
                             My Requests
                         </a>
                     </li>
                 {% endif %}
-                <li class="nav-item">
-                    <a class="nav-link {% if app.request.attributes.get('_route') starts with 'forecasts' %}active{% endif %}" href="{{ path('forecasts_view') }}">
-                        Weather Forecasts
-                    </a>
-                </li>
-                {% if app.user.agronomist or (app.user.farmer and app.user.myReplies)%}
+                {% if app.user.agronomist or (app.user.farmer and app.user.myReplies) %}
                     <li class="nav-item">
-                        <a class="nav-link {% if app.request.attributes.get('_route') starts with 'my_replies' %}active{% endif %}" href="{{ path('my_replies_index') }}">
+                        <a class="nav-link mx-1 {% if app.request.attributes.get('_route') starts with 'my_replies' %}active{% endif %}" href="{{ path('my_replies_index') }}">
                             My Replies
                         </a>
                     </li>
                 {% endif %}
                 {% if app.user.agronomist %}
                     <li class="nav-item">
-                        <a class="nav-link {% if app.request.attributes.get('_route') starts with 'daily_plan' %}active{% endif %}" href="{{ path('daily_plan_index') }}">
+                        <a class="nav-link mx-1 {% if app.request.attributes.get('_route') starts with 'daily_plan' %}active{% endif %}" href="{{ path('daily_plan_index') }}">
                             Daily Plan
                         </a>
                     </li>
                 {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link mx-1 {% if app.request.attributes.get('_route') starts with 'forecasts' %}active{% endif %}" href="{{ path('forecasts_view') }}">
+                        Weather Forecasts
+                    </a>
+                </li>
             </ul>
             <div class="dropdown text-end">
                 <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">

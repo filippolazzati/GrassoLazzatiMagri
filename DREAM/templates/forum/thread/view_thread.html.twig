@@ -31,7 +31,7 @@
                         <div class="d-flex align-items-center">
                             <img src="{{ message.author.avatarUrl }}" alt="{{ message.author.fullName }}"
                                  class="rounded-circle me-2" style="width: 24px; height: 24px;">
-                            <strong>{{ app.user.fullName }}</strong>
+                            <strong>{{ message.author.fullName }}</strong>
                         </div>
                         <span class="d-block text-muted">{{ message.createdAt|date('d/m/Y H:i:s') }}</span>
                     </div>

@@ -4,6 +4,8 @@ namespace App\Entity\ProductionData;
 
 use App\Repository\ProductionData\ProductionDataEntryRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ProductionDataEntryRepository::class)]
 #[ORM\InheritanceType('SINGLE_TABLE')]
@@ -14,14 +16,25 @@ use Doctrine\ORM\Mapping as ORM;
     'watering' => WateringEntry::class,
     'harvesting' => HarvestingEntry::class,
 ])]
-class ProductionDataEntry
+#[DiscriminatorMap(
+    typeProperty: 'type',
+    mapping: [
+        'planting_seeding' => PlantingSeedingEntry::class,
+        'fertilizing' => FertilizingEntry::class,
+        'watering' => WateringEntry::class,
+        'harvesting' => HarvestingEntry::class,
+    ]
+)]
+abstract class ProductionDataEntry
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    #[Groups(['form'])]
+    private ?int $id;
 
     #[ORM\Column(type: 'float')]
+    #[Groups(['form'])]
     private $area;
 
     #[ORM\ManyToOne(targetEntity: ProductionData::class, inversedBy: 'entries')]
@@ -31,6 +44,18 @@ class ProductionDataEntry
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getArea(): ?float
+    {
+        return $this->area;
+    }
+
+    public function setArea(?float $area): self
+    {
+        $this->area = $area;
+
+        return $this;
     }
 
     public function getParent(): ?ProductionData
