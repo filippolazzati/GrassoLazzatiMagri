@@ -6,6 +6,7 @@ use App\Entity\Farmer;
 use App\Entity\HelpRequest\HelpReply;
 use App\Entity\HelpRequest\HelpRequest;
 use App\Entity\User;
+use DateTime;
 use Exception;
 
 class HelpRequestsService
@@ -23,7 +24,7 @@ class HelpRequestsService
         if (!($receiver->isAgronomist() || $receiver->isFarmer() && !$receiver->getBestPerforming())) {
             throw new Exception('invalid receiver');
         }
-        return new HelpRequest(new \DateTime(), $title, $text, $author, $receiver);
+        return new HelpRequest(new DateTime(), $title, $text, $author, $receiver);
     }
 
     /**
@@ -32,9 +33,9 @@ class HelpRequestsService
      * @param HelpRequest $helpRequest the help request which the created help reply is related to
      * @return HelpReply the created help reply
      */
-    public function createHelpReply (string $text, HelpRequest $helpRequest) : HelpReply
+    public function createHelpReply(string $text, HelpRequest $helpRequest): HelpReply
     {
-        $helpReply = new HelpReply($text, new \DateTime());
+        $helpReply = new HelpReply($text, new DateTime());
         $helpRequest->setReply($helpReply);
         return $helpReply;
     }
@@ -45,7 +46,7 @@ class HelpRequestsService
      * @param string $feedback the feedback to add to the help reply (at most 300 characters)
      * @return void
      */
-    public function addFeedbackToReply(HelpRequest $helpRequest, string $feedback) : void
+    public function addFeedbackToReply(HelpRequest $helpRequest, string $feedback): void
     {
         $helpRequest->getReply()->setFeedback($feedback);
     }

@@ -6,8 +6,6 @@ use App\Entity\Farmer;
 use App\Entity\HelpRequest\HelpRequest;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 

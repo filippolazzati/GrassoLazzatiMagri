@@ -3,21 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Farmer;
-use App\Entity\Forum\Message;
-use App\Entity\Forum\Thread;
 use App\Entity\ProductionData\HarvestingEntry;
 use App\Entity\ProductionData\PlantingSeedingEntry;
 use App\Entity\ProductionData\ProductionData;
-use App\Entity\ProductionData\ProductionDataEntry;
-use App\Form\Forum\NewMessageType;
-use App\Form\Forum\NewThreadType;
 use App\Form\ProductionDataType;
-use App\Forum\ForumService;
 use AssertionError;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr\Join;
 use Knp\Component\Pager\PaginatorInterface;
-use LogicException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

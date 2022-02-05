@@ -2,7 +2,6 @@
 
 namespace App\Entity\ProductionData;
 
-use App\Entity\ProductionData\PlantingSeedingRelationTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 

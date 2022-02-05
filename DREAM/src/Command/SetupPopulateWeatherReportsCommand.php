@@ -2,8 +2,6 @@
 
 namespace App\Command;
 
-use App\Entity\Area;
-use App\Entity\WeatherForecast;
 use App\Entity\WeatherReport;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -42,12 +40,12 @@ class SetupPopulateWeatherReportsCommand extends Command
         if ($CSVfp !== FALSE) {
             while (!feof($CSVfp)) {
                 $row = fgetcsv($CSVfp, 1000, ",");
-                if($row != ''){
-                $date = DateTime::createFromFormat('Y-m-d', $row[0]);
-                array_push($reports, new WeatherReport($date,$row[1],$row[2],(int) $row[3],(int) $row[4],(int) $row[5],(int) $row[6],(float) $row[7], $row[8],(int) $row[9],(int) $row[10]));
+                if ($row != '') {
+                    $date = DateTime::createFromFormat('Y-m-d', $row[0]);
+                    array_push($reports, new WeatherReport($date, $row[1], $row[2], (int)$row[3], (int)$row[4], (int)$row[5], (int)$row[6], (float)$row[7], $row[8], (int)$row[9], (int)$row[10]));
+                }
             }
-            }
-            }
+        }
         fclose($CSVfp);
 
         foreach ($reports as $report) {

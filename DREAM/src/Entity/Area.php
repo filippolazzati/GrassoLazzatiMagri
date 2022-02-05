@@ -86,7 +86,7 @@ class Area
     /**
      * @return mixed
      */
-    public function getAgronomists() : Collection
+    public function getAgronomists(): Collection
     {
         return $this->agronomists;
     }
@@ -113,7 +113,7 @@ class Area
         return $this;
     }
 
-    public function equals(Area $other) : bool
+    public function equals(Area $other): bool
     {
         return $this->id == $other->getId();
     }

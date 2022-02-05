@@ -32,3 +32,7 @@ services:
     App\Command\SetupDatabase:
         arguments:
             $pythonPath: '%app.python_path%'
+
+    App\Suggestions\SuggestionService:
+        arguments:
+            $pythonPath: '%app.python_path%'

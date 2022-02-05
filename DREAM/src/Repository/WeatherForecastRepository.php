@@ -37,7 +37,6 @@ class WeatherForecastRepository extends ServiceEntityRepository
             ->andWhere('w.city = :city')
             ->setParameter('city', $city)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 }

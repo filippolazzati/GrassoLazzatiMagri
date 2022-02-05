@@ -2,9 +2,9 @@
 
 namespace App\DailyPlan;
 
+use DateInterval;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
-use Exception;
 
 /**
  * Helper class that manages working days and holidays in Telangana.
@@ -31,23 +31,23 @@ class Calendar
      * @param DateTime $date the date from which (included) the working days are computed
      * @return ArrayCollection an ArrayCollection of DateTime objects, containing seven working days, from the provided one included
      */
-    public function getSevenWorkingDaysFrom(DateTime $date) : ArrayCollection
+    public function getSevenWorkingDaysFrom(DateTime $date): ArrayCollection
     {
         $result = new ArrayCollection();
         do {
             if (!$this->isHoliday($date)) {
                 $result->add(new DateTime($date->format('Y-m-d')));
             }
-            $date = $date->add(new \DateInterval('P1D'));
+            $date = $date->add(new DateInterval('P1D'));
         } while ($result->count() < 7);
         return $result;
     }
 
-    private function isHoliday(DateTime $date) : bool
+    private function isHoliday(DateTime $date): bool
     {
         $weekDay = $date->format('w');
         return $weekDay == 6 || $weekDay == 0 || $this->nationalHolidays->exists(function ($key, $value) use ($date) {
-                return strcmp($date->format('d-m'), $value->format('d-m')) == 0 ;
+                return strcmp($date->format('d-m'), $value->format('d-m')) == 0;
             });
     }
 }

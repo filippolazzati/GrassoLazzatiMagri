@@ -5,6 +5,7 @@ namespace App\Entity\HelpRequest;
 use App\Entity\Farmer;
 use App\Entity\User;
 use App\Repository\HelpRequest\HelpRequestRepository;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: HelpRequestRepository::class)]
@@ -35,8 +36,8 @@ class HelpRequest
     #[ORM\OneToOne(targetEntity: HelpReply::class, cascade: ['persist', 'remove'])]
     private $reply;
 
-    public function __construct(\DateTimeInterface $timestamp, string $title, string $text, Farmer $author,
-                                User $receiver)
+    public function __construct(DateTimeInterface $timestamp, string $title, string $text, Farmer $author,
+                                User              $receiver)
     {
         $this->timestamp = $timestamp;
         $this->title = $title;
@@ -50,12 +51,12 @@ class HelpRequest
         return $this->id;
     }
 
-    public function getTimestamp(): ?\DateTimeInterface
+    public function getTimestamp(): ?DateTimeInterface
     {
         return $this->timestamp;
     }
 
-    public function setTimestamp(\DateTimeInterface $timestamp): self
+    public function setTimestamp(DateTimeInterface $timestamp): self
     {
         $this->timestamp = $timestamp;
 
@@ -122,7 +123,7 @@ class HelpRequest
         return $this;
     }
 
-    public function needsReply() : bool
+    public function needsReply(): bool
     {
         return is_null($this->reply);
     }

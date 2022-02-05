@@ -7,6 +7,7 @@ use App\Entity\Farm;
 use App\Entity\Farmer;
 use App\Entity\PolicyMaker;
 use App\Entity\User;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -63,7 +64,7 @@ class UserCreateCommand extends Command
         $user->setPassword($this->passwordHasher->hashPassword($user, $password));
         $user->setName('');
         $user->setSurname('');
-        $user->setBirthDate(new \DateTime());
+        $user->setBirthDate(new DateTime());
 
         if ($user instanceof Farmer) {
             $user->setFarm(new Farm());

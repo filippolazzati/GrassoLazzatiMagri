@@ -99,12 +99,12 @@ def weather_to_number(label):
 # import the params
 params = list()
 for i in range(6):
-    params.append(np.loadtxt('../src/Controller/suggestions/params-mean-std-crops/params'+str(i)+'.csv', delimiter=','))
-data_mean = np.loadtxt('../src/Controller/suggestions/params-mean-std-crops/mean.csv', delimiter=',')
-data_std = np.loadtxt('../src/Controller/suggestions/params-mean-std-crops/std.csv', delimiter=',')
+    params.append(np.loadtxt('./params-mean-std-crops/params'+str(i)+'.csv', delimiter=','))
+data_mean = np.loadtxt('./params-mean-std-crops/mean.csv', delimiter=',')
+data_std = np.loadtxt('./params-mean-std-crops/std.csv', delimiter=',')
 
 # import the sample
-sample = pd.read_csv('../src/Controller/suggestions/sample.csv', header=None)
+sample = pd.read_csv('./sample.csv', header=None)
 
 # convert sample to numeric
 w = 1 # index for weather

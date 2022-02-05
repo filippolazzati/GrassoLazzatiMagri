@@ -6,6 +6,7 @@ use App\Entity\Area;
 use App\Entity\Farmer;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -43,7 +44,23 @@ class RegisterType extends AbstractType
                 'class' => Area::class,
                 'mapped' => false
             ])
-            ->add('farmCity', TextType::class, ['mapped' => false])
+            ->add('farmCity', ChoiceType::class, [
+                'choices' => [
+                    'Hyderabad' => 'Hyderabad',
+                    'Warangal' => 'Warangal',
+                    'Nizamabad' => 'Nizamabad',
+                    'Khammam' => 'Khammam',
+                    'Karimnagar' => 'Karimnagar',
+                    'Ramagundam' => 'Ramagundam',
+                    'Mahabubnagar' => 'Mahabubnagar',
+                    'Adilabad' => 'Adilabad',
+                    'Suryapet' => 'Suryapet',
+                    'Siddipet' => 'Siddipet',
+                    'Nalgonda' => 'Nalgonda',
+                    'Jagtial' => 'Jagtial',
+                ],
+                'mapped' => false,
+            ])
             ->add('farmStreet', TextType::class, ['required' => false, 'mapped' => false]);
     }
 

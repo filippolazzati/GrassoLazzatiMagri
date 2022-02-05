@@ -24,6 +24,7 @@
         "symfony/flex": "^2",
         "symfony/form": "6.0.*",
         "symfony/framework-bundle": "6.0.*",
+        "symfony/google-mailer": "6.0.*",
         "symfony/http-client": "6.0.*",
         "symfony/intl": "6.0.*",
         "symfony/mailer": "6.0.*",
@@ -49,6 +50,7 @@
     "require-dev": {
         "dama/doctrine-test-bundle": "^6.7",
         "doctrine/doctrine-fixtures-bundle": "^3.4",
+        "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan": "^1.4",
         "phpstan/phpstan-doctrine": "^1.2",
         "phpstan/phpstan-symfony": "^1.1",

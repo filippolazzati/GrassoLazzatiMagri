@@ -24,20 +24,20 @@ class SuggestionsType extends AbstractType
 
         $builder
             ->add('type', ChoiceType::class, [
-                'choices'  => [
+                'choices' => [
                     'Fertilizer' => 'fertilizer',
                     'Crop' => 'crop',
                 ],
             ])
             ->add('crop', ChoiceType::class, [
                 'choices' => [
-                     'Potatoes' => 'potatoes',
-                     'Tomatoes' => 'tomatoes',
-                     'Salad' => 'salad',
-                     'Onions' => 'onions',
-                     'Radishes' => 'radishes',
-                     'Cucumber' => 'cucumber',
-                     'Cauliflower' => 'cauliflower',
+                    'Potatoes' => 'potatoes',
+                    'Tomatoes' => 'tomatoes',
+                    'Salad' => 'salad',
+                    'Onions' => 'onions',
+                    'Radishes' => 'radishes',
+                    'Cucumber' => 'cucumber',
+                    'Cauliflower' => 'cauliflower',
                 ],
                 'required' => $type === 'fertilizer',
             ])

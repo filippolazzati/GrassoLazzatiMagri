@@ -4,6 +4,7 @@ namespace App\Entity\DailyPlan;
 
 use App\Entity\Farm;
 use App\Repository\DailyPlan\FarmVisitRepository;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: FarmVisitRepository::class)]
@@ -21,7 +22,7 @@ class FarmVisit
     #[ORM\Column(type: 'time')]
     private $startTime;
 
-    #[ORM\ManyToOne(targetEntity: Farm::class)]
+    #[ORM\ManyToOne(targetEntity: Farm::class, inversedBy: 'farmVisits')]
     #[ORM\JoinColumn(nullable: false)]
     private $farm;
 
@@ -33,12 +34,12 @@ class FarmVisit
         return $this->id;
     }
 
-    public function getStartTime(): ?\DateTimeInterface
+    public function getStartTime(): ?DateTimeInterface
     {
         return $this->startTime;
     }
 
-    public function setStartTime(\DateTimeInterface $startTime): self
+    public function setStartTime(DateTimeInterface $startTime): self
     {
         $this->startTime = $startTime;
 
@@ -69,7 +70,7 @@ class FarmVisit
         return $this;
     }
 
-    public function equals(FarmVisit $other) : bool
+    public function equals(FarmVisit $other): bool
     {
         return $this->id == $other->getId();
     }

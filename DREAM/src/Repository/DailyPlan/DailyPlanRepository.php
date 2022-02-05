@@ -6,7 +6,6 @@ use App\Entity\Agronomist;
 use App\Entity\DailyPlan\DailyPlan;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -30,13 +29,13 @@ class DailyPlanRepository extends ServiceEntityRepository
      * @return DailyPlan|null the daily plan of the given agronomist for the given date, or null if the given agronomist
      * does not have a daily plan for that date
      */
-    public function findDailyPlanByAgronomistAndDate(Agronomist $agronomist, DateTime $date) : ?DailyPlan
+    public function findDailyPlanByAgronomistAndDate(Agronomist $agronomist, DateTime $date): ?DailyPlan
     {
         return $this->_em->createQuery(
             'SELECT dp
                  FROM App\Entity\DailyPlan\DailyPlan dp
                  WHERE dp.agronomist = :agronomist AND dp.date = :date'
-            )->setParameter('agronomist', $agronomist)
+        )->setParameter('agronomist', $agronomist)
             ->setParameter('date', $date)
             ->getOneOrNullResult();
     }
@@ -49,7 +48,7 @@ class DailyPlanRepository extends ServiceEntityRepository
      * @return array the daily plans of the given agronomist, in state either NEW or ACCEPTED, belonging to a date
      * prior to the given one
      */
-    public function findNotConfirmedPastDailyPlansOfAgronomist(Agronomist $agronomist, DateTime $date) : array
+    public function findNotConfirmedPastDailyPlansOfAgronomist(Agronomist $agronomist, DateTime $date): array
     {
         return $this->_em->createQuery(
             "SELECT dp

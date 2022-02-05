@@ -2,8 +2,8 @@
 
 namespace App\Command;
 
-use App\Entity\Area;
 use App\Entity\WeatherForecast;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -49,12 +49,12 @@ class SetupPopulateWeatherForecastsCommand extends Command
 
         // create an array of forecasts for the next 6 days in $city
         $forecasts = [
-            new WeatherForecast(new \DateTime('+1 day'), $city, "sunny", 30, 22, 27, 0, 2.0, "n", 40, 1010),
-            new WeatherForecast(new \DateTime('+2 day'), $city, "sunny", 28, 22, 26, 0, 2.5, "ne", 45, 1015),
-            new WeatherForecast(new \DateTime('+3 day'), $city, "partially cloudy", 28, 20, 25, 0, 4, "n", 30, 1030),
-            new WeatherForecast(new \DateTime('+4 day'), $city, "sunny", 29, 22, 26, 0, 3, "ne", 42, 1020),
-            new WeatherForecast(new \DateTime('+5 day'), $city, "cloudy", 25, 19, 23, 5, 5, "e", 38, 990),
-            new WeatherForecast(new \DateTime('+6 day'), $city, "rainy", 25, 17, 20, 0, 7, "e", 55, 1000),
+            new WeatherForecast(new DateTime('+1 day'), $city, "sunny", 30, 22, 27, 0, 2.0, "n", 40, 1010),
+            new WeatherForecast(new DateTime('+2 day'), $city, "sunny", 28, 22, 26, 0, 2.5, "ne", 45, 1015),
+            new WeatherForecast(new DateTime('+3 day'), $city, "partially cloudy", 28, 20, 25, 0, 4, "n", 30, 1030),
+            new WeatherForecast(new DateTime('+4 day'), $city, "sunny", 29, 22, 26, 0, 3, "ne", 42, 1020),
+            new WeatherForecast(new DateTime('+5 day'), $city, "cloudy", 25, 19, 23, 5, 5, "e", 38, 990),
+            new WeatherForecast(new DateTime('+6 day'), $city, "rainy", 25, 17, 20, 0, 7, "e", 55, 1000),
         ];
 
         foreach ($forecasts as $forecast) {

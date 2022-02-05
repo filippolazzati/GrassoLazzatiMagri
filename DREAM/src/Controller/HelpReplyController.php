@@ -4,26 +4,26 @@ namespace App\Controller;
 
 use App\Entity\Agronomist;
 use App\Entity\Farmer;
-use App\Entity\HelpRequest\HelpReply;
 use App\Entity\HelpRequest\HelpRequest;
 use App\Form\HelpRequests\InsertReplyType;
 use App\HelpRequests\HelpRequestsService;
-use AssertionError;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Service\Attribute\Required;
 
 #[Route('/my_replies', name: 'my_replies_')]
-class HelpReplyController extends \Symfony\Bundle\FrameworkBundle\Controller\AbstractController
+class HelpReplyController extends AbstractController
 {
     #[Required] public EntityManagerInterface $em;
     #[Required] public PaginatorInterface $paginator;
     #[Required] public HelpRequestsService $helpRequestsService;
 
     #[Route('/view/{help_request?}', name: 'index', methods: ['GET', 'POST'])]
-    public function index(Request $request, ?HelpRequest $help_request): \Symfony\Component\HttpFoundation\Response
+    public function index(Request $request, ?HelpRequest $help_request): Response
     {
         // if the user is not a farmer or agronomist, error
         $user = $this->getUser();
@@ -36,7 +36,7 @@ class HelpReplyController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
         $pagination = $this->paginator->paginate($helpRequestsQuery, $request->query->getInt('page', 1), 20);
 
         // if a help request has been selected and its receiver is different from the user, error
-        if(!is_null($help_request) && !$help_request->getReceiver()->equals($user)) {
+        if (!is_null($help_request) && !$help_request->getReceiver()->equals($user)) {
             $this->createNotFoundException();
         }
 
@@ -67,7 +67,7 @@ class HelpReplyController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
     }
 
     #[Route('/confirmation_insert_help_reply{help_request}', name: 'confirmation_insert_help_reply', methods: ['GET'])]
-    public function getConfirmPageForInsertReply(HelpRequest $help_request) : \Symfony\Component\HttpFoundation\Response
+    public function getConfirmPageForInsertReply(HelpRequest $help_request): Response
     {
         // if the user is not a farmer or agronomist, error
         $user = $this->getUser();
@@ -76,7 +76,7 @@ class HelpReplyController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
         }
 
         // if a help request has been selected and its receiver is different from the user, error
-        if(!$help_request->getReceiver()->equals($user)) {
+        if (!$help_request->getReceiver()->equals($user)) {
             $this->createNotFoundException();
         }
         return $this->render('myreplies/confirm_insert_reply.html.twig', ['help_request' => $help_request]);
