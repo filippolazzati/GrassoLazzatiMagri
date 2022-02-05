@@ -1,7 +1,7 @@
 framework:
     mailer:
         envelope:
-            sender: 'dream@grasso.io'
+            sender: 'dream.sw.eng.2.project@gmail.com'
         dsn: '%env(MAILER_DSN)%'
         headers:
-            from: 'DREAM <dream@grasso.io>'
+            from: 'DREAM <dream.sw.eng.2.project@gmail.com>'
