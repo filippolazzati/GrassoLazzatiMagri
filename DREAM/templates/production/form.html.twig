@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Production Data{% endblock %}
+
+{% block toolbar %}
+    <a class="btn btn-light" href="{{ path('forum_index') }}">
+        <i class="bi bi-arrow-left-short"></i> Back to production data list
+    </a>
+{% endblock %}
+
+{% block content %}
+    {{ form_start(form) }}
+
+    {{ form_row(form.date) }}
+    {{ form_row(form.comment) }}
+
+    <div id="production-data-entries-app" class="my-5">
+        <h5>Entries</h5>
+        {% if plantingEntries|length == 0 %}
+            <div class="alert alert-info p-2">
+                You can only enter planting entries as there are no existing entries.
+            </div>
+        {% endif %}
+        <input type="hidden" name="{{ form.entries.vars.full_name }}" :value="JSON.stringify(entries)">
+        <table v-if="entries.length > 0" class="table">
+            <tr v-for="(entry,i) in entries" :key="i">
+                <td class="align-middle font-weight-bolder">[[ entry.type|formatType ]]</td>
+                <td class="align-middle" v-if="entry.type === 'planting_seeding'">
+                    <div class="form-floating">
+                        <select class="form-select" :id="`production-crop-${i}`" v-model="entry.crop" required>
+                            <option selected>Select a crop type</option>
+                            <option v-for="(name, value) in crops" :value="value" :key="value">[[ name ]]</option>
+                        </select>
+                        <label :for="`production-crop-${i}`">Crop</label>
+                    </div>
+                </td>
+                <td class="align-middle" v-else>
+                    <div class="form-floating">
+                        <select class="form-select" :id="`production-related-${i}`" v-model.number="entry.relatedEntry" required>
+                            <option selected>Select an entry</option>
+                            {% for entry in plantingEntries %}
+                            <option value="{{ entry.id }}">[[ crops['{{ entry.crop }}'] ]] - {{ entry.area }}m² - {{ entry.parent.date|date('d/m/Y') }}</option>
+                            {% endfor %}
+                        </select>
+                        <label :for="`production-related-${i}`">Related entry</label>
+                    </div>
+                </td>
+                <td class="align-middle">
+                    <div class="form-floating">
+                        <input :id="`production-area-${i}`" type="number" v-model.number="entry.area" min="0" class="form-control" placeholder="Area">
+                        <label :for="`production-area-${i}`">Area</label>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div v-for="entry in entries" class="d-flex align-items-center">
+            <strong>[[  ]]</strong>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-sm btn-secondary dropdown-toggle" type="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-plus"></i> Add new entry
+            </button>
+            <ul class="dropdown-menu">
+                <li><button type="button" class="dropdown-item" @click="addEntry('planting_seeding')">Planting/Seeding</button></li>
+                {% if plantingEntries|length > 0 %}
+                <li><button type="button" class="dropdown-item" @click="addEntry('fertilizing')">Fertilizing</button></li>
+                <li><button type="button" class="dropdown-item" @click="addEntry('watering')">Watering</button></li>
+                <li><button type="button" class="dropdown-item" @click="addEntry('harvesting')">Harvesting</button></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+
+    <button class="btn btn-primary" type="submit">
+        Save
+    </button>
+
+    {{ form_row(form._token) }}
+    {{ form_end(form, {render_rest: false}) }}
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('vendor/vue/vue.js') }}"></script>
+    <script src="{{ asset('js/production/production-form.js') }}"></script>
+{% endblock %}

@@ -3,22 +3,14 @@
 namespace App\Entity\ProductionData;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity]
 class PlantingSeedingEntry extends ProductionDataEntry
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
-
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(['form'])]
     private $crop;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getCrop(): ?string
     {

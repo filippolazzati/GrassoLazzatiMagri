@@ -47,7 +47,7 @@ class SetupPopulateWeatherForecastsCommand extends Command
         $this->em->createQuery('DELETE FROM App\Entity\WeatherForecast a')->execute();
 
 
-        // create an array of forecasts for the next 6 days in Adilabad
+        // create an array of forecasts for the next 6 days in $city
         $forecasts = [
             new WeatherForecast(new \DateTime('+1 day'), $city, "sunny", 30, 22, 27, 0, 2.0, "n", 40, 1010),
             new WeatherForecast(new \DateTime('+2 day'), $city, "sunny", 28, 22, 26, 0, 2.5, "ne", 45, 1015),

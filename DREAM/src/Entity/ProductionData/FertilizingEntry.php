@@ -4,24 +4,16 @@ namespace App\Entity\ProductionData;
 
 use App\Entity\ProductionData\PlantingSeedingRelationTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity]
 class FertilizingEntry extends ProductionDataEntry
 {
     use PlantingSeedingRelationTrait;
 
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
-
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(['form'])]
     private $fertilizerType;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getFertilizerType(): ?string
     {

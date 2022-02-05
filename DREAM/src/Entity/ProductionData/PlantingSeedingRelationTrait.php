@@ -3,10 +3,12 @@
 namespace App\Entity\ProductionData;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 trait PlantingSeedingRelationTrait
 {
     #[ORM\ManyToOne(targetEntity: PlantingSeedingEntry::class)]
+    #[Groups(['form'])]
     private $relatedEntry;
 
     public function getRelatedEntry(): ?PlantingSeedingEntry
