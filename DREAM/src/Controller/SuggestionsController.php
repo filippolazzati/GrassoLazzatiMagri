@@ -73,7 +73,6 @@ class SuggestionsController extends AbstractController
                 $date = date('Y-m-d', strtotime($date . ' - 30 days'));
                 $reports[] = $reportsRepo->findOneByMonth($date, $city);
             }
-
             // write data to file sample.csv to pass the sample to the trained neural network to retrieve the suggestion
             $sampleFile = fopen("../src/Controller/suggestions/sample.csv", "wb");
             fwrite($sampleFile, $type === 'fertilizer' ? $crop : $area);

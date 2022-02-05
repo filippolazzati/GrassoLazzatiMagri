@@ -49,10 +49,9 @@ class SetupDatabase extends Command
 
         $this->em->createQuery('DELETE FROM App\Entity\WeatherForecast a')->execute();
         $this->em->createQuery('DELETE FROM App\Entity\WeatherReport a')->execute();
-        $this->em->createQuery('DELETE FROM App\Entity\Area a')->execute();
 
         // generate the datasets updated to the current date
-        shell_exec('python src/Command/sample_datasets/generate_sample_datasets.py');
+        echo shell_exec('python src/Command/sample_datasets/generate_sample_datasets.py');
 
         // setup weather reports
         $CSVfp = fopen("src/Command/sample_datasets/weather_reports.csv", "r");
@@ -96,25 +95,6 @@ class SetupDatabase extends Command
         // persist forecasts
         foreach ($forecasts as $forecast) {
             $this->em->persist($forecast);
-        }
-
-        // insert areas
-        $areas = [
-            new Area('Adilabad'),
-            new Area('Hyderabad'),
-            new Area('Karimnagar'),
-            new Area('Khammam'),
-            new Area('Mahbubnagar'),
-            new Area('Medak'),
-            new Area('Nalgonda'),
-            new Area('Nizamabad'),
-            new Area('Rangareddy'),
-            new Area('Warangal'),
-        ];
-
-        // persist areas
-        foreach ($areas as $area) {
-            $this->em->persist($area);
         }
 
         $this->em->flush();

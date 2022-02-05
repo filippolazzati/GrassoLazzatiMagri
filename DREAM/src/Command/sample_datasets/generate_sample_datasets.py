@@ -27,9 +27,9 @@ crops = ['potatoes', 'tomatoes', 'salad', 'onions', 'radishes', 'cucumber', 'cau
 fertilizers = ['Ammonium chloride', 'Ammonium sulphate', 'CAN', 'DAP', 'NP / NPK complexes', 'SSP', 'Urea']
 
 ################ create weather reports
-n_reports_for_city = 365
+n_reports_for_city = 400
 
-with open('weather_reports.csv', mode='w') as f:
+with open('src/Command/sample_datasets/weather_reports.csv', mode='w+') as f:
     writer = csv.writer(f, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     # the first row is the header
     writer.writerow(['date', 'city', 'weather', 't_max', 't_min', 't_avg', 'rain_mm', 'windSpeed', 'windDirection', 'humidity', 'pressure'])
@@ -55,7 +55,7 @@ with open('weather_reports.csv', mode='w') as f:
 ################# create weather forecasts
 days_forecasts = 6
 
-with open('weather_forecasts.csv', mode='w') as f:
+with open('src/Command/sample_datasets/weather_forecasts.csv', mode='w+') as f:
     writer = csv.writer(f, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     # the first row is the header
     writer.writerow(['date', 'city', 'weather', 't_max', 't_min', 't_avg', 'rain_mm', 'windSpeed', 'windDirection', 'humidity', 'pressure'])
