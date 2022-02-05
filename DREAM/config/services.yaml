@@ -4,6 +4,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    app.python_path: '%env(PYTHON_PATH)%'
 
 services:
     # default configuration for services in *this* file
@@ -27,3 +28,7 @@ services:
     App\Normalizer\EntityNormalizer:
         tags:
             - { name: serializer.normalizer, priority: 10 }
+
+    App\Command\SetupDatabase:
+        arguments:
+            $pythonPath: '%app.python_path%'

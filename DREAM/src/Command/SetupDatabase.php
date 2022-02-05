@@ -15,6 +15,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Process\Process;
 use Symfony\Contracts\Service\Attribute\Required;
 
 /**
@@ -31,6 +33,15 @@ use Symfony\Contracts\Service\Attribute\Required;
 class SetupDatabase extends Command
 {
     #[Required] public EntityManagerInterface $em;
+    #[Required] public KernelInterface $kernel;
+
+    private string $pythonPath;
+
+    public function __construct(string $pythonPath)
+    {
+        parent::__construct();
+        $this->pythonPath = $pythonPath;
+    }
 
     protected function configure(): void
     {
@@ -49,12 +60,34 @@ class SetupDatabase extends Command
 
         $this->em->createQuery('DELETE FROM App\Entity\WeatherForecast a')->execute();
         $this->em->createQuery('DELETE FROM App\Entity\WeatherReport a')->execute();
+        $this->em->createQuery('DELETE FROM App\Entity\Area a')->execute();
+
+        $areas = [
+            new Area('Adilabad'),
+            new Area('Hyderabad'),
+            new Area('Karimnagar'),
+            new Area('Khammam'),
+            new Area('Mahbubnagar'),
+            new Area('Medak'),
+            new Area('Nalgonda'),
+            new Area('Nizamabad'),
+            new Area('Rangareddy'),
+            new Area('Warangal'),
+        ];
+
+        foreach ($areas as $area) {
+            $this->em->persist($area);
+        }
 
         // generate the datasets updated to the current date
-        echo shell_exec('python src/Command/sample_datasets/generate_sample_datasets.py');
+        $process = new Process([
+            $this->pythonPath,
+            $this->kernel->getProjectDir() . '/sample_datasets/generate_sample_datasets.py'
+        ], $this->kernel->getProjectDir().'/sample_datasets');
+        $process->run();
 
         // setup weather reports
-        $CSVfp = fopen("src/Command/sample_datasets/weather_reports.csv", "r");
+        $CSVfp = fopen($this->kernel->getProjectDir()."/sample_datasets/weather_reports.csv", "rb");
         $reports = array();
         // remove header
         $row = fgetcsv($CSVfp, 1000, ",");
@@ -62,9 +95,9 @@ class SetupDatabase extends Command
         if ($CSVfp !== FALSE) {
             while (!feof($CSVfp)) {
                 $row = fgetcsv($CSVfp, 1000, ",");
-                if($row != ''){
+                if(!empty($row)) {
                     $date = DateTime::createFromFormat('Y-m-d', $row[0]);
-                    array_push($reports, new WeatherReport($date,$row[1],$row[2],(int) $row[3],(int) $row[4],(int) $row[5],(int) $row[6],(float) $row[7], $row[8],(int) $row[9],(int) $row[10]));
+                    $reports[] = new WeatherReport($date, $row[1], $row[2], (int)$row[3], (int)$row[4], (int)$row[5], (int)$row[6], (float)$row[7], $row[8], (int)$row[9], (int)$row[10]);
                 }
             }
         }
@@ -76,7 +109,7 @@ class SetupDatabase extends Command
         }
 
         // setup weather forecasts
-        $CSVfp = fopen("src/Command/sample_datasets/weather_forecasts.csv", "r");
+        $CSVfp = fopen($this->kernel->getProjectDir()."/sample_datasets/weather_forecasts.csv", "rb");
         $forecasts = array();
         // remove header
         $row = fgetcsv($CSVfp, 1000, ",");
@@ -84,9 +117,9 @@ class SetupDatabase extends Command
         if ($CSVfp !== FALSE) {
             while (!feof($CSVfp)) {
                 $row = fgetcsv($CSVfp, 1000, ",");
-                if($row != ''){
+                if(!empty($row)) {
                     $date = DateTime::createFromFormat('Y-m-d', $row[0]);
-                    array_push($forecasts, new WeatherForecast($date,$row[1],$row[2],(int) $row[3],(int) $row[4],(int) $row[5],(int) $row[6],(float) $row[7], $row[8],(int) $row[9],(int) $row[10]));
+                    $forecasts[] = new WeatherForecast($date, $row[1], $row[2], (int)$row[3], (int)$row[4], (int)$row[5], (int)$row[6], (float)$row[7], $row[8], (int)$row[9], (int)$row[10]);
                 }
             }
         }
