@@ -26,7 +26,7 @@ class ForumTest extends WebTestCase
         $farmer->setSurname('Doe');
         $farmer->setEmail('example@example.com');
         $farmer->setBirthDate(new \DateTime());
-        $farmer->setPassword($client->getContainer()->get(UserPasswordHasherInterface::class)->hashPassword($farmer, 'password'));
+        $farmer->setPassword('password');
 
         $farmer->setFarm((new Farm())->setArea($area)->setCity('City1')->setStreet('Street1'));
 

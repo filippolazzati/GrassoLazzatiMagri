@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Entity\Agronomist;
+use App\Entity\Area;
 use App\Entity\Farm;
 use App\Entity\Farmer;
 use App\Entity\PolicyMaker;
@@ -67,7 +68,11 @@ class UserCreateCommand extends Command
         $user->setBirthDate(new DateTime());
 
         if ($user instanceof Farmer) {
-            $user->setFarm(new Farm());
+            $user->setFarm(
+                (new Farm())
+                    ->setArea($this->entityManager->getRepository(Area::class)->findOneBy([]))
+                    ->setCity('Adilabad')
+            );
         }
 
         $this->entityManager->persist($user);

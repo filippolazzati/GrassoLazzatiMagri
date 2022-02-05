@@ -2,8 +2,12 @@
 
 namespace App\Repository\ProductionData;
 
+use App\Entity\Farm;
+use App\Entity\ProductionData\HarvestingEntry;
+use App\Entity\ProductionData\PlantingSeedingEntry;
 use App\Entity\ProductionData\ProductionDataEntry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -19,32 +23,38 @@ class ProductionDataEntryRepository extends ServiceEntityRepository
         parent::__construct($registry, ProductionDataEntry::class);
     }
 
-    // /**
-    //  * @return ProductionDataEntry[] Returns an array of ProductionDataEntry objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return PlantingSeedingEntry[]
+     */
+    public function findOpenPlantingEntries(Farm $farm): array
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        return  $this->createQueryBuilder('entry')
+            ->andWhere('entry INSTANCE OF '.PlantingSeedingEntry::class)
+            ->addSelect('parent')
+            ->join('entry.parent', 'parent')
+            ->leftJoin(HarvestingEntry::class, 'harvestingEntry', Join::WITH, 'harvestingEntry.relatedEntry = entry')
+            ->andWhere('parent.farm = :farm')
+            ->andHaving('SUM(COALESCE(harvestingEntry.area, 0)) < entry.area')
+            ->setParameter('farm', $farm)
+            ->orderBy('parent.date', 'DESC')
+            ->groupBy('entry.id')
+            ->getQuery()->getResult();
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?ProductionDataEntry
+    /**
+     * @return PlantingSeedingEntry[]
+     */
+    public function getPlantingStats(Farm $farm): array
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        return $this->_em->createQueryBuilder()
+            ->from(PlantingSeedingEntry::class, 'entry')
+            ->select('entry.crop', 'SUM(entry.area) - SUM(COALESCE(harvestingEntry.area, 0)) as area')
+            ->join('entry.parent', 'parent')
+            ->leftJoin(HarvestingEntry::class, 'harvestingEntry', Join::WITH, 'harvestingEntry.relatedEntry = entry')
+            ->andWhere('parent.farm = :farm')
+            ->having('SUM(entry.area) - SUM(COALESCE(harvestingEntry.area, 0)) > 0')
+            ->setParameter('farm', $farm)
+            ->groupBy('entry.crop')
+            ->getQuery()->getArrayResult();
     }
-    */
 }

@@ -25,4 +25,9 @@ class FertilizingEntry extends ProductionDataEntry
 
         return $this;
     }
+
+    public function __toString(): string
+    {
+        return 'Fertilizing ' . $this->getArea() . 'm² ' . $this->getRelatedEntry()->getCrop();
+    }
 }

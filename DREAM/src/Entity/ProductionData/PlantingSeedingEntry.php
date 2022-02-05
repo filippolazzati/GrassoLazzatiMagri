@@ -23,4 +23,9 @@ class PlantingSeedingEntry extends ProductionDataEntry
 
         return $this;
     }
+
+    public function __toString(): string
+    {
+        return 'Planting / Seeding ' . $this->getArea() . 'm² ' . $this->getCrop();
+    }
 }

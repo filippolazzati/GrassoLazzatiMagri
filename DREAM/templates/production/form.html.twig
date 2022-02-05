@@ -18,7 +18,7 @@
         <h5>Entries</h5>
         {% if plantingEntries|length == 0 %}
             <div class="alert alert-info p-2">
-                You can only enter planting entries as there are no existing entries.
+                You can only enter planting entries as there are no planted crops.
             </div>
         {% endif %}
         <input type="hidden" name="{{ form.entries.vars.full_name }}" :value="JSON.stringify(entries)">
