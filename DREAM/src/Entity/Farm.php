@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\DailyPlan\FarmVisit;
 use App\Entity\ProductionData\ProductionData;
 use App\Repository\FarmRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -32,6 +33,9 @@ class Farm
 
     #[ORM\OneToMany(mappedBy: 'farm', targetEntity: ProductionData::class, orphanRemoval: true)]
     private $productionData;
+
+    #[ORM\OneToMany(mappedBy: 'farm', targetEntity: FarmVisit::class, orphanRemoval: true)]
+    private $farmVisits;
 
     public function __construct()
     {
@@ -115,6 +119,36 @@ class Farm
             // set the owning side to null (unless already changed)
             if ($productionData->getFarm() === $this) {
                 $productionData->setFarm(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ProductionData[]
+     */
+    public function getFarmVisits(): Collection
+    {
+        return $this->farmVisits;
+    }
+
+    public function addFarmVisit(FarmVisit $farmVisit): self
+    {
+        if (!$this->farmVisits->contains($farmVisit)) {
+            $this->farmVisits[] = $farmVisit;
+            $farmVisit->setFarm($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFarmVisit(FarmVisit $farmVisit): self
+    {
+        if ($this->farmVisits->removeElement($farmVisit)) {
+            // set the owning side to null (unless already changed)
+            if ($farmVisit->getFarm() === $this) {
+                $farmVisit->setFarm(null);
             }
         }
 

@@ -2,6 +2,7 @@
 
 namespace App\DailyPlan;
 
+use _PHPStan_daf7d5577\Nette\Utils\DateTime;
 use App\Entity\Agronomist;
 use App\Entity\DailyPlan\DailyPlan;
 use App\Entity\DailyPlan\FarmVisit;
@@ -164,8 +165,8 @@ class DailyPlanService
         $offsetInMinutes = (self::WORKING_HOURS * self::MINUTES_PER_HOUR) / ($farms->count());
         for ($i = 0; $i < $farms->count(); $i++) {
             $farmVisit = new FarmVisit();
-            $farmVisit->setFarm($farms->get($i));
-            $startTime = $startingHour->add(new \DateInterval('PT' . ($offsetInMinutes * $i) . 'M'));
+            $farms->get($i)->addFarmVisit($farmVisit);
+            $startTime = new DateTime($startingHour->add(new \DateInterval('PT' . ($offsetInMinutes * $i) . 'M'))->format('H:i')) ;
             if ($startTime >= new \DateTime(self::BEGIN_LUNCH_BREAK)){ // to take into account lunch break
                 $startTime = $startTime->add(new \DateInterval('PT1H'));
             }

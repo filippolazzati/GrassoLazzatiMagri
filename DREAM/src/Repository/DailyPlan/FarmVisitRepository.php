@@ -8,6 +8,7 @@ use App\Entity\Farm;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -29,36 +30,41 @@ class FarmVisitRepository extends ServiceEntityRepository
      * A number maxResults of farms is returned, or less  if there are not maxResults farms satisfying the condition.
      * If there are more than maxResults farms satisfying the condition, the farms returned are the maxResults
      * ones with the smaller number of visits among the other.
-     * If onlyWorstPerforming = true, only farms belonging to farmers marked as worst performing are selected
+     * If onlyWorstPerforming = true, only farms belonging to farmers marked as worst performing are selected.
      * @param Area $area an area in Telangana
-     * @param DateTime $minDate
-     * @param DateTime $maxDate
-     * @param int $numVisits
-     * @param int $maxResults
-     * @param bool $onlyWorstPerforming
-     * @return ArrayCollection
+     * @param DateTime $minDate only visits in date greater than or equal minDate are considered
+     * @param DateTime $maxDate only visits in date less than or equal than minDate are considered
+     * @param int $numVisits the farms returned were visited a number of times (strictly) less than numVisits
+     * @param int $maxResults the maximum number of results obtained
+     * @param bool $onlyWorstPerforming if true, only farms of worst performing farmers are considered, otherwise
+     * all farms are considered
+     * @return array an array of maxResults Farm objects, such that in the period between minDate and maxDate
+     * the farms were visited a number of times less than numVisits
      */
     public function getFarmsWithNumberOfVisitsLessThan(
-        Area $area, DateTime $minDate, DateTime $maxDate, int $numVisits, int $maxResults, bool $onlyWorstPerforming): ArrayCollection
+        Area $area, DateTime $minDate, DateTime $maxDate, int $numVisits, int $maxResults, bool $onlyWorstPerforming): array
     {
         $qb = $this->_em->createQueryBuilder()
-            ->select('fv.farm, COUNT(fv.dailyPlan.id)')
-            ->from('App\Entity\DailyPlan\FarmVisit', 'fv')
-            ->where('fv.dailyPlan.date BETWEEN :minDate AND :maxDate')
-            ->andWhere('fv.farm.area = :area');
+            ->select('f')
+            ->from('App\Entity\Farm', 'f')
+            ->leftJoin('f.farmVisits', 'fv' )
+            ->join('fv.dailyPlan', 'dp')
+            ->join('f.farmer', 'fmr')
+            ->where('dp.date BETWEEN :minDate AND :maxDate')
+            ->andWhere('f.area = :area');
 
         if ($onlyWorstPerforming) {
-            $qb = $qb->andWhere('fv.farm.farmer.worst_performing = true');
+            $qb = $qb->andWhere('fmr.worst_performing = true');
         }
 
         $qb = $qb->groupBy('fv.farm')
-            ->having('fv.dailyPlan.id) < :numVisits')
-            ->orderBy('COUNT(fv.dailyPlan.id) ASC')
+            ->having('COUNT(fv.dailyPlan)< :numVisits')
+            ->orderBy('COUNT(fv.dailyPlan)', 'ASC')
             ->setParameter('minDate', $minDate)
             ->setParameter('maxDate', $maxDate)
             ->setParameter('area', $area)
-            ->setParameter('numVisits', $numVisits)
-            ->setMaxResults($maxResults);
+            ->setParameter('numVisits', $numVisits);
+            //->setMaxResults($maxResults);
 
         return $qb->getQuery()->getResult();
     }
