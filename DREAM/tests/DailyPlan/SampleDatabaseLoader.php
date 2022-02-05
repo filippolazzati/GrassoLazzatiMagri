@@ -30,11 +30,7 @@ class SampleDatabaseLoader
             $agronomists[$i]->setName('agronomistName' . $i);
             $agronomists[$i]->setSurname('agronomistSurname' . $i);
             $agronomists[$i]->setBirthDate(new \DateTime());
-            if ($i % 4 == 0) {
-                $agronomists[$i]->setArea($areas[0]);
-            } else {
-                $agronomists[$i]->setArea($areas[1]);
-            }
+            $agronomists[$i]->setArea($areas[$i % 4]);
         }
 
         // FARMER AND FARM
@@ -52,13 +48,13 @@ class SampleDatabaseLoader
             $farms[$i]->setStreet('street' . $i);
             $farmers[$i]->setFarm($farms[$i]);
             if ($i < 8) {
-                $farms[$i]->setArea($areas[0]);
+                $areas[0]->addFarm($farms[$i]);
             } else if ($i < 13) {
-                $farms[$i]->setArea($areas[1]);
+                $areas[1]->addFarm($farms[$i]);
             } else if ($i < 23) {
-                $farms[$i]->setArea($areas[2]);
+                $areas[2]->addFarm($farms[$i]);
             } else {
-                $farms[$i]->setArea($areas[3]);
+                $areas[3]->addFarm($farms[$i]);
             }
         }
 

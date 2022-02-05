@@ -77,6 +77,11 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
             $this->createNotFoundException('date not in the future');
         }
 
+        // if the agronomist already has a daily plan for the date, error
+        if (!is_null($this->em->getRepository(DailyPlan::class)->findDailyPlanByAgronomistAndDate($agronomist, $date))) {
+            $this->createNotFoundException('there is already a daily plan for this date');
+        }
+
         // create the form for new daily plan
         $options = ['maxVisits' => DailyPlanService::MAX_VISITS_IN_A_DAY];
         $form = $this->createForm(CreateDailyPlanType::class, null, $options);
@@ -89,15 +94,13 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
             $numberOfVisits = $formData['numberOfVisits'];
             // the form is valid if the number of visits is less than or equal MAX_VISITS and if the date is not
             // in the past
-            if ($numberOfVisits <= DailyPlanService::MAX_VISITS_IN_A_DAY && $date > new \DateTime('yesterday')) {
+            if ($numberOfVisits <= DailyPlanService::MAX_VISITS_IN_A_DAY) {
                 // the daily plan can be created if the user has not already got a daily plan for that day
-                if (!$this->em->getRepository(DailyPlan::class)->hasDailyPlan($agronomist, $date)) {
                     $dpService = new DailyPlanService($this->em->getRepository(FarmVisit::class));
                     $dailyPlan = $dpService->generateDailyPlan($agronomist, $date, $numberOfVisits);
                     $this->em->persist($dailyPlan);
                     $this->em->flush();
                     return $this->redirectToRoute('daily_plan_date', ['daily_plan' => $dailyPlan->getId()]);
-                }
             }
         }
 

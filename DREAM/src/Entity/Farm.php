@@ -40,6 +40,7 @@ class Farm
     public function __construct()
     {
         $this->productionData = new ArrayCollection();
+        $this->farmVisits = new ArrayCollection();
     }
 
     public function getId(): ?int

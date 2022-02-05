@@ -33,11 +33,20 @@ class DailyPlanService
         $this->farmVisitRepository = $farmVisitRepository;
     }
 
+    /**
+     * Creates a daily plan for the given agronomist and the given date, containing the given number of visits.
+     * If there are less than numberOfVisits farms in the area, the daily plan contains a number of visits
+     * equal to the number of farmers in the area.
+     * @param Agronomist $agronomist the agronomist for whom to generate the daily plan
+     * @param \DateTime $date the date to which the generated daily plan refers
+     * @param int $numberOfVisits the number of visits included in the generated daily plan
+     * @return DailyPlan a daily plan for the given agronomist and the given date, containing the given number of visits
+     */
     public function generateDailyPlan(Agronomist $agronomist, \DateTime $date, int $numberOfVisits) : DailyPlan
     {
         // if there are less than $numberOfVisits farms in the area, simply all farms should be visited
         // (very particular case)
-        if ($numberOfVisits <= $agronomist->getArea()->getFarms()->count()) {
+        if ($numberOfVisits >= $agronomist->getArea()->getFarms()->count()) {
             return $this->createDailyPlan($agronomist, $date, $agronomist->getArea()->getFarms());
         }
 
@@ -50,8 +59,8 @@ class DailyPlanService
             self::MIN_VISITS_IN_A_YEAR, $numberOfVisits, false);
 
         // if the farms to visit are $numberOfVisits, create daily plan
-        if ($farmsToVisit->count() == $numberOfVisits) {
-            return $this->createDailyPlan($agronomist, $date, $farmsToVisit);
+        if (count($farmsToVisit) == $numberOfVisits) {
+            return $this->createDailyPlan($agronomist, $date, new ArrayCollection($farmsToVisit));
         }
 
         // otherwise, take into consideration farms of worst-performing farmers with less than
@@ -63,7 +72,7 @@ class DailyPlanService
             $dateOfLastVisit->sub(new \DateInterval('P1M')), $dateOfLastVisit,
             self::MIN_VISITS_IN_A_MONTH_FOR_WORST_FARMERS, $numberOfVisits, true);
 
-        $farmsToVisit = $this->addFarmsToVisit($farmsToVisit, $farmsToAdd, $numberOfVisits);
+        $farmsToVisit = $this->addFarmsToVisit(new ArrayCollection($farmsToVisit), new ArrayCollection($farmsToAdd), $numberOfVisits);
 
         // if the farms to visit are $numberOfVisits, create daily plan
         if ($farmsToVisit->count() == $numberOfVisits) {
@@ -79,7 +88,7 @@ class DailyPlanService
                   // uses < and not <=
             $farmsToAdd = $this->farmVisitRepository->getFarmsWithNumberOfVisitsLessThan($agronomist->getArea(),
                 $dateOfLastVisit->sub(new \DateInterval('P1Y')), $dateOfLastVisit, $i, $numberOfVisits, false);
-            $farmsToVisit = $this->addFarmsToVisit($farmsToVisit, $farmsToAdd, $numberOfVisits);
+            $farmsToVisit = $this->addFarmsToVisit($farmsToVisit, new ArrayCollection($farmsToAdd), $numberOfVisits);
         }
         return $this->createDailyPlan($agronomist, $date, $farmsToVisit);
     }
@@ -162,11 +171,15 @@ class DailyPlanService
         $startingHour = new \DateTime(self::START_WORKDAY);
         // time in minutes between a visit and another one
         // visits are homogeneously distributed among the day, starting from 8:00 AM (travel time not considered)
-        $offsetInMinutes = (self::WORKING_HOURS * self::MINUTES_PER_HOUR) / ($farms->count());
+        $offsetInMinutes = floor((self::WORKING_HOURS * self::MINUTES_PER_HOUR) / ($farms->count())) ;
         for ($i = 0; $i < $farms->count(); $i++) {
             $farmVisit = new FarmVisit();
             $farms->get($i)->addFarmVisit($farmVisit);
-            $startTime = new DateTime($startingHour->add(new \DateInterval('PT' . ($offsetInMinutes * $i) . 'M'))->format('H:i')) ;
+            if ($i == 0) {
+                $startTime = new \DateTime(self::START_WORKDAY);
+            } else {
+                $startTime = new DateTime($startingHour->add(new \DateInterval('PT' . ($offsetInMinutes) . 'M'))->format('H:i')) ;
+            }
             if ($startTime >= new \DateTime(self::BEGIN_LUNCH_BREAK)){ // to take into account lunch break
                 $startTime = $startTime->add(new \DateInterval('PT1H'));
             }
