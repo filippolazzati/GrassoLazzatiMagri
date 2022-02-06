@@ -25,12 +25,8 @@ class HelpReplyController extends AbstractController
     #[Route('/view/{help_request?}', name: 'index', methods: ['GET', 'POST'])]
     public function index(Request $request, ?HelpRequest $help_request): Response
     {
-        // if the user is not a farmer or agronomist, error
-        /** @var Farmer $user */
+        /** @var Farmer|Agronomist $user */
         $user = $this->getUser();
-        if (!($user instanceof Farmer || $user instanceof Agronomist)) {
-            $this->createNotFoundException();
-        }
 
         // retrieve help requests sent to the user, paginating them in group of 20
         $helpRequestsQuery = $this->em->getRepository(HelpRequest::class)->getHelpRequestsToUserQuery($user);
@@ -70,11 +66,8 @@ class HelpReplyController extends AbstractController
     #[Route('/confirmation_insert_help_reply{help_request}', name: 'confirmation_insert_help_reply', methods: ['GET'])]
     public function getConfirmPageForInsertReply(HelpRequest $help_request): Response
     {
-        // if the user is not a farmer or agronomist, error
+        /** @var Farmer|Agronomist $user */
         $user = $this->getUser();
-        if (!($user instanceof Farmer || $user instanceof Agronomist)) {
-            $this->createNotFoundException();
-        }
 
         // if a help request has been selected and its receiver is different from the user, error
         if (!$help_request->getReceiver()->equals($user)) {

@@ -20,6 +20,6 @@ class RemoveVisitType extends AbstractType
         $builder->add('visit', HiddenType::class, [
             'empty_data' => $options['visitToRemove']
         ])
-            ->add('send', SubmitType::class, ['label' => 'Remove Visit']);
+            ->add('send', SubmitType::class, ['label' => 'Remove Visit', 'attr' => ['class' => 'btn btn-danger']]);
     }
 }

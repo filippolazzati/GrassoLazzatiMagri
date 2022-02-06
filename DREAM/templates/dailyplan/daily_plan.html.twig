@@ -3,8 +3,8 @@
 {% block title %}Daily Plan of {{ daily_plan.date | date('Y-m-d')}} {% endblock %}
 
 {% block content %}
-    <p>
-        State : {{ daily_plan.state }}
+    <p class="fs-5">
+        State: {{ daily_plan.state }}
     </p>
     {% if error_msg is not null %}
         <p class="text-danger">
@@ -15,30 +15,54 @@
         <thead>
             <tr>
                 <th>Start Time</th>
-                <th>Farm Address</th>
-                <th>Farmer</th>
-                <th colspan="3"></th>
+                <th>Farm</th>
+                {% if forms_move_visits is not null or forms_remove_visits is not null %}
+                <th colspan="2" style="width: 50%">Actions</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
             {% for farmVisit in daily_plan.farmVisits %}
                 <tr>
                     <td>{{ farmVisit.startTime | date('H:i') }}</td>
-                    <td>{{ farmVisit.farm.city}}, {{ farmVisit.farm.street }}</td>
-                    <td>{{ farmVisit.farm.farmer.fullName }}</td>
-                    <td><a href={{ path('daily_plan_farm_details', {daily_plan: daily_plan.id, farm: farmVisit.farm.id}) }}>FarmDetails</a></td>
+                    <td>
+                        <div>
+                            <strong class="d-block">{{ farmVisit.farm.farmer.fullName }}</strong>
+                            {{ farmVisit.farm.street ? (farmVisit.farm.street ~ ', ') : '' }}{{ farmVisit.farm.city }}
+                        </div>
+                        <a href="{{ path('daily_plan_farm_details', {daily_plan: daily_plan.id, farm: farmVisit.farm.id}) }}"
+                           class="btn btn-sm btn-outline-primary mt-2">View Farm Details</a>
+                    </td>
                     {% if forms_move_visits is not null %}
-                        <td>{{ form(forms_move_visits[(farmVisit.id)]) }}</td>
+                        <td>
+                            {{ form_start(forms_move_visits[(farmVisit.id)]) }}
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    {{ form_widget(forms_move_visits[(farmVisit.id)].newStartHour) }}
+                                </div>
+                                <div class="ms-2">
+                                    {{ form_widget(forms_move_visits[(farmVisit.id)].send) }}
+                                </div>
+                            </div>
+                            {{ form_end(forms_move_visits[(farmVisit.id)]) }}
+                        </td>
                     {% endif %}
                     {% if forms_remove_visits is not null %}
-                        <td>{{ form(forms_remove_visits[(farmVisit.id)]) }}</td>
+                        <td>
+                            {{ form_start(forms_remove_visits[(farmVisit.id)]) }}
+                            {{ form_widget(forms_remove_visits[(farmVisit.id)].send) }}
+                            {{ form_end(forms_remove_visits[(farmVisit.id)]) }}
+                        </td>
                     {% endif %}
                 </tr>
             {% endfor %}
         </tbody>
     </table>
     {% if form_add_visit is not null %}
-        {{ form(form_add_visit) }}
+        <div class="mt-4">
+            <h5>Add new visit</h5>
+            {{ form(form_add_visit) }}
+        </div>
     {% endif %}
     {% if form_accept_daily_plan is not null %}
         {{ form(form_accept_daily_plan)  }}

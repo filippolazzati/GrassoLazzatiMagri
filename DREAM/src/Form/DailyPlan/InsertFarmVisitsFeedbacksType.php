@@ -26,8 +26,9 @@ class InsertFarmVisitsFeedbacksType extends AbstractType
 
         /** @var FarmVisit $farmVisit */
         foreach ($farmVisits as $farmVisit) {
-            $builder->add($farmVisit->getId(),
+            $builder->add((string) $farmVisit->getId(),
                 TextareaType::class, [
+                    'label' => $farmVisit->getStartTime()->format('H:i') .' - '.$farmVisit->getFarm()->getFarmer()->getFullName().' - '.$farmVisit->getFarm()->getCity() . ' ' . $farmVisit->getFarm()->getStreet(),
                     'constraints' => [
                         new NotBlank(),
                         new Length(['min' => 5, 'max' => 1000]),
