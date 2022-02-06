@@ -196,7 +196,7 @@ This sequence diagram describes the procedure through which a Farmer, starting f
     \caption{Sequence diagram that describes the AcceptDailyPlan use case.}
 \end{figure}
 This sequence diagram describes the interactions that occurs when an agronomist visualizes for the first time a new daily plan and accepts it. \newline
-First of all, the agronomist opens the daily plan dates page and then he When he selects the date of the daily plan he wants to visualize, the getDailyPlan interface of the DailyPlan component is invoked. As it is the first time that the agronomist visualizes the daily plan, getDailyPlan generates the daily plan (otherwise, it would just retrieve the already existing one from the database). In order to do so, it retrieves from the database the needed data, regarding:
+First of all, the agronomist opens the daily plan dates page and then he selects the date of the daily plan he wants to visualize. When he selects the date of the daily plan he wants to visualize, the generateDailyPlan interface of the DailyPlan component is invoked. It generates the daily plan. In order to do so, it retrieves from the database the needed data, regarding:
 \begin{itemize}
     \item the farmers (and the corresponding farms) in the area of the agronomist
     \item how many visits each farmer in the area has received from agronomists in the last 365 days
@@ -422,7 +422,11 @@ Service for agronomist daily plans.
 \item \begin{verbatim}
 getDailyPlan(agronomist: Agronomist, date: DateTime): DailyPlan
 \end{verbatim}
-If the daily plan of the given agronomist in the given date already exists, returns it; otherwise, generates a new daily plan for the given agronomist and date and returns it.
+If the daily plan of the given agronomist in the given date already exists, returns it.
+\item \begin{verbatim}
+generateDailyPlan(agronomist: Agronomist, date: DateTime): DailyPlan
+\end{verbatim}
+Generates a daily plan for the given agronomist in the given date.
 \item \begin{verbatim}
 addDailyPlanEntry(plan: DailyPlan, farm: Farm, time: Time): FarmVisit
 \end{verbatim}
