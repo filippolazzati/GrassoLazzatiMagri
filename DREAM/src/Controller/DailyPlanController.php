@@ -108,7 +108,7 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
     }
 
     #[Route('/daily_plan/{daily_plan}', name: 'date', methods: ['GET', 'POST'])]
-    public function getDailyPlan(Request $request, DailyPlan $daily_plan, LoggerInterface $logger) : \Symfony\Component\HttpFoundation\Response
+    public function getDailyPlan(Request $request, DailyPlan $daily_plan) : \Symfony\Component\HttpFoundation\Response
     {
         // if the user is not an agronomist, error
         $agronomist = $this->getUser();
@@ -131,16 +131,26 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
         $formToAcceptDailyPlan = null;
         $formToConfirmDailyPlan = null;
 
+        if ($daily_plan->getFarmVisits()->isEmpty()) {
+            $startHourOfLastVisit = new \DateTime(DailyPlanService::START_WORKDAY);
+        } else {
+            $startHourOfLastVisit = max($daily_plan->getFarmVisits()->map(function ($value) {
+                return $value->getStartTime();
+            })->toArray());
+        }
+
+        $halfHourPassed = new \DateTime() >= new \DateTime(
+                $daily_plan->getDate()->format('Y-m-d') . ' ' . $startHourOfLastVisit->format('H:i:s'));
+
+
         // if the daily plan is in state NEW or ACCEPTED, show for each visit a form to move it
-        if (!$daily_plan->isConfirmed()) {
+        if ($daily_plan->isNew() || ($daily_plan->isAccepted() && $halfHourPassed)) {
 
             $formsToMoveVisits = array();
 
             foreach ($daily_plan->getFarmVisits() as $farmVisit) {
-                $logger->info($farmVisit->getId());
                 $formToMoveVisit = $this->createForm(MoveVisitType::class, null, ['visitToMove' => $farmVisit->getId()]);
                 $formsToMoveVisits += [$farmVisit->getId() => $formToMoveVisit->createView()];
-                $logger->info('array size = ' . count($formsToMoveVisits));
 
                 $formToMoveVisit->handleRequest($request);
 
@@ -149,10 +159,10 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
                     $visitToMove = $this->em->getRepository(FarmVisit::class)->find($formData['visit']);
                     $newStartHour = $formData['newStartHour'];
                     try {
-                        $dpService->moveVisit($agronomist, $daily_plan, $visitToMove, $newStartHour, $logger);
+                        $dpService->moveVisit($agronomist, $daily_plan, $visitToMove, $newStartHour);
                         $this->em->persist($visitToMove);
                         $this->em->flush();
-
+                        $this->redirectToRoute($request->attributes->get('_route'));
                     } catch(\Exception $e) {
                         $errorMsg = 'The visit cannot be moved to the selected hour';
                     }
@@ -161,7 +171,7 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
         }
 
         // if the daily plan is in state NEW or ACCEPTED, show the form for adding a visit
-        if (!$daily_plan->isConfirmed()) {
+        if ($daily_plan->isNew() || ($daily_plan->isAccepted() && $halfHourPassed)) {
             $farmsInTheArea = $agronomist->getArea()->getFarms();
             $options = array('farmsInTheArea' => $farmsInTheArea);
             $formToAddVisit =  $this->createForm(AddVisitType::class, null, $options);
@@ -174,7 +184,7 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
                     $dpService->addVisit($agronomist, $daily_plan, $formData['farm'], $formData['startingHour']);
                     $this->em->persist($daily_plan);
                     $this->em->flush();
-                    $this->redirectToRoute('daily_plan_date', ['daily_plan' => $daily_plan->getId()]);
+                    $this->redirectToRoute($request->attributes->get('_route'));
                 } catch (\Exception $e) {
                     $errorMsg = 'The visit cannot be added';
                 }
@@ -182,7 +192,7 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
         }
 
         // if the daily plan is in state NEW or ACCEPTED, show for each visit a form to remove it
-        if (!$daily_plan->isConfirmed()) {
+        if ($daily_plan->isNew() || ($daily_plan->isAccepted() && $halfHourPassed)) {
             $formsToRemoveVisits = array();
 
             foreach ($daily_plan->getFarmVisits() as $farmVisit) {
@@ -198,7 +208,7 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
                         $dpService->removeVisit($agronomist, $daily_plan, $visitToRemove);
                         $this->em->persist($daily_plan);
                         $this->em->flush();
-                        $this->redirectToRoute('daily_plan_date', ['daily_plan' => $daily_plan->getId()]);
+                        $this->redirectToRoute($request->attributes->get('_route'));
                     } catch (\Exception $e) {
                         $errorMsg = 'The visit cannot be removed';
                     }
@@ -217,7 +227,7 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
                     $dpService->acceptDailyPlan($agronomist, $daily_plan);
                     $this->em->persist($daily_plan);
                     $this->em->flush();
-                    $this->redirectToRoute('daily_plan_date', ['daily_plan' => $daily_plan->getId()]);
+                    $this->redirectToRoute($request->attributes->get('_route'));
                 } catch (\Exception $e) {
                     $errorMsg = 'Daily plan not acceptable';
                 }
@@ -226,11 +236,7 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
 
         // if the daily plan is in the state ACCEPTED and more than half an hour has passed from the
         // starting time of the last visit of the day, show form for confirming the daily plan
-        $startHourOfLastVisit = max($daily_plan->getFarmVisits()->map(function ($value) {
-            return $value->getStartTime();
-        })->toArray());
-        $halfHourPassed = new \DateTime() >= new \DateTime(
-            $daily_plan->getDate()->format('Y-m-d') . ' ' . $startHourOfLastVisit->format('H:i:s'));
+
 
         if($daily_plan->isAccepted() && $halfHourPassed) {
             $formToConfirmDailyPlan = $this->createForm(ConfirmDailyPlanType::class);

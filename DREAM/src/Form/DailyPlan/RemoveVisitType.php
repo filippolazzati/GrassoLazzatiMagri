@@ -17,7 +17,7 @@ class RemoveVisitType extends \Symfony\Component\Form\AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('visit', HiddenType::class, [
-            'data' => $options['visitToRemove']
+            'empty_data' => $options['visitToRemove']
         ])
             ->add('send', SubmitType::class, ['label' => 'Remove Visit']);
     }

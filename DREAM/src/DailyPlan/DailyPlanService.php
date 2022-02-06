@@ -11,8 +11,6 @@ use App\Repository\DailyPlan\FarmVisitRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Exception;
-use Knp\Component\Pager\Event\AfterEvent;
-use Psr\Log\LoggerInterface;
 
 class DailyPlanService
 {
@@ -93,7 +91,19 @@ class DailyPlanService
         return $this->createDailyPlan($agronomist, $date, $farmsToVisit);
     }
 
-    public function moveVisit(Agronomist $agronomist, DailyPlan $dailyPlan, FarmVisit $farmVisit, \DateTime $newStartHour, LoggerInterface $logger) : void {
+    /**
+     * Moves a visit in the given daily plan to the provided new start hour.
+     * @param Agronomist $agronomist the agronomist to which the daily plan refers
+     * @param DailyPlan $dailyPlan the daily plan containing the visit to move
+     * @param FarmVisit $farmVisit the visit to move
+     * @param \DateTime $newStartHour the new start hour of the visit
+     * @return void
+     * @throws Exception if dailyPlan does not belong to agronomist, or if farmVisit does not belong to dailyPlan, or
+     * if new startHour is not between DailyPlanService::START_WORKDAY and DailyPlanService::LAST_POSSIBLE_WORK_HOUR,
+     * or if the daily plan has already been confirmed
+     */
+    public function moveVisit(Agronomist $agronomist, DailyPlan $dailyPlan, FarmVisit $farmVisit, \DateTime $newStartHour) : void
+    {
         if (!$dailyPlan->getAgronomist()->equals($agronomist) || $dailyPlan->isConfirmed() || !$dailyPlan->equals($farmVisit->getDailyPlan()) ||
                 $this->compareTime($newStartHour, new \DateTime(self::START_WORKDAY)) ||
                 $this->compareTime(new \DateTime(self::LAST_POSSIBLE_WORK_HOUR), $newStartHour)) {
@@ -103,12 +113,23 @@ class DailyPlanService
         $farmVisit->setStartTime($newStartHour);
     }
 
+    /**
+     * Adds to the given daily plan a visit to the given farm, starting from the given start hour.
+     * @param Agronomist $agronomist the agronomist who the daily plan belongs to
+     * @param DailyPlan $dailyPlan the daily plan which the farm visit is added to
+     * @param Farm $farm the farm to visit in the visit added to the daily plan
+     * @param \DateTime $startHour the start hour of the visit added to the daily plan
+     * @return void
+     * @throws Exception if dailyPlan does not belong to agronomist, or if the daily plan has already been confirmed,
+     * or if startHOur is not between DailyPlanService::START_WORKDAY and DailyPlanService::LAST_POSSIBLE_WORK_HOUR,
+     * or if farm does not belong to the area of the agronomist
+     */
     public function addVisit(Agronomist $agronomist, DailyPlan $dailyPlan, Farm $farm, \DateTime $startHour)
     {
         if (!$dailyPlan->getAgronomist()->equals($agronomist) || $dailyPlan->isConfirmed() ||
             $this->compareTime($startHour, new \DateTime(self::START_WORKDAY)) ||
             $this->compareTime(new \DateTime(self::LAST_POSSIBLE_WORK_HOUR), $startHour) ||
-            $agronomist->getArea()->equals($farm->getArea())) {
+            !$agronomist->getArea()->equals($farm->getArea())) {
             throw new \Exception('Operation "add visit" illegal');
         }
 
@@ -118,6 +139,17 @@ class DailyPlanService
         $dailyPlan->addFarmVisit($farmVisit);
     }
 
+    /**
+     * Removes the given visit from the given daily plan if it is present in the daily plan, otherwise does nothing.
+     * @param Agronomist $agronomist the agronomist who the daily plan belongs to
+     * @param DailyPlan $dailyPlan the daily plan from which the farm visit has to be removed
+     * @param FarmVisit $farmVisit the farm visit to remove
+     * @return void
+     * @throws Exception if dailyPlan does not belong to the agronomist, or if dailyPlan is already confirmed,
+     * or if farmVisit belongs to a different daily plan than dailyPlan, or if the daily plan is new and the farm
+     * was visited less than DailyPlanService::MIN_VISITS_IN_A_YEAR (DailyPlanService::MIN_VISITS_IN_A_MONTH_FOR_WORST_FARMERS
+     * if the farm belongs to a worst performing farmer)
+     */
     public function removeVisit(Agronomist $agronomist, DailyPlan $dailyPlan, FarmVisit $farmVisit) {
         if (!$dailyPlan->getAgronomist()->equals($agronomist) || $dailyPlan->isConfirmed() ||
             !$dailyPlan->equals($farmVisit->getDailyPlan()) || ($dailyPlan->isNew() && $this->isVisitNecessary($farmVisit))) {
@@ -127,6 +159,14 @@ class DailyPlanService
         $dailyPlan->removeFarmVisit($farmVisit);
     }
 
+    /**
+     * Sets the status of the given daily plan to ACCEPTED.
+     * @param Agronomist $agronomist the agronomist who the daily plan belongs to
+     * @param DailyPlan $dailyPlan the daily plan to accept
+     * @return void
+     * @throws Exception if dailyPlan does not belong to agronomist, or if the daily plan is not in the
+     * state NEW, or if there are two visits which start times are nearer than DailyPlanService::MIN_VISIT_DURATION
+     */
     public function acceptDailyPlan(Agronomist $agronomist, DailyPlan $dailyPlan)
     {
         if ($dailyPlan->getAgronomist()->equals($agronomist) && $dailyPlan->isNew() &&
@@ -137,6 +177,14 @@ class DailyPlanService
         }
     }
 
+    /**
+     * Sets the status of the given daily plan to CONFIRMED.
+     * @param Agronomist $agronomist the agronomist who the daily plan belongs to
+     * @param DailyPlan $dailyPlan the daily plan to confirm
+     * @return void
+     * @throws Exception if dailyPlan does not belong to agronomist, or if the daily plan is not in the
+     * state ACCEPTED, or if there are two visits which start times are nearer than DailyPlanService::MIN_VISIT_DURATION
+     */
     public function confirmDailyPlan(Agronomist $agronomist, DailyPlan $dailyPlan)
     {
         if ($dailyPlan->getAgronomist()->equals($agronomist) && $dailyPlan->isAccepted() &&
@@ -214,13 +262,15 @@ class DailyPlanService
         // date of last visit scheduled in the area
         $dateOfLastVisitInArea = $this->farmVisitRepository->getDateOfLastVisitToArea($farmVisit->getFarm()->getArea());
 
-        if ($farmVisit->getFarm()->getFarmer()->getWorstPerforming()) {
+        if ($farmVisit->getFarm()->getFarmer()->getWorstPerforming() == true) {
+            $minDate = (new DateTime($dateOfLastVisitInArea->format('Y-m-d')))->sub(new \DateInterval('P1M'));
             return $this->farmVisitRepository->getNumberOfVisitsToFarmInPeriod($farmVisit->getFarm(),
-                $dateOfLastVisitInArea->sub(new \DateInterval('P1M')), $dateOfLastVisitInArea)
+                    $minDate, $dateOfLastVisitInArea)
                 < self::MIN_VISITS_IN_A_MONTH_FOR_WORST_FARMERS;
         } else {
+            $minDate = (new DateTime($dateOfLastVisitInArea->format('Y-m-d')))->sub(new \DateInterval('P1Y'));
             return $this->farmVisitRepository->getNumberOfVisitsToFarmInPeriod($farmVisit->getFarm(),
-                $dateOfLastVisitInArea->sub(new \DateInterval('P1Y')), $dateOfLastVisitInArea)
+                $minDate, $dateOfLastVisitInArea)
                 < self::MIN_VISITS_IN_A_YEAR;
         }
     }

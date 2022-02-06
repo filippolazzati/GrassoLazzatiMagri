@@ -3,15 +3,15 @@
 {% block title %}Daily Plan of {{ daily_plan.date | date('Y-m-d')}} {% endblock %}
 
 {% block content %}
-    <div>
+    <p>
         State : {{ daily_plan.state }}
-    </div>
+    </p>
     {% if error_msg is not null %}
-        <div>
+        <p class="text-danger">
             {{ error_msg }}
-        </div>
+        </p>
     {% endif %}
-    <table>
+    <table class="table table-bordered border-dark">
         <thead>
             <tr>
                 <th>Start Time</th>
