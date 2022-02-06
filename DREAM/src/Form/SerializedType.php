@@ -2,7 +2,6 @@
 
 namespace App\Form;
 
-use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;

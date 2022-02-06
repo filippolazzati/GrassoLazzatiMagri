@@ -4,6 +4,7 @@ namespace App\Entity\DailyPlan;
 
 use App\Entity\Agronomist;
 use App\Repository\DailyPlan\DailyPlanRepository;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,9 +12,9 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: DailyPlanRepository::class)]
 class DailyPlan
 {
-    const NEW = 'NEW';
-    const ACCEPTED = 'ACCEPTED';
-    const CONFIRMED = 'CONFIRMED';
+    public const NEW = 'NEW';
+    public const ACCEPTED = 'ACCEPTED';
+    public const CONFIRMED = 'CONFIRMED';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -58,12 +59,12 @@ class DailyPlan
         return $this;
     }
 
-    public function getDate(): ?\DateTimeInterface
+    public function getDate(): ?DateTimeInterface
     {
         return $this->date;
     }
 
-    public function setDate(\DateTimeInterface $date): self
+    public function setDate(DateTimeInterface $date): self
     {
         $this->date = $date;
 
@@ -112,22 +113,23 @@ class DailyPlan
         return $this;
     }
 
-    public function isNew() : bool
+    public function isNew(): bool
     {
-        return strcmp($this->state, self::NEW) == 0;
+        return $this->state === self::NEW;
     }
 
-    public function isAccepted() : bool
+    public function isAccepted(): bool
     {
-        return strcmp($this->state, self::ACCEPTED) == 0;
+        return $this->state === self::ACCEPTED;
     }
 
-    public function isConfirmed() : bool
+    public function isConfirmed(): bool
     {
-        return strcmp($this->state, self::CONFIRMED) == 0;
+        return $this->state === self::CONFIRMED;
     }
 
-    public function equals(DailyPlan $other) {
-        return $this->id == $other->getId();
+    public function equals(DailyPlan $other): bool
+    {
+        return $this->id === $other->getId();
     }
 }

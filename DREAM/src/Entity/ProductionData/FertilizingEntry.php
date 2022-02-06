@@ -2,7 +2,6 @@
 
 namespace App\Entity\ProductionData;
 
-use App\Entity\ProductionData\PlantingSeedingRelationTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -25,5 +24,10 @@ class FertilizingEntry extends ProductionDataEntry
         $this->fertilizerType = $fertilizerType;
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return 'Fertilizing ' . $this->getArea() . 'm² ' . $this->getRelatedEntry()->getCrop();
     }
 }

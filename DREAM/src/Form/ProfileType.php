@@ -8,10 +8,9 @@ use App\Entity\Farmer;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -37,7 +36,21 @@ class ProfileType extends AbstractType
                     'mapped' => false,
                     'data' => $builder->getData()?->getFarm()?->getArea(),
                 ])
-                ->add('farmCity', TextType::class, [
+                ->add('farmCity', ChoiceType::class, [
+                    'choices' => [
+                        'Hyderabad' => 'Hyderabad',
+                        'Warangal' => 'Warangal',
+                        'Nizamabad' => 'Nizamabad',
+                        'Khammam' => 'Khammam',
+                        'Karimnagar' => 'Karimnagar',
+                        'Ramagundam' => 'Ramagundam',
+                        'Mahabubnagar' => 'Mahabubnagar',
+                        'Adilabad' => 'Adilabad',
+                        'Suryapet' => 'Suryapet',
+                        'Siddipet' => 'Siddipet',
+                        'Nalgonda' => 'Nalgonda',
+                        'Jagtial' => 'Jagtial',
+                    ],
                     'mapped' => false,
                     'data' => $builder->getData()?->getFarm()?->getCity(),
                 ])
@@ -47,7 +60,7 @@ class ProfileType extends AbstractType
                     'data' => $builder->getData()?->getFarm()?->getStreet(),
                 ]);
         }
-        if($entity instanceof Agronomist) {
+        if ($entity instanceof Agronomist) {
             $builder
                 ->add('area', EntityType::class, [
                     'class' => Area::class

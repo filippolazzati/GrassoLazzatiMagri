@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Controller\suggestions;
+namespace App\Suggestions;
 
 /**
  * Class Suggestion
@@ -29,9 +29,9 @@ class Suggestion
 
     /**
      * Suggestion constructor.
-     * @param $data
-     * @param $number
-     * @param $reliability
+     * @param mixed $data
+     * @param mixed $number
+     * @param mixed $reliability
      */
     public function __construct($data, $number, $reliability)
     {

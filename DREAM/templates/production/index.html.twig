@@ -9,36 +9,67 @@
 {% endblock %}
 
 {% block content %}
-    <table class="table table-hover mt-4">
-        <thead>
-        <tr>
-            <th style="width: 25%">Date/Time</th>
-            <th style="width: 60%">Entries</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for data in pagination %}
-            <tr data-href="{{ path('production_data_view', {data: data.id}) }}">
-                <td class="align-middle">
-                    <div class="d-flex align-items-center">
-                        {{ data.createdAt|date('d/m/Y H:i') }}
-                    </div>
-                </td>
-                <td class="align-middle">
-                    {{ data.entries.count }}
-                </td>
-            </tr>
-        {% endfor %}
-        {% if pagination.totalItemCount == 0 %}
+    <div>
+        <h5>Planted Crops</h5>
+        <table class="table table-striped">
+            <thead>
             <tr>
-                <td colspan="3" class="text-center py-3">
-                    There is currently no production data.
-                </td>
+                <th>Crop</th>
+                <th>Area</th>
             </tr>
-        {% endif %}
-        </tbody>
-    </table>
-    <div class="navigation">
-        {{ knp_pagination_render(pagination) }}
+            </thead>
+            <tbody>
+            {% for stat in plantingStats %}
+                <tr>
+                    <td>{{ stat.crop }}</td>
+                    <td>{{ stat.area }}m²</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <hr class="my-4">
+    <div>
+        <h5>Entries</h5>
+        <table class="table mt-4">
+            <thead>
+            <tr>
+                <th style="width: 15%">Date/Time</th>
+                <th style="width: 35%">Comment</th>
+                <th style="width: 50%">Entries</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for data in pagination %}
+                <tr>
+                    <td class="align-middle">
+                        <div class="d-flex align-items-center">
+                            {{ data.createdAt|date('d/m/Y H:i') }}
+                        </div>
+                    </td>
+                    <td class="align-middle">
+                        {{ data.comment|default('-') }}
+                    </td>
+                    <td class="align-middle">
+                        <small>
+                            {% for entry in data.entries %}
+                                {{ entry }}{% if not loop.last %} &bull; {% endif %}
+                            {% endfor %}
+                        </small>
+                    </td>
+                </tr>
+            {% endfor %}
+            {% if pagination.totalItemCount == 0 %}
+                <tr>
+                    <td colspan="3" class="text-center py-3">
+                        There is currently no production data.
+                    </td>
+                </tr>
+            {% endif %}
+            </tbody>
+        </table>
+        <div class="navigation">
+            {{ knp_pagination_render(pagination) }}
+        </div>
     </div>
 {% endblock %}

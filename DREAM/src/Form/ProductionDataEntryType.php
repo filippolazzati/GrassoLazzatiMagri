@@ -24,8 +24,7 @@ class ProductionDataEntryType extends AbstractType
                     'Watering' => WateringEntry::class,
                     'Harvesting' => HarvestingEntry::class,
                 ]
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

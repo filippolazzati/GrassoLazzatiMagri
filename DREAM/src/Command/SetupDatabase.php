@@ -11,7 +11,6 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -83,11 +82,11 @@ class SetupDatabase extends Command
         $process = new Process([
             $this->pythonPath,
             $this->kernel->getProjectDir() . '/sample_datasets/generate_sample_datasets.py'
-        ], $this->kernel->getProjectDir().'/sample_datasets');
+        ], $this->kernel->getProjectDir() . '/sample_datasets');
         $process->run();
 
         // setup weather reports
-        $CSVfp = fopen($this->kernel->getProjectDir()."/sample_datasets/weather_reports.csv", "rb");
+        $CSVfp = fopen($this->kernel->getProjectDir() . "/sample_datasets/weather_reports.csv", "rb");
         $reports = array();
         // remove header
         $row = fgetcsv($CSVfp, 1000, ",");
@@ -95,7 +94,7 @@ class SetupDatabase extends Command
         if ($CSVfp !== FALSE) {
             while (!feof($CSVfp)) {
                 $row = fgetcsv($CSVfp, 1000, ",");
-                if(!empty($row)) {
+                if (!empty($row)) {
                     $date = DateTime::createFromFormat('Y-m-d', $row[0]);
                     $reports[] = new WeatherReport($date, $row[1], $row[2], (int)$row[3], (int)$row[4], (int)$row[5], (int)$row[6], (float)$row[7], $row[8], (int)$row[9], (int)$row[10]);
                 }
@@ -109,7 +108,7 @@ class SetupDatabase extends Command
         }
 
         // setup weather forecasts
-        $CSVfp = fopen($this->kernel->getProjectDir()."/sample_datasets/weather_forecasts.csv", "rb");
+        $CSVfp = fopen($this->kernel->getProjectDir() . "/sample_datasets/weather_forecasts.csv", "rb");
         $forecasts = array();
         // remove header
         $row = fgetcsv($CSVfp, 1000, ",");
@@ -117,7 +116,7 @@ class SetupDatabase extends Command
         if ($CSVfp !== FALSE) {
             while (!feof($CSVfp)) {
                 $row = fgetcsv($CSVfp, 1000, ",");
-                if(!empty($row)) {
+                if (!empty($row)) {
                     $date = DateTime::createFromFormat('Y-m-d', $row[0]);
                     $forecasts[] = new WeatherForecast($date, $row[1], $row[2], (int)$row[3], (int)$row[4], (int)$row[5], (int)$row[6], (float)$row[7], $row[8], (int)$row[9], (int)$row[10]);
                 }

@@ -3,9 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\WeatherForecastRepository;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: WeatherForecastRepository::class)]
 class WeatherForecast
@@ -75,12 +74,12 @@ class WeatherForecast
         return $this->id;
     }
 
-    public function getDate(): ?\DateTimeInterface
+    public function getDate(): ?DateTimeInterface
     {
         return $this->date;
     }
 
-    public function setDate(\DateTimeInterface $date): self
+    public function setDate(DateTimeInterface $date): self
     {
         $this->date = $date;
 

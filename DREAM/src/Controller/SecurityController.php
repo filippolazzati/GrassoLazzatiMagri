@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Agronomist;
 use App\Entity\Farm;
 use App\Entity\Farmer;
 use App\Form\ProfileType;
@@ -10,6 +9,7 @@ use App\Form\RegisterType;
 use App\Security\EmailVerificationService;
 use AssertionError;
 use Doctrine\ORM\EntityManagerInterface;
+use InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,10 +47,10 @@ class SecurityController extends AbstractController
 
     #[Route('/register', name: 'register', methods: ['GET', 'POST'])]
     public function register(
-        Request $request,
-        SessionInterface $session,
+        Request                     $request,
+        SessionInterface            $session,
         UserPasswordHasherInterface $passwordHasher,
-        EmailVerificationService $emailVerificationService
+        EmailVerificationService    $emailVerificationService
     ): Response
     {
         if ($this->getUser() !== null) {
@@ -78,7 +78,7 @@ class SecurityController extends AbstractController
             try {
                 $emailVerificationService->sendVerificationEmail($farmer);
             } catch (TransportExceptionInterface) {
-                $this->addFlash('error', 'An error occurred while sending the verification email.');
+                $this->addFlash('danger', 'An error occurred while sending the verification email.');
                 return $this->redirectToRoute('register');
             }
 
@@ -121,7 +121,7 @@ class SecurityController extends AbstractController
 
         try {
             $emailVerificationService->verifyEmail($token);
-        } catch (\InvalidArgumentException) {
+        } catch (InvalidArgumentException) {
             return $this->redirectToRoute('register');
         }
 

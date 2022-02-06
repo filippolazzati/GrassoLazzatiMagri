@@ -3,17 +3,9 @@
 
 namespace App\Controller;
 
-
-use App\Controller\forecasts\Forecast;
-use App\Controller\forecasts\ForecastsChoice;
-use App\Controller\suggestions\Suggestion;
-use App\Controller\suggestions\SuggestionChoice;
-use App\Entity\Farmer;
 use App\Entity\WeatherForecast;
-use App\Entity\WeatherReport;
 use App\Form\WeatherForecastsType;
 use App\Repository\WeatherForecastRepository;
-use App\Repository\WeatherReportRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -39,13 +31,11 @@ class WeatherForecastsController extends AbstractController
     #[Route('/', name: 'view', methods: ['GET', 'POST'])]
     public function index(Request $request): Response
     {
-        // create the form
-        $data = new ForecastsChoice();
-        $form = $this->createForm(WeatherForecastsType::class, $data, ['method' => 'GET', 'csrf_protection' => false]);
+        $form = $this->createForm(WeatherForecastsType::class, null, ['method' => 'GET', 'csrf_protection' => false]);
         $form->handleRequest($request);
 
         // retrieve data from the form
-        $city = $data->getCity();
+        $city = $form->getData()['city'] ?? null;
 
         // query the database to retrieve the forecasts
         /** @var $forecastsRepo WeatherForecastRepository */

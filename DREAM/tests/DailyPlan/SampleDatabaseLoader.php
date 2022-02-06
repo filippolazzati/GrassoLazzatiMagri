@@ -2,7 +2,6 @@
 
 namespace App\Tests\DailyPlan;
 
-use _PHPStan_daf7d5577\Nette\Utils\DateTime;
 use App\Entity\Agronomist;
 use App\Entity\Area;
 use App\Entity\DailyPlan\DailyPlan;

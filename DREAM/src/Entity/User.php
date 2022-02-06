@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Entity\HelpRequest\HelpRequest;
 use App\Repository\UserRepository;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -81,7 +82,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return (string)$this->email;
     }
 
     /**
@@ -159,12 +160,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getBirthDate(): ?\DateTimeInterface
+    public function getBirthDate(): ?DateTimeInterface
     {
         return $this->birthDate;
     }
 
-    public function setBirthDate(\DateTimeInterface $birthDate): self
+    public function setBirthDate(DateTimeInterface $birthDate): self
     {
         $this->birthDate = $birthDate;
 
@@ -228,12 +229,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this instanceof Farmer;
     }
 
-    public function isAgronomist() : bool
+    public function isAgronomist(): bool
     {
         return $this instanceof Agronomist;
     }
 
-    public function equals(User $other) : bool
+    public function equals(User $other): bool
     {
         return $this->id == $other->getId();
     }

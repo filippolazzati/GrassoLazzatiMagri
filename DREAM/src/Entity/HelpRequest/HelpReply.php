@@ -3,6 +3,7 @@
 namespace App\Entity\HelpRequest;
 
 use App\Repository\HelpRequest\HelpReplyRepository;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: HelpReplyRepository::class)]
@@ -22,7 +23,7 @@ class HelpReply
     #[ORM\Column(type: 'string', length: 300, nullable: true)]
     private $feedback;
 
-    public function __construct(string $text, \DateTimeInterface $timestamp)
+    public function __construct(string $text, DateTimeInterface $timestamp)
     {
         $this->text = $text;
         $this->timestamp = $timestamp;
@@ -33,12 +34,12 @@ class HelpReply
         return $this->id;
     }
 
-    public function getTimestamp(): ?\DateTimeInterface
+    public function getTimestamp(): ?DateTimeInterface
     {
         return $this->timestamp;
     }
 
-    public function setTimestamp(\DateTimeInterface $timestamp): self
+    public function setTimestamp(DateTimeInterface $timestamp): self
     {
         $this->timestamp = $timestamp;
 

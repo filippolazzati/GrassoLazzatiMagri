@@ -3,30 +3,30 @@
 namespace App\Controller;
 
 use App\Entity\Farmer;
-use App\Entity\HelpRequest\HelpReply;
 use App\Entity\HelpRequest\HelpRequest;
 use App\Entity\User;
 use App\Form\HelpRequests\InsertFeedbackType;
 use App\Form\HelpRequests\NewHelpRequestType;
 use App\HelpRequests\HelpRequestsService;
-use AssertionError;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Service\Attribute\Required;
 
 #[Route('/my_requests', name: 'my_requests_')]
-class HelpRequestController extends \Symfony\Bundle\FrameworkBundle\Controller\AbstractController
+class HelpRequestController extends AbstractController
 {
     #[Required] public EntityManagerInterface $em;
     #[Required] public PaginatorInterface $paginator;
     #[Required] public HelpRequestsService $helpRequestsService;
 
     #[Route('/view/{help_request?}', name: 'index', methods: ['GET', 'POST'])]
-    public function index(Request $request, ?HelpRequest $help_request): \Symfony\Component\HttpFoundation\Response
+    public function index(Request $request, ?HelpRequest $help_request): Response
     {
         // if the user is not a farmer, error
         $farmer = $this->getUser();
@@ -39,7 +39,7 @@ class HelpRequestController extends \Symfony\Bundle\FrameworkBundle\Controller\A
         $pagination = $this->paginator->paginate($helpRequestsQuery, $request->query->getInt('page', 1), 20);
 
         // if a help_request not belonging to the farmer has been selected, error
-        if ( !is_null($help_request) && !$help_request->getAuthor()->equals($farmer)) {
+        if (!is_null($help_request) && !$help_request->getAuthor()->equals($farmer)) {
             $this->createNotFoundException();
         }
 
@@ -70,14 +70,14 @@ class HelpRequestController extends \Symfony\Bundle\FrameworkBundle\Controller\A
     }
 
     #[Route('/select_expert_type', name: 'select_expert_type', methods: ['GET'])]
-    public function getSelectExpertPage(Request $request): \Symfony\Component\HttpFoundation\Response
+    public function getSelectExpertPage(Request $request): Response
     {
         return $this->render('myrequests/select_expert_type.html.twig', []);
     }
 
 
     #[Route('/new_help_request{type}', name: 'new_help_request', methods: ['GET', 'POST'])]
-    public function newHelpRequest(Request $request, string $type): \Symfony\Component\HttpFoundation\Response
+    public function newHelpRequest(Request $request, string $type): Response
     {
         // the user must be a farmer
         $farmer = $this->getUser();
@@ -104,7 +104,7 @@ class HelpRequestController extends \Symfony\Bundle\FrameworkBundle\Controller\A
         $form->handleRequest($request);
 
         // when the user submits the form, create the new help request
-        if($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $formData = $form->getData();
             try {
                 $helpRequest = $this->helpRequestsService->createHelpRequest(
@@ -113,7 +113,7 @@ class HelpRequestController extends \Symfony\Bundle\FrameworkBundle\Controller\A
                 $this->em->flush();
                 return $this->redirectToRoute('my_requests_confirmation_new_help_request',
                     ['help_request' => $helpRequest->getId()]);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 throw new BadRequestException($e->getMessage());
             }
         }
@@ -124,7 +124,7 @@ class HelpRequestController extends \Symfony\Bundle\FrameworkBundle\Controller\A
     }
 
     #[Route('/confirmation_new_help_request{help_request}', name: 'confirmation_new_help_request', methods: ['GET'])]
-    public function getConfirmPageForNewHelpRequest(Request $request, HelpRequest $help_request) : \Symfony\Component\HttpFoundation\Response
+    public function getConfirmPageForNewHelpRequest(Request $request, HelpRequest $help_request): Response
     {
         // the user must be a farmer
         $farmer = $this->getUser();
