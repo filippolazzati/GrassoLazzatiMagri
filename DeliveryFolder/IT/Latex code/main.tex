@@ -1,0 +1,397 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{color}   %May be necessary if you want to color links
+\usepackage{hyperref}
+\usepackage{ragged2e}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage[table]{xcolor}
+\usepackage{amssymb}
+\usepackage{minted}
+\usepackage{rotating}
+\setlength{\arrayrulewidth}{0.5mm}
+\setlength{\tabcolsep}{18pt}
+\renewcommand{\arraystretch}{2.5}
+\hypersetup{
+    colorlinks=false, %set true if you want colored links
+    linktoc=all,     %set to all if you want both sections and subsections linked
+    linkcolor=blue,  %choose some color if you want links to stand out
+}
+
+\title{DREAM - DD}
+\author{Filippo Lazzati}
+%\date{October 2021}
+
+\begin{document}
+\thispagestyle{empty} 
+\begin{titlepage}
+    \begin{center}
+       %\vspace*{2cm}
+       {\Huge \textbf{DREAM}} %%Replace this with the Title of your research
+       \vspace{0.5cm}
+       \\
+    \begin{LARGE}
+        {Data-dRiven PrEdictive FArMing in Telangana}
+        \vspace{1.0cm}
+        \\
+        {\textit{Implementation \& Test Deliverable - ITD}}
+        \includegraphics[width=13cm]{logo/polimi.png}
+       \vspace{1.0cm}
+        
+        {Christian Grasso - Filippo Lazzati - Chiara Magri}
+       \vspace{0.5cm}
+       {Year: 2021/2022}
+       \\
+       {Installation rules: \url{https://github.com/Chiara-Magri/GrassoLazzatiMagri}}\\
+       {Code: \url{https://github.com/Chiara-Magri/GrassoLazzatiMagri/tree/main/DREAM}}
+       
+    \end{LARGE}  
+   \end{center}
+\end{titlepage}
+\newpage
+\tableofcontents 
+\newpage
+\section{Introduction}
+The \textbf{Implementation \& Test Deliverable} (ITD) is the document that contains implementation details of the system and notes about the tests performed to check the verification (that is, checking whether the implemented product is "right").
+\subsection{Purpose}
+The main goal of this document is to explain and motivate the reasons behind the choices performed in the implementation phase of \verb|DREAM| and justify any possible difference between the out-and-out system and the system described in the \textit{RASD} and \textit{DD} documents\footnote{RASD = Requirement Analysis and Specification
+Document; DD = Design Document.}. Moreover, this ITD aims to show how the testing phase has been performed over the implemented \verb|DREAM|, the procedure adopted and the main test cases along with their outcome.
+\subsection{Document structure}
+The structure of this document is organized in the following way:
+\begin{itemize}
+    \item section 2 presents the requirements and functions introduced in the previous documents (\textit{RASD} and \textit{DD}) that have been actually implemented in the software (with
+motivations for including them and excluding others if applicable);
+\item section 3 is about the framework adopted: the reasons behind the choice and a brief overview of advantages and disadvantages;
+\item in sections 4 and 5 there is the presentation of the structure of the source code along with the entity-relationship model of the data;
+\item section 6 shows testing choices;
+\item sections 7 and 8 are about the effort spent by each member and the references.
+\end{itemize}
+\newpage
+\section{Requirements/Functions implemented}
+Since the software presented is a demo, we have decided to implement only the most important features of \verb|DREAM| while ruling out others. In particular, we have decided to implement the features for farmers and agronomists and to avoid to implement the features for the policy makers because they are less suitable to the presentation of the demo.
+\subsection{Requirements implemented}
+The requirements we have decided to implement are shown in the following paragraphs.
+\paragraph{Authentication}
+This function has been implemented because it is fundamental for every web application to provide a service to authenticate the users. A user will never provide his data to a website that is not secure and does not recognize him.
+\paragraph{Forum}
+We have decided to implement the forum function because one of the main goals of \verb|DREAM| is to put in touch various farmers to share information.
+\paragraph{Suggestions}
+We have decided to implement the suggestions functionality because for a farmer is helpful to have a suggestion about what to do, and in \verb|DREAM| suggestions are important. It should be remarked that the suggestions provided are generated according to the algorithm presented in the \textit{Design Document - 2.8} and that the training of the network has been done with a randomly generated dataset.
+\paragraph{Requests and Replies}
+Another main functionality that \verb|DREAM| offers is that of providing help to those farmers that need it. Every time a farmer has some doubts or faces some problems, he can ask for help to an agronomist or a best-performing farmer through an help request. Agronomists and best-performing farmers can then answer through help replies.
+\paragraph{Visualization of weather forecasts}
+Every farmer and agronomist that needs to know the weather forecasts for the next days must be able to look at them through \verb|DREAM|. This is one of the main goals of \verb|DREAM|, therefore we have implemented it. The demo shows random forecasts generated for some Telangana's cities.
+\paragraph{Insertion of production data}
+Every farmer must provide production data that give information about their lands. This is central in \verb|DREAM|, because this data is used by policy makers and agronomists to rank the farmers the to conduct analytics.
+\paragraph{Daily plan}
+As far as the agronomists' job is concerned, they need to schedule their visits to the farmers in an efficient way, that allows less-productive farmers to be visited more often than the others. \verb|DREAM| allows to schedule their visits.
+\subsection{Requirements not implemented}
+On the other side, we have decided to do not implement the following main features of \verb|DREAM|.
+\paragraph{Ranking of farmers}
+The ranking of the farmers conducted by the policy makers (and the agronomists) has not been implemented because we have considered it not too relevant for a demo of \verb|DREAM|.
+\paragraph{Analysis of initiatives}
+This functionality allows the policy makers to understand whether the initiatives involving
+agronomists and best-performing farmers have a good impact on the work of the farmers. We have decided to avoid to implement it because, as previously said, policy makers' requirements are less suitable for the presentation of a demo of the system.
+\paragraph{Sensors and water irrigation system}
+These kinds of functionality are strictly related to the analytics function. The data that arrives from soil sensors and water irrigation system are mainly used in \verb|DREAM| to provide accurate analytics and improved suggestions. Given the missing availability of the real sensors and that this kind of data can be easily added to the suggestions functionality without changing the logic of the code, we have opted for avoiding to implement it.
+\newpage
+\section{Adopted development framework}
+For our implementation, we used the \verb|PHP| programming language and the \href{https://symfony.com/}{Symfony} development framework. The reasons for these choices are highlighted below.
+
+\subsection{Programming language}
+\paragraph{PHP} \verb|PHP| is the most used programming language worldwide for backend web development. It powers around 78\% of all websites whose backend programming language is known\footnote{https://w3techs.com/technologies/details/pl-php}.
+
+The language itself is usually not considered a \textit{modern} programming language, mainly because of some inconsistencies and lack of features such as a more solid typing system (albeit the language is still in active development and the latest versions are trying to fill its gaps).
+
+However, as of today, the \textit{ecosystem} around the language is still unmatched, with a large amount of solid frameworks and libraries which manage to improve the overall development experience and allow for very fast prototyping.
+\paragraph{Python} \verb|Python| is the data science programming language. It allows to easily manage data structures for representing matrices and it is plenty of libraries and modules to work with data. Since for the "Suggestions" functionality of \verb|DREAM| we have designed to exploit a neural network, we have decided to exploit some \verb|Python| scripts for generating the datasets (clearly randomly, since we do not have real data) and for creating the neural network and for training it. It is not the best decision to adopt a second programming language, but it is better than programming a neural network in \verb|PHP|.
+\subsection{Framework}
+The Symfony framework is an open source web application framework with a focus on simplicity and development speed. It is a very solid project with more than 15 years of development, and it is still being actively developed and improved (in our implementation we used version 6, released in November 2021).
+
+Symfony follows many common architectural patterns, such as Model-View-Controller and Object Relational Mapping for database interaction (using the Doctrine\footnote{https://www.doctrine-project.org/} library) and provides developers with a standardized architecture to develop web apps in a streamlined way.
+
+Symfony automates many common and repetitive tasks in web development, such as user authentication, routing, database interaction, data validation, cache management, localization, forms, emailing, testing and more. This allowed us to focus on the business logic of our application without having to worry about data correctness or security problems.
+
+\newpage
+\section{Structure of the code}
+The code in the repository is organized like every \verb|Symfony| project. Inside the project directory \textit{DREAM}, there are the following directories:
+\begin{itemize}
+    \item \textbf{bin}, that contains the executable files;
+    \item \textbf{config}, that contains the configuration files of all \verb|Symfony| applications;
+    \item \textbf{sample\_datasets}, that contains a script to generate sample data for weather reports and forecasts (since sensor data reading has not been implemented). After running the generation script, these can be imported by using the commands \verb|bin/console app:setup:populate-forecasts| and \verb|bin/console app:setup:populate-reports|.
+    \item \textbf{suggestions}, that contains training data for the neural network used for suggestions and the Python scripts to generate suggestions.
+    \item \textbf{src}, where all the code is located;
+    \item \textbf{templates}, that contains the \textit{HTML} templates exploited for the implementation of \verb|DREAM|; in \verb|Symfony|, the templating language adopted is \href{https://twig.symfony.com/}{Twig};
+    \item \textbf{tests}, where we have put all the unit tests performed;
+    \item other non-relevant directories.
+\end{itemize}
+With regards to the \textbf{src} directory, it is organized in the following way:
+\begin{itemize}
+    \item \textbf{Command}, that contains all the commands that we have developed to initialize the database. In particular, just for the goal of presenting a working demo of \verb|DREAM|, we have placed in this folder a Python script for the generation of sample datasets to use to initialize the database;
+    \item \textbf{Controller}, where all the controllers are implemented. According to the \verb|Symfony| documentation, a \textit{controller is a PHP function you create that reads information from the Request object and creates and returns a Response object. The response could be an HTML page, JSON, XML, a file download, a redirect, a 404 error or anything else. The controller runs whatever arbitrary logic your application needs to render the content of a page} (by extension, Controller also refers to the class containing such functions). Therefore, we have placed in this folder all the controller classes we have created that allow \verb|DREAM| to provide its functions;
+    \item \textbf{Entity}, that contains Object-Oriented representations of the tables in the database. As previously mentioned, \verb|Symfony| exploits \verb|Doctrine| to interact with relational (and not) databases in an Object-Oriented way. This is the place where all the classes modeling database entities live;
+    \item \textbf{Form}, that contains all the \verb|PHP| classes used to create forms and retrieve data from them. All these classes extend the \textit{AbstractType} abstract class;
+    \item \textbf{Forum}, that contains a service exploited by the forum functionality;
+    \item \textbf{Repository}, where all the Repository classes are put. Again, according to the \verb|Symfony| documentation, we have that a repository is \textit{a PHP class whose only job is to help to fetch entities of a certain class}. Therefore, every Repository class contains helper methods that allow to query the database in a more Object-Oriented way;
+    \item \textbf{Security}, that contains a service used to authenticate the user;
+    \item \textbf{Twig}, utilities for frontend rendering.
+\end{itemize}
+\newpage
+\section{Entity-Relationship model}
+We have decided to provide a conceptual model of the data through an Entity-Relationship diagram before actually create the database. The conceptual model of the data devised is:
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.2]{er.png}
+    \caption{The Entity-Relationship model of DREAM.}
+    \label{fig:e-r}
+\end{figure}
+The main entities of the diagram are:
+\begin{itemize}
+    \item \textbf{User}, that represents a user of \verb|DREAM| and is identified by an id; there are three kinds of users: \textbf{Farmer}, \textbf{Agronomist} and \textbf{PolicyMaker} that inherit from \textbf{User};
+    \item \textbf{Thread} and \textbf{Message}, that are used to save forum data; a thread has a title and a message has a content; both of them are related to \textbf{Farmer} through an "author" relationship;
+    \item \textbf{Problem}, that represents a problem faced by a \textbf{Farmer} and inserted into \verb|DREAM|; it has a date and a description;
+    \item \textbf{Farm}, which is owned by a farmer and stands in a city. Every farm receives \textbf{FarmVisit}s by an agronomist (described by date and starting hour) and uses some water; the use of water is saved through \textbf{WaterIrrigationSystemData} entity;
+    \item \textbf{Area}, that represents a certain district of Telangana; every agronomist is assigned to a certain area and soil sensors data (\textbf{SensorData}) is assigned to a certain area;
+    \item \textbf{WeatherData}, that represents both the weather reports and the weather forecasts. 
+    \item \textbf{ProductionData}, that represents a single insertion of data from the farmer into the system. A production data is made of various \textbf{ProductionDataEntry} (characterising a certain area), which is one of four different types: \textbf{PlantingSeedingEntry}, that says the crop planted, \textbf{FertilizingEntry}, that says the fertilizer used, \textbf{WateringEntry}, that says that the considered area has been watered, and \textbf{HarvestingEntry}, that says that the considered area has been entirely harvested;
+    \item \textbf{HelpRequest} and \textbf{HelpReply}, that represent respectively the requests and the responses made/received by the farmers who need help;
+    \item \textbf{DailyPlan}, characterised by a state and a date and related to a certain agronomist, which is composed of multiple \textbf{FarmVisit}s.
+\end{itemize}
+\newpage
+\section{Testing}
+\verb|Symfony|\footnote{The Symfony official documentation about tests can be found at \url{https://symfony.com/doc/current/testing.html}.} exploits an independent library called \href{https://phpunit.de/}{PHPUnit} as testing framework.
+Every test is a \verb|PHP| class ending with "Test" that lives in the \textbf{tests/} directory of the project.\\
+In \verb|Symfony|, the following tests definitions are adopted:
+\begin{itemize}
+    \item \textbf{unit tests}, to test individual units of source code (usual definition seen during the lectures);
+    \item \textbf{integration tests}, to test combination of classes and commonly interact with \verb|Symfony|'s service container;
+    \item \textbf{application tests}, to test the behavior of a complete application. They make HTTP requests (both real and simulated ones) and test that the response is as expected.
+\end{itemize}
+These definitions are more or less (some differences occur) the same of those provided during the classes, except for \textbf{application tests} that we know as \textbf{system tests}.\\
+The system has been tested following the test plan provided in the \textit{Design Document}. In particular:
+\begin{itemize}
+    \item as far as \textbf{integration tests} are concerned, as written in the \textit{Design Document}, it is of minor importance for our system because every module is rather independent of the others, except for the \verb|RankingService|, which requires the development of other services to be completed, but since we have decided to avoid the implementation of the \verb|RankingService| because not considered one of the main services that \verb|DREAM| has to offer, therefore we have not provided \textbf{integration tests}. Or better, we have provided two different \textbf{integration tests} according to the definition used by \verb|Symfony| to test the "DailyPlanController". As a matter of fact, unit testing for the "DailyPlanController" is mandatory because it contains the whole logic for the generation of the daily plan, which is rather complex (it is explained at \textit{Design Document - 2.8 Algorithms}). Therefore, we have written two \textit{KernelTestCase}s\footnote{according to Symfony, they are integration tests, but according to the definition seen during the classes, they are unit tests.} to test its logic;
+    \item with regards to \textbf{application tests}, they are the main kind of test we have adopted for testing our system. In \verb|Symfony| there are three main types of \textbf{application tests}:
+    \begin{enumerate}
+        \item \textit{WebTestCase}, to run browser-like scenarios, but do not execute Javascript code;
+        \item \textit{ApiTestCase}, to run API-oriented scenarios;
+        \item \textit{PantherTestCase}, to run e2e (end-to-end) scenarios, using a real-browser or HTTP client and a real web server.
+    \end{enumerate}
+    It is clear that \textit{ApiTestCase} are useless in our case and we avoid \textit{PantherTestCase} because the amount of JavaScript in the pages is rather limited and the interaction between the user and the system is limited to some simple gestures, therefore \textit{WebTestCase}s are enough. More specifically, we have written:
+    \begin{itemize}
+        \item \textit{ForumTest}, to verify that the "ForumController" shows all the threads in the database with the proper content;
+        \item \textit{ForecastsResultsTest}, to check that "WeatherForecastsController" shows the proper forecasts (even though in the actual system these forecasts will not be taken from an internal database but from the \textbf{Telangana}'s website;
+        \item \textit{ProductionDataTest}, to check the correctness of the queries used to determine the currently planted crops;
+        \item tests in the \textit{DailyPlan} directory for daily plan generation and queries used in the daily plan section.
+    \end{itemize}
+    \item The suggestion section, since its implementation is based on a neural network, cannot be tested in a rigorous way; however, we can use the value of the loss function as a metric for the \textit{correctness} of the results. After training, this value settled at $1.505e-04$, meaning that suggestions are relevant:
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.65\textwidth]{loss_history_training.png}
+        \caption{The history of the loss function used for the suggestions during training.}
+        \label{fig:loss}
+    \end{figure}
+\end{itemize}
+\newpage
+\section{Installation instructions}
+In order to install \verb|DREAM|, you need to have running on your pc both \textbf{Python} and \textbf{PHP} and also a database instance like \textbf{postgresql} or \textbf{mysql}.\\
+\subsection{Database installation}
+You can download \textbf{postgresql} at \url{https://www.postgresql.org/download/} or, if you prefer \textbf{mysql}, you can download it at \url{https://www.mysql.com/downloads/} or install it with a package manager of your choice.
+\subsection{Python installation}
+First of all, you can install python for instance from this website \url{https://www.python.org/downloads/} and then you need to install the modules \href{https://numpy.org/}{Numpy}, \href{https://pandas.pydata.org/}{Pandas} and \href{https://github.com/google/jax}{JAX}, which can be installed through the following commands:
+\begin{minted}{shell}
+python3 -m pip install numpy
+python3 -m pip install pandas
+python3 -m pip install jax
+\end{minted}
+or, simply, through:
+\begin{minted}{shell}
+pip install numpy
+pip install pandas
+pip install jax
+\end{minted}
+if you have just one version of python installed (at least python 3 is required).\\
+\subsection{PHP, composer and Symfony installation}
+You need to install:
+\begin{enumerate}
+    \item PHP 8.0.2 or higher, which can be downloaded at \url{https://www.php.net/downloads.php}, and these PHP extensions (which are installed and enabled by default in most PHP 8 installations): \href{https://www.php.net/book.ctype}{Ctype}, \href{https://www.php.net/book.iconv}{iconv}, \href{https://www.php.net/book.pcre}{PCRE}, \href{https://www.php.net/book.session}{Session}, \href{https://www.php.net/book.simplexml}{SimpleXML}, and \href{https://www.php.net/book.tokenizer}{Tokenizer};
+    \item \href{https://getcomposer.org/download/}{Composer}, which is used to install PHP packages;
+    \item you have also to install \href{https://symfony.com/download}{Symfony CLI}; this creates a binary called symfony that provides all the tools you need to develop and run your Symfony application locally.
+\end{enumerate}
+You are suggested to add both PHP and Symfony CLI to your \textit{path} environment variable.
+\subsection{Start DREAM}
+Finally, you need to:
+\begin{enumerate}
+    \item clone the repo \url{https://github.com/Chiara-Magri/GrassoLazzatiMagri} in a directory of your choice;
+\item Enter the implementation directory \verb|DREAM/|. All the following commands and actions must be performed inside this directory.
+\item create a file \textbf{.env.local} which will be used for environment setup;
+\item For email configuration, enter the following line inside the \verb|.env.local| file (these are the credentials for the sample account we used for testing)
+\begin{minted}{yaml}
+MAILER_DSN="gmail+smtp://dream.sw.eng.2.project@gmail.com:dream-password@default"
+\end{minted}
+followed by the following line in case you have \verb|POSTGRESQL| running on your pc (db\_user and db\_password are respectively the username and password of your database and 13 represents the version installed):
+\begin{minted}{yaml}
+DATABASE_URL="postgresql://db_user:db_password@127.0.0.1:5432/dream?serverVersion=13"
+\end{minted}
+or, in case you are using \verb|MySQL| (same meaning for db\_user and db\_password):
+\begin{minted}{yaml}
+DATABASE_URL="mysql://db_user:db_password@127.0.0.1:3306/dream?serverVersion=5.7"
+\end{minted}
+You also need to setup the path the Python 3 executable on your system:
+\begin{minted}{yaml}
+PYTHON_PATH=python3 # adapt for your system
+\end{minted}
+\item You may also need to enable the appropriate database driver in the PHP configuration. To do so, find the file "php.ini" in the PHP installation folder, and remove the comment from the line corresponding to your database:
+\begin{minted}{yaml}
+;extension=pdo_mysql
+\end{minted}
+that is, remove the semicolon ';' from it:
+\begin{minted}{yaml}
+extension=pdo_mysql
+\end{minted}
+(for Postgres, uncomment the line \verb|extension=pdo_pgsql|).
+    \item make \verb|Composer| install the project's dependencies into vendor/:
+    \begin{minted}{shell}
+composer install
+    \end{minted}
+\item initialize the database instance through the commands:
+    \begin{minted}{shell}
+php bin/console d:d:c % create database
+php bin/console d:s:u -f % synchronize schema
+    \end{minted}
+\item start the server:
+    \begin{minted}{shell}
+symfony server:start
+    \end{minted}
+\item call the commands \textit{app:setup:populate-database} and \textit{app:setup:populate-areas} to populate the database with sample data (in particular Telangana areas, needed to create a farmer account):
+    \begin{minted}{shell}
+php bin/console app:setup:populate-database
+php bin/console app:setup:populate-areas
+    \end{minted}
+\item use the following command to create an agronomist user (you can create farmer users in the UI directly):
+    \begin{minted}{shell}
+php bin/console app:user:create example@example.com password agronomist
+    \end{minted}
+\item you can now open a browser and go to \url{localhost:8000/} to connect to \verb|DREAM|.
+\end{enumerate}
+\subsection{Run tests}
+In order to be able to run the tests, you also need to follow the next steps (in the project directory \verb|DREAM/|:
+\begin{enumerate}
+    \item add the line that you previously added to your \textbf{.env.local} file:
+\begin{minted}{yaml}
+DATABASE_URL="..."
+\end{minted}
+to the file \textbf{.env.test.local} (that you need to create);
+\item run the commands to initialize the test database (it will be called "dream\_test"):
+\begin{minted}{shell}
+php bin/console --env=test doctrine:database:create
+php bin/console --env=test doctrine:schema:create
+\end{minted}
+\item you are now ready to run tests through the command:
+\begin{minted}{shell}
+php ./vendor/bin/phpunit
+\end{minted}
+You can specifiy a test name after the command to run that specific test, e.g. \verb|php ./vendor/bin/phpunit tests/Forum/ForumTest.php|.
+\end{enumerate}
+\newpage
+\section{Effort spent}
+\begin{longtable}{|m{5cm}|m{5cm}|}
+\caption{The time Christian Grasso has spent on the implementation part.}
+ \label{christian effort spent}
+ \hline
+ \multicolumn{2}{|c|}{\cellcolor{white}\emph{Effort spent}} \\
+  % do not write anything here
+ \endfirsthead
+ % do not write anything here
+ \endhead
+ % do not write anything here
+ \endfoot
+ % do not write anything here
+ \endlastfoot
+ \hline
+ Initial organization & 2h\\
+ \hline
+ Authentication & 5h\\
+ \hline
+ Forum & 14h\\
+ \hline
+  Production data & 32h\\
+ \hline
+  Document & 4h\\
+ \hline  
+ Test & 9h\\
+ \hline
+ Final recap & 6h\\
+ \hline
+\end{longtable}
+
+\begin{longtable}{|m{5cm}|m{5cm}|}
+\caption{The time Filippo Lazzati has spent on the implementation part.}
+ \label{filippo effort spent}
+ \hline
+ \multicolumn{2}{|c|}{\cellcolor{white}\emph{Effort spent}} \\
+  % do not write anything here
+ \endfirsthead
+ % do not write anything here
+ \endhead
+ % do not write anything here
+ \endfoot
+ % do not write anything here
+ \endlastfoot
+ \hline
+ Initial organization & 2h\\
+ \hline
+ Suggestions & 33h\\
+ \hline
+ Weather forecasts & 12h\\
+ \hline
+ Document & 12h\\
+ \hline  
+ Test & 7h\\
+ \hline
+ Final recap & 6h\\
+ \hline
+\end{longtable}
+
+\begin{longtable}{|m{5cm}|m{5cm}|}
+\caption{The time Chiara Magri has spent on the implementation part.}
+ \label{chiara effort spent}
+ \hline
+ \multicolumn{2}{|c|}{\cellcolor{white}\emph{Effort spent}} \\
+  % do not write anything here
+ \endfirsthead
+ % do not write anything here
+ \endhead
+ % do not write anything here
+ \endfoot
+ % do not write anything here
+ \endlastfoot
+ \hline
+ Initial organization & 2h\\
+ \hline
+ Daily plan & 35h\\
+ \hline
+ Help request / reply & 13h\\
+ \hline
+  Document & 2h\\
+ \hline    
+ Test & 14h\\
+ \hline
+ Final recap & 6h\\
+ \hline
+\end{longtable}
+\newpage
+\section{References \& Tools}
+\begin{itemize}
+    \item \href{https://symfony.com/}{Symfony}, the adopted framework;
+    \item \href{https://www.doctrine-project.org/}{Doctrine}, the \verb|PHP| libraries for database storage and object mapping;
+    \item \href{https://app.diagrams.net/}{draw.io}: another tool to draw UML diagrams;
+    \item \href{https://www.overleaf.com}{Overleaf}: Latex editor;
+    \item \href{https://github.com/}{Github}: to share the code;
+    \item \href{https://numpy.org/}{Numpy}, \href{https://pandas.pydata.org/}{Pandas} and \href{https://github.com/google/jax}{JAX} for implementing the suggestions;
+    \item \href{https://www.jetbrains.com/phpstorm/}{PHPStorm} as IDE.
+\end{itemize}
+\end{document}
