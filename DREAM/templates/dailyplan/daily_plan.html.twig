@@ -25,7 +25,7 @@
                     <td>{{ farmVisit.startTime | date('H:i') }}</td>
                     <td>{{ farmVisit.farm.city}}, {{ farmVisit.farm.street }}</td>
                     <td>{{ farmVisit.farm.farmer.fullName }}</td>
-                    <td><a href={{ path('daily_plan_farm_details', {farm: farmVisit.farm.id}) }}>FarmDetails</a></td>
+                    <td><a href={{ path('daily_plan_farm_details', {daily_plan: daily_plan.id, farm: farmVisit.farm.id}) }}>FarmDetails</a></td>
                     {% if forms_move_visits is not null %}
                         <td>{{ form(forms_move_visits[(farmVisit.id)]) }}</td>
                     {% endif %}

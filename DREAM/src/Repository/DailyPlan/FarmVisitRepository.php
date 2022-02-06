@@ -2,6 +2,7 @@
 
 namespace App\Repository\DailyPlan;
 
+use App\Entity\Agronomist;
 use App\Entity\Area;
 use App\Entity\DailyPlan\FarmVisit;
 use App\Entity\Farm;
@@ -182,5 +183,30 @@ class FarmVisitRepository extends ServiceEntityRepository
             ->setParameter('minDate', $minDate)
             ->setParameter('maxDate', $maxDate)
             ->getSingleScalarResult();
+    }
+
+    /**
+     * Returns the date of the last visit to the farm by the agronomist, or null if the agronomist has never
+     * visited the farm.
+     * @param Agronomist $agronomist
+     * @param Farm $farm
+     * @return DateTime|null the date of the last visit to the farm by the agronomist, or null if the agronomist has never
+     * visited the farm
+     */
+    public function getDateOfLastVisitToFarmByAgronomist(Agronomist $agronomist, Farm $farm) : ?DateTime
+    {
+        $date = $this->_em->createQuery(
+            "SELECT DISTINCT MAX(dp.date)
+                 FROM App\Entity\Dailyplan\DailyPlan dp JOIN dp.farmVisits fv JOIN fv.farm f
+                 WHERE f = :farm AND dp.agronomist = :agronomist AND dp.state = 'CONFIRMED'"
+        )->setParameter('farm', $farm)
+            ->setParameter('agronomist', $agronomist)
+            ->getSingleScalarResult();
+
+        if ($date != null) {
+            return new DateTime($date);
+        } else {
+            return null;
+        }
     }
 }

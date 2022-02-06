@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Agronomist;
 use App\Entity\Farmer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;

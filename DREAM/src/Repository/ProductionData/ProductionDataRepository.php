@@ -2,6 +2,7 @@
 
 namespace App\Repository\ProductionData;
 
+use App\Entity\Farm;
 use App\Entity\ProductionData\ProductionData;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -17,6 +18,18 @@ class ProductionDataRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ProductionData::class);
+    }
+
+    public function findProductionDataOfFarmInPeriod(Farm $farm, \DateTime $minDate, \DateTime $maxDate)
+    {
+        return $this->_em->createQuery(
+            'SELECT p
+                 FROM App\Entity\ProductionData\ProductionData p 
+                 WHERE p.farm = :farm AND (p.date BETWEEN :minDate AND :maxDate)'
+        )->setParameter('farm', $farm)
+            ->setParameter('minDate', $minDate)
+            ->setParameter('maxDate', $maxDate)
+            ->getResult();
     }
 
     // /**

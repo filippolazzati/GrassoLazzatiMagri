@@ -8,6 +8,7 @@ use App\Entity\Agronomist;
 use App\Entity\DailyPlan\DailyPlan;
 use App\Entity\DailyPlan\FarmVisit;
 use App\Entity\Farm;
+use App\Entity\ProductionData\ProductionData;
 use App\Form\DailyPlan\AcceptDailyPlanType;
 use App\Form\DailyPlan\AddVisitType;
 use App\Form\DailyPlan\ConfirmDailyPlanType;
@@ -267,10 +268,21 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
         ]);
     }
 
-    #[Route('/daily_plan/farm_details/{farm}', name: 'farm_details', methods: ['GET'])]
-    public function getFarmDetails(Request $request, Farm $farm) : \Symfony\Component\HttpFoundation\Response
+    #[Route('/daily_plan/farm_details/{daily_plan}/{farm}', name: 'farm_details', methods: ['GET'])]
+    public function getFarmDetails(Request $request, DailyPlan $daily_plan, Farm $farm) : \Symfony\Component\HttpFoundation\Response
     {
-        return $this->render('dailyplan/farm_details.html.twig');
+        // if the user is not an agronomist, error
+        $agronomist = $this->getUser();
+        if (!($agronomist instanceof Agronomist)) {
+            throw new AssertionError();
+        }
+
+        $dateOfLastVisit = $this->em->getRepository(FarmVisit::class)
+            ->getDateOfLastVisitToFarmByAgronomist($agronomist, $farm);
+        $productionData = $this->em->getRepository(ProductionData::class)
+            ->findProductionDataOfFarmInPeriod($farm, $dateOfLastVisit, new \DateTime());
+
+        return $this->render('dailyplan/farm_details.html.twig', ['production_data' => $productionData, 'daily_plan' => $daily_plan, 'farm' => $farm]);
     }
     #[Route('/daily_plan/insert_visits_feedbacks/{daily_plan}', name: 'insert_visits_feedbacks', methods: ['GET', 'POST'])]
     public function insertFarmVisitsFeedbacks(Request $request, DailyPlan $daily_plan): \Symfony\Component\HttpFoundation\Response

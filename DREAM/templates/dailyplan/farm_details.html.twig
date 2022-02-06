@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Farm Details{% endblock %}
+
+{% block toolbar %}
+    <a href="{{ path('daily_plan_date', {daily_plan: daily_plan.id}) }}" class="btn btn-primary">
+        <i class="bi bi-plus"></i> Back to daily plan page
+    </a>
+{% endblock %}
+
+{% block content %}
+    <p>Farm Address: {{ farm.city }}  {{ farm.street }}</p>
+    <p>Farmer: {{ farm.farmer.fullname }}</p>
+
+    <table class="table mt-4">
+        <thead>
+        <tr>
+            <th style="width: 15%">Date/Time</th>
+            <th style="width: 35%">Comment</th>
+            <th style="width: 50%">Entries</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for data in production_data %}
+            <tr>
+                <td class="align-middle">
+                    <div class="d-flex align-items-center">
+                        {{ data.createdAt|date('d/m/Y H:i') }}
+                    </div>
+                </td>
+                <td class="align-middle">
+                    {{ data.comment|default('-') }}
+                </td>
+                <td class="align-middle">
+                    <small>
+                        {% for entry in data.entries %}
+                            {{ entry }}{% if not loop.last %} &bull; {% endif %}
+                        {% endfor %}
+                    </small>
+                </td>
+            </tr>
+        {% endfor %}
+        {% if production_data is empty %}
+            <tr>
+                <td colspan="3" class="text-center py-3">
+                    There is currently no production data.
+                </td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+{% endblock %}
