@@ -144,8 +144,6 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
                 $daily_plan->getDate()->format('Y-m-d') . ' ' . $startHourOfLastVisit->format('H:i:s'));
 
 
-        $halfHourPassed = true;
-
 
         // if the daily plan is in state NEW or ACCEPTED, show for each visit a form to move it
         if ($daily_plan->isNew() || ($daily_plan->isAccepted() && $halfHourPassed)) {
