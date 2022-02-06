@@ -144,6 +144,9 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
                 $daily_plan->getDate()->format('Y-m-d') . ' ' . $startHourOfLastVisit->format('H:i:s'));
 
 
+        $halfHourPassed = true;
+
+
         // if the daily plan is in state NEW or ACCEPTED, show for each visit a form to move it
         if ($daily_plan->isNew() || ($daily_plan->isAccepted() && $halfHourPassed)) {
 
@@ -298,11 +301,9 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
             throw new AssertionError();
         }
 
-        $visitsThatNeedFeedback = $daily_plan->getFarmVisits()->filter(function ($value) {
-            return is_null($value->getFeedback());
-        });
+        $visitsThatNeedFeedback = $daily_plan->getFarmVisits();
 
-        $form = $this->createForm(InsertFarmVisitsFeedbacksType::class,
+        $form = $this->createForm(InsertFarmVisitsFeedbacksType::class, null,
             ['farmVisits' => $visitsThatNeedFeedback]);
 
         $form->handleRequest($request);
