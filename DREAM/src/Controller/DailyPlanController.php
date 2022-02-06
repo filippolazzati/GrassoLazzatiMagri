@@ -23,6 +23,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Service\Attribute\Required;
 
@@ -81,6 +82,10 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
         // if the agronomist already has a daily plan for the date, error
         if (!is_null($this->em->getRepository(DailyPlan::class)->findDailyPlanByAgronomistAndDate($agronomist, $date))) {
             $this->createNotFoundException('there is already a daily plan for this date');
+        }
+
+        if ($agronomist->getArea()->getFarms()->isEmpty()) {
+            return new Response('No farms in the area');
         }
 
         // create the form for new daily plan
