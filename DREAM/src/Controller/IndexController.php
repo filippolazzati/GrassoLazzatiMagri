@@ -15,6 +15,8 @@ class IndexController extends AbstractController
     {
         if ($this->getUser() instanceof Farmer) {
             return $this->render('home/farmer.html.twig');
+        } else if ($this->getUser() instanceof Agronomist) {
+            return $this->render('home/agronomist.html.twig');
         }
         return $this->render('base.html.twig');
     }

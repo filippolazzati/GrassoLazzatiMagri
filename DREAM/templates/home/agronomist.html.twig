@@ -3,6 +3,8 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-    {% if  %}
-    Welcome, {{ app.user.fullName }}! You are in the <strong>agronomist</strong> dashboard.
+    <p>Welcome {{ app.user.fullName }}! You are in the <strong>agronomist</strong> dashboard.</p>
+    {% if app.user.area is null or app.user.area is empty %}
+        <p>Please, insert your area <a href={{ path('profile') }}>here</a></p>
+    {% endif %}
 {% endblock %}
