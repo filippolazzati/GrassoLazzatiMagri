@@ -26,6 +26,7 @@ class HelpReplyController extends AbstractController
     public function index(Request $request, ?HelpRequest $help_request): Response
     {
         // if the user is not a farmer or agronomist, error
+        /** @var Farmer $user */
         $user = $this->getUser();
         if (!($user instanceof Farmer || $user instanceof Agronomist)) {
             $this->createNotFoundException();

@@ -38,7 +38,7 @@ class WeatherForecastsController extends AbstractController
         $city = $form->getData()['city'] ?? null;
 
         // query the database to retrieve the forecasts
-        /** @var $forecastsRepo WeatherForecastRepository */
+        /** @var WeatherForecastRepository $forecastsRepo */
         $forecastsRepo = $this->em->getRepository(WeatherForecast::class);
         $forecasts = $forecastsRepo->findAllForecasts($city);
 

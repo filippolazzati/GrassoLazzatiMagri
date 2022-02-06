@@ -135,7 +135,7 @@ With regards to the \textbf{src} directory, it is organized in the following way
     \item \textbf{Forum}, that contains a service exploited by the forum functionality;
     \item \textbf{Repository}, where all the Repository classes are put. Again, according to the \verb|Symfony| documentation, we have that a repository is \textit{a PHP class whose only job is to help to fetch entities of a certain class}. Therefore, every Repository class contains helper methods that allow to query the database in a more Object-Oriented way;
     \item \textbf{Security}, that contains a service used to authenticate the user;
-    \item \textbf{Twig}, not really important.
+    \item \textbf{Twig}, utilities for frontend rendering.
 \end{itemize}
 \newpage
 \section{Entity-Relationship model}
@@ -171,13 +171,6 @@ In \verb|Symfony|, the following tests definitions are adopted:
 These definitions are more or less (some differences occur) the same of those provided during the classes, except for \textbf{application tests} that we know as \textbf{system tests}.\\
 The system has been tested following the test plan provided in the \textit{Design Document}. In particular:
 \begin{itemize}
-    \item no \textbf{unit tests} (according to the \verb|Symfony| definition) are used because the "Controller" classes (the only classes with enough logic to be tested) are rather simple and show their results directly through web pages; this is why we have preferred to exploit other kinds of tests to test the logic of these classes. However, it should be noticed that unit testing has not been performed for the "SuggestionsController" through \verb|PHPUnit|, but since the whole logic of this class is hidden behind the code of the neural network training, a low value for the loss function is itself a test for this class; after training, it has reached the value $1.505e-04$, meaning that samples from the training set are suggested well:
-    \begin{figure}[H]
-        \centering
-        \includegraphics{loss_history_training.png}
-        \caption{The history of the loss function used for the suggestions during training.}
-        \label{fig:loss}
-    \end{figure}
     \item as far as \textbf{integration tests} are concerned, as written in the \textit{Design Document}, it is of minor importance for our system because every module is rather independent of the others, except for the \verb|RankingService|, which requires the development of other services to be completed, but since we have decided to avoid the implementation of the \verb|RankingService| because not considered one of the main services that \verb|DREAM| has to offer, therefore we have not provided \textbf{integration tests}. Or better, we have provided two different \textbf{integration tests} according to the definition used by \verb|Symfony| to test the "DailyPlanController". As a matter of fact, unit testing for the "DailyPlanController" is mandatory because it contains the whole logic for the generation of the daily plan, which is rather complex (it is explained at \textit{Design Document - 2.8 Algorithms}). Therefore, we have written two \textit{KernelTestCase}s\footnote{according to Symfony, they are integration tests, but according to the definition seen during the classes, they are unit tests.} to test its logic;
     \item with regards to \textbf{application tests}, they are the main kind of test we have adopted for testing our system. In \verb|Symfony| there are three main types of \textbf{application tests}:
     \begin{enumerate}
@@ -189,14 +182,22 @@ The system has been tested following the test plan provided in the \textit{Desig
     \begin{itemize}
         \item \textit{ForumTest}, to verify that the "ForumController" shows all the threads in the database with the proper content;
         \item \textit{ForecastsResultsTest}, to check that "WeatherForecastsController" shows the proper forecasts (even though in the actual system these forecasts will not be taken from an internal database but from the \textbf{Telangana}'s website;
-        \item \textit{}, ...
+        \item \textit{ProductionDataTest}, to check the correctness of the queries used to determine the currently planted crops;
+        \item tests in the \textit{DailyPlan} directory for daily plan generation and queries used in the daily plan section.
     \end{itemize}
+    \item The suggestion section, since its implementation is based on a neural network, cannot be tested in a rigorous way; however, we can use the value of the loss function as a metric for the \textit{correctness} of the results. After training, this value settled at $1.505e-04$, meaning that suggestions are relevant:
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.65\textwidth]{loss_history_training.png}
+        \caption{The history of the loss function used for the suggestions during training.}
+        \label{fig:loss}
+    \end{figure}
 \end{itemize}
 \newpage
 \section{Installation instructions}
 In order to install \verb|DREAM|, you need to have running on your pc both \textbf{Python} and \textbf{PHP} and also a database instance like \textbf{postgresql} or \textbf{mysql}.\\
 \subsection{Database installation}
-You can download \textbf{postgresql} at \url{https://www.postgresql.org/download/} or, if you prefer \textbf{mysql}, you can download it at \url{https://www.mysql.com/downloads/}.
+You can download \textbf{postgresql} at \url{https://www.postgresql.org/download/} or, if you prefer \textbf{mysql}, you can download it at \url{https://www.mysql.com/downloads/} or install it with a package manager of your choice.
 \subsection{Python installation}
 First of all, you can install python for instance from this website \url{https://www.python.org/downloads/} and then you need to install the modules \href{https://numpy.org/}{Numpy}, \href{https://pandas.pydata.org/}{Pandas} and \href{https://github.com/google/jax}{JAX}, which can be installed through the following commands:
 \begin{minted}{shell}
@@ -223,9 +224,11 @@ You are suggested to add both PHP and Symfony CLI to your \textit{path} environm
 Finally, you need to:
 \begin{enumerate}
     \item clone the repo \url{https://github.com/Chiara-Magri/GrassoLazzatiMagri} in a directory of your choice;
-\item create a file \textbf{.env.local} inside the project directory (DREAM/) and put in it the following content:
+\item Enter the implementation directory \verb|DREAM/|. All the following commands and actions must be performed inside this directory.
+\item create a file \textbf{.env.local} which will be used for environment setup;
+\item For email configuration, enter the following line inside the \verb|.env.local| file (these are the credentials for the sample account we used for testing)
 \begin{minted}{yaml}
-MAILER_DSN="smtp://dream.sw.eng.2.project@gmail.com:dream-password@smtp.migadu.com"
+MAILER_DSN="gmail+smtp://dream.sw.eng.2.project@gmail.com:dream-password@default"
 \end{minted}
 followed by the following line in case you have \verb|POSTGRESQL| running on your pc (db\_user and db\_password are respectively the username and password of your database and 13 represents the version installed):
 \begin{minted}{yaml}
@@ -235,8 +238,11 @@ or, in case you are using \verb|MySQL| (same meaning for db\_user and db\_passwo
 \begin{minted}{yaml}
 DATABASE_URL="mysql://db_user:db_password@127.0.0.1:3306/dream?serverVersion=5.7"
 \end{minted}
-\textcolor{red}{You also have to ... PYTHON3 or PYTHON}
-\item go to your installation folder of php, find the file "php.ini", and remove the comment from the line:
+You also need to setup the path the Python 3 executable on your system:
+\begin{minted}{yaml}
+PYTHON_PATH=python3 # adapt for your system
+\end{minted}
+\item You may also need to enable the appropriate database driver in the PHP configuration. To do so, find the file "php.ini" in the PHP installation folder, and remove the comment from the line corresponding to your database:
 \begin{minted}{yaml}
 ;extension=pdo_mysql
 \end{minted}
@@ -244,25 +250,19 @@ that is, remove the semicolon ';' from it:
 \begin{minted}{yaml}
 extension=pdo_mysql
 \end{minted}
-(in case of being using POSTGRESQL, you have to uncomment the line ';extension=pdo\_pgsql').
+(for Postgres, uncomment the line \verb|extension=pdo\_pgsql|).
     \item make \verb|Composer| install the project's dependencies into vendor/:
     \begin{minted}{shell}
 cd DREAM/
 composer install
     \end{minted}
-\item create the database instance through the command:
+\item initialize the database instance through the commands:
     \begin{minted}{shell}
-cd DREAM/
-php bin/console d:d:c
+php bin/console d:d:c % create database
+php bin/console d:s:u -f % synchronize schema
     \end{minted}
-\item update the database schema:
+\item start the server:
     \begin{minted}{shell}
-cd DREAM/
-php bin/console d:s:u -f
-    \end{minted}
-    \item start the server:
-    \begin{minted}{shell}
-cd DREAM/
 symfony server:start
     \end{minted}
     \item call the commands \textit{app:setup:populate-database} and \textit{app:setup:populate-areas} to populate the database with sample data (in particular Telangana areas, needed to create a farmer account):
@@ -274,29 +274,23 @@ php bin/console app:setup:populate-areas
 \item you can now open a browser and go to \url{localhost:8000/} to connect to \verb|DREAM|.
 \end{enumerate}
 \subsection{Run tests}
-In order to be able to run the tests, you also need to follow the next steps:
+In order to be able to run the tests, you also need to follow the next steps (in the project directory \verb|DREAM/|:
 \begin{enumerate}
     \item add the line that you previously added to your \textbf{.env.local} file:
 \begin{minted}{yaml}
 DATABASE_URL="..."
 \end{minted}
 to the file \textbf{.env.test.local} (that you need to create);
-\item run the command to create the test database (it will be called "dream\_test":
+\item run the commands to initialize the test database (it will be called "dream\_test"):
 \begin{minted}{shell}
-cd DREAM/
 php bin/console --env=test doctrine:database:create
-\end{minted}
-\item run the command to create the tables/columns in the test database:
-\begin{minted}{shell}
-cd DREAM/
 php bin/console --env=test doctrine:schema:create
 \end{minted}
 \item you are now ready to run tests through the command:
 \begin{minted}{shell}
-cd DREAM/
-php ./vendor/bin/phpunit tests/Forum/ForumTest.php
+php ./vendor/bin/phpunit
 \end{minted}
-to run, for instance, the test "ForumTest.php" located in the \textbf{tests/Forum/} folder.
+You can specifiy a test name after the command to run that specific test, e.g. \verb|php ./vendor/bin/phpunit tests/Forum/ForumTest.php|.
 \end{enumerate}
 \newpage
 \section{Effort spent}

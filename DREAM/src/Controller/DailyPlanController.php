@@ -174,7 +174,6 @@ class DailyPlanController extends AbstractController
                             $request->attributes->get('_route_params')
                         );
                     } catch (Exception $e) {
-                        throw $e;
                         $errorMsg = 'The visit cannot be moved to the selected hour';
                     }
                 }

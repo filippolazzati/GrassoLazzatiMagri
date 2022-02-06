@@ -28,7 +28,7 @@ class HelpRequestController extends AbstractController
     #[Route('/view/{help_request?}', name: 'index', methods: ['GET', 'POST'])]
     public function index(Request $request, ?HelpRequest $help_request): Response
     {
-        // if the user is not a farmer, error
+        /** @var Farmer $farmer */
         $farmer = $this->getUser();
         if (!($farmer instanceof Farmer)) {
             $this->createNotFoundException();

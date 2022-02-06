@@ -279,6 +279,7 @@ class DailyPlanService
 
     private function noOverlappingVisits(Collection $farmVisits): bool
     {
+        /** @var ArrayCollection<FarmVisit> $startingHours */
         $startingHours = $farmVisits->map(function ($value) {
             return new DateTime($value->getStartTime()->format('H:i'));
         });

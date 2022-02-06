@@ -59,6 +59,7 @@ class UserCreateCommand extends Command
             'farmer' => new Farmer(),
             'agronomist' => new Agronomist(),
             'policy_maker' => new PolicyMaker(),
+            default => throw new \InvalidArgumentException(),
         };
 
         $user->setEmail($email);

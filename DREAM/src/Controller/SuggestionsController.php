@@ -49,7 +49,7 @@ class SuggestionsController extends AbstractController
             $crop = $form->getData()['crop'];
             $area = $form->getData()['area'];
 
-            /** @var $user Farmer */
+            /** @var Farmer $user */
             $user = $this->getUser();
             $city = $user->getFarm()?->getCity();
 

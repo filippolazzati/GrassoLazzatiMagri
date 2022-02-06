@@ -26,7 +26,7 @@ class InsertFarmVisitsFeedbacksType extends AbstractType
 
         /** @var FarmVisit $farmVisit */
         foreach ($farmVisits as $farmVisit) {
-            $builder = $builder->add($farmVisit->getId(),
+            $builder->add($farmVisit->getId(),
                 TextareaType::class, [
                     'constraints' => [
                         new NotBlank(),

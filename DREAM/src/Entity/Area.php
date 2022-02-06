@@ -83,9 +83,6 @@ class Area
         return $this->getName();
     }
 
-    /**
-     * @return mixed
-     */
     public function getAgronomists(): Collection
     {
         return $this->agronomists;

@@ -2,6 +2,7 @@
 
 namespace App\HelpRequests;
 
+use App\Entity\Agronomist;
 use App\Entity\Farmer;
 use App\Entity\HelpRequest\HelpReply;
 use App\Entity\HelpRequest\HelpRequest;
@@ -21,7 +22,7 @@ class HelpRequestsService
      */
     public function createHelpRequest(Farmer $author, User $receiver, string $title, string $text): HelpRequest
     {
-        if (!($receiver->isAgronomist() || $receiver->isFarmer() && !$receiver->getBestPerforming())) {
+        if (!($receiver->isAgronomist() || ($receiver->isFarmer() && $receiver->getBestPerforming()))) {
             throw new Exception('invalid receiver');
         }
         return new HelpRequest(new DateTime(), $title, $text, $author, $receiver);
