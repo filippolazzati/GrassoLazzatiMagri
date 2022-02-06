@@ -17,10 +17,11 @@ use App\Form\DailyPlan\InsertFarmVisitsFeedbacksType;
 use App\Form\DailyPlan\MoveVisitType;
 use App\Form\DailyPlan\RemoveVisitType;
 use AssertionError;
-use Cassandra\Date;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerInterface;
+use Exception;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,12 +29,12 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Service\Attribute\Required;
 
 #[Route('/daily_plan', name: 'daily_plan_')]
-class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\AbstractController
+class DailyPlanController extends AbstractController
 {
     #[Required] public EntityManagerInterface $em;
 
     #[Route('/dates', name: 'index', methods: ['GET'])]
-    public function index(Request $request) : \Symfony\Component\HttpFoundation\Response
+    public function index(Request $request): Response
     {
         // if the user is not an agronomist, error
         $agronomist = $this->getUser();
@@ -42,7 +43,7 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
         }
 
         // retrieve next seven working days from this one
-        $workingDays = (new Calendar())->getSevenWorkingDaysFrom(new \DateTime());
+        $workingDays = (new Calendar())->getSevenWorkingDaysFrom(new DateTime());
 
 
         // for each working day, retrieve the daily plan for the day if it exists
@@ -51,7 +52,7 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
         foreach ($workingDays as $day) {
             $dailyPlan = $this->em->getRepository(DailyPlan::class)->findDailyPlanByAgronomistAndDate($agronomist, $day);
             // NB: you can't generate a new daily plan for the current day
-            if (!(is_null($dailyPlan) && $day < new \DateTime('tomorrow'))) {
+            if (!(is_null($dailyPlan) && $day < new DateTime('tomorrow'))) {
                 $dailyPlans += [$day->format('Y-m-d') => ((!is_null($dailyPlan)) ? $dailyPlan->getId() : null)];
             } else {
                 $workingDays->removeElement($day);
@@ -59,14 +60,14 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
         }
 
         // retrieve past daily plans in state new or confirmed
-        $pastDailyPlans = $this->em->getRepository(DailyPlan::class)->findNotConfirmedPastDailyPlansOfAgronomist($agronomist, new \DateTime());
+        $pastDailyPlans = $this->em->getRepository(DailyPlan::class)->findNotConfirmedPastDailyPlansOfAgronomist($agronomist, new DateTime());
 
         return $this->render('dailyplan/index.html.twig',
             ['working_days' => $workingDays, 'daily_plans' => $dailyPlans, 'past_daily_plans' => $pastDailyPlans]);
     }
 
     #[Route('/daily_plan/create/{date}', name: 'create', methods: ['GET', 'POST'])]
-    public function createDailyPlan(Request $request, \DateTime $date): \Symfony\Component\HttpFoundation\Response
+    public function createDailyPlan(Request $request, DateTime $date): Response
     {
         // if the user is not an agronomist, error
         $agronomist = $this->getUser();
@@ -75,7 +76,7 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
         }
 
         // if date is not in the future, error
-        if ($date < new \DateTime('tomorrow')) {
+        if ($date < new DateTime('tomorrow')) {
             $this->createNotFoundException('date not in the future');
         }
 
@@ -95,18 +96,18 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
         $form->handleRequest($request);
 
         // when the user submits the form, create the daily plan
-        if($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $formData = $form->getData();
             $numberOfVisits = $formData['numberOfVisits'];
             // the form is valid if the number of visits is less than or equal MAX_VISITS and if the date is not
             // in the past
             if ($numberOfVisits <= DailyPlanService::MAX_VISITS_IN_A_DAY) {
                 // the daily plan can be created if the user has not already got a daily plan for that day
-                    $dpService = new DailyPlanService($this->em->getRepository(FarmVisit::class));
-                    $dailyPlan = $dpService->generateDailyPlan($agronomist, $date, $numberOfVisits);
-                    $this->em->persist($dailyPlan);
-                    $this->em->flush();
-                    return $this->redirectToRoute('daily_plan_date', ['daily_plan' => $dailyPlan->getId()]);
+                $dpService = new DailyPlanService($this->em->getRepository(FarmVisit::class));
+                $dailyPlan = $dpService->generateDailyPlan($agronomist, $date, $numberOfVisits);
+                $this->em->persist($dailyPlan);
+                $this->em->flush();
+                return $this->redirectToRoute('daily_plan_date', ['daily_plan' => $dailyPlan->getId()]);
             }
         }
 
@@ -114,7 +115,7 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
     }
 
     #[Route('/daily_plan/{daily_plan}', name: 'date', methods: ['GET', 'POST'])]
-    public function getDailyPlan(Request $request, DailyPlan $daily_plan) : \Symfony\Component\HttpFoundation\Response
+    public function getDailyPlan(Request $request, DailyPlan $daily_plan): Response
     {
         // if the user is not an agronomist, error
         $agronomist = $this->getUser();
@@ -138,16 +139,15 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
         $formToConfirmDailyPlan = null;
 
         if ($daily_plan->getFarmVisits()->isEmpty()) {
-            $startHourOfLastVisit = new \DateTime(DailyPlanService::START_WORKDAY);
+            $startHourOfLastVisit = new DateTime(DailyPlanService::START_WORKDAY);
         } else {
             $startHourOfLastVisit = max($daily_plan->getFarmVisits()->map(function ($value) {
                 return $value->getStartTime();
             })->toArray());
         }
 
-        $halfHourPassed = new \DateTime() >= new \DateTime(
+        $halfHourPassed = new DateTime() >= new DateTime(
                 $daily_plan->getDate()->format('Y-m-d') . ' ' . $startHourOfLastVisit->format('H:i:s'));
-
 
 
         // if the daily plan is in state NEW or ACCEPTED, show for each visit a form to move it
@@ -161,7 +161,7 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
 
                 $formToMoveVisit->handleRequest($request);
 
-                if($formToMoveVisit->isSubmitted() && $formToMoveVisit->isValid()) {
+                if ($formToMoveVisit->isSubmitted() && $formToMoveVisit->isValid()) {
                     $formData = $formToMoveVisit->getData();
                     $visitToMove = $this->em->getRepository(FarmVisit::class)->find($formData['visit']);
                     $newStartHour = $formData['newStartHour'];
@@ -169,8 +169,12 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
                         $dpService->moveVisit($agronomist, $daily_plan, $visitToMove, $newStartHour);
                         $this->em->persist($visitToMove);
                         $this->em->flush();
-                        $this->redirectToRoute($request->attributes->get('_route'));
-                    } catch(\Exception $e) {
+                        return $this->redirectToRoute(
+                            $request->attributes->get('_route'),
+                            $request->attributes->get('_route_params')
+                        );
+                    } catch (Exception $e) {
+                        throw $e;
                         $errorMsg = 'The visit cannot be moved to the selected hour';
                     }
                 }
@@ -181,18 +185,21 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
         if ($daily_plan->isNew() || ($daily_plan->isAccepted() && $halfHourPassed)) {
             $farmsInTheArea = $agronomist->getArea()->getFarms();
             $options = array('farmsInTheArea' => $farmsInTheArea);
-            $formToAddVisit =  $this->createForm(AddVisitType::class, null, $options);
+            $formToAddVisit = $this->createForm(AddVisitType::class, null, $options);
 
             $formToAddVisit->handleRequest($request);
 
-            if($formToAddVisit->isSubmitted() && $formToAddVisit->isValid()) {
+            if ($formToAddVisit->isSubmitted() && $formToAddVisit->isValid()) {
                 $formData = $formToAddVisit->getData();
                 try {
                     $dpService->addVisit($agronomist, $daily_plan, $formData['farm'], $formData['startingHour']);
                     $this->em->persist($daily_plan);
                     $this->em->flush();
-                    $this->redirectToRoute($request->attributes->get('_route'));
-                } catch (\Exception $e) {
+                    return $this->redirectToRoute(
+                        $request->attributes->get('_route'),
+                        $request->attributes->get('_route_params')
+                    );
+                } catch (Exception $e) {
                     $errorMsg = 'The visit cannot be added';
                 }
             }
@@ -208,15 +215,18 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
 
                 $formToRemoveVisit->handleRequest($request);
 
-                if($formToRemoveVisit->isSubmitted() && $formToRemoveVisit->isValid()) {
+                if ($formToRemoveVisit->isSubmitted() && $formToRemoveVisit->isValid()) {
                     $formData = $formToRemoveVisit->getData();
                     $visitToRemove = $this->em->getRepository(FarmVisit::class)->find($formData['visit']);
                     try {
                         $dpService->removeVisit($agronomist, $daily_plan, $visitToRemove);
                         $this->em->persist($daily_plan);
                         $this->em->flush();
-                        $this->redirectToRoute($request->attributes->get('_route'));
-                    } catch (\Exception $e) {
+                        return $this->redirectToRoute(
+                            $request->attributes->get('_route'),
+                            $request->attributes->get('_route_params')
+                        );
+                    } catch (Exception $e) {
                         $errorMsg = 'The visit cannot be removed';
                     }
                 }
@@ -224,7 +234,7 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
         }
 
         // if the daily plan is in the state NEW, show form for accepting the daily plan
-        if($daily_plan->isNew()) {
+        if ($daily_plan->isNew()) {
             $formToAcceptDailyPlan = $this->createForm(AcceptDailyPlanType::class);
 
             $formToAcceptDailyPlan->handleRequest($request);
@@ -234,8 +244,11 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
                     $dpService->acceptDailyPlan($agronomist, $daily_plan);
                     $this->em->persist($daily_plan);
                     $this->em->flush();
-                    $this->redirectToRoute($request->attributes->get('_route'));
-                } catch (\Exception $e) {
+                    return $this->redirectToRoute(
+                        $request->attributes->get('_route'),
+                        $request->attributes->get('_route_params')
+                    );
+                } catch (Exception $e) {
                     $errorMsg = 'Daily plan not acceptable';
                 }
             }
@@ -245,7 +258,7 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
         // starting time of the last visit of the day, show form for confirming the daily plan
 
 
-        if($daily_plan->isAccepted() && $halfHourPassed) {
+        if ($daily_plan->isAccepted() && $halfHourPassed) {
             $formToConfirmDailyPlan = $this->createForm(ConfirmDailyPlanType::class);
 
             $formToConfirmDailyPlan->handleRequest($request);
@@ -255,9 +268,9 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
                     $dpService->confirmDailyPlan($agronomist, $daily_plan);
                     $this->em->persist($daily_plan);
                     $this->em->flush();
-                    $this->redirectToRoute('daily_plan_insert_visits_feedbacks',
+                    return $this->redirectToRoute('daily_plan_insert_visits_feedbacks',
                         ['daily_plan' => $daily_plan->getId()]);
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     $errorMsg = 'Daily plan not confirmable';
                 }
             }
@@ -275,7 +288,7 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
     }
 
     #[Route('/daily_plan/farm_details/{daily_plan}/{farm}', name: 'farm_details', methods: ['GET'])]
-    public function getFarmDetails(Request $request, DailyPlan $daily_plan, Farm $farm) : \Symfony\Component\HttpFoundation\Response
+    public function getFarmDetails(Request $request, DailyPlan $daily_plan, Farm $farm): Response
     {
         // if the user is not an agronomist, error
         $agronomist = $this->getUser();
@@ -286,12 +299,13 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
         $dateOfLastVisit = $this->em->getRepository(FarmVisit::class)
             ->getDateOfLastVisitToFarmByAgronomist($agronomist, $farm);
         $productionData = $this->em->getRepository(ProductionData::class)
-            ->findProductionDataOfFarmInPeriod($farm, $dateOfLastVisit, new \DateTime());
+            ->findProductionDataOfFarmInPeriod($farm, $dateOfLastVisit, new DateTime());
 
         return $this->render('dailyplan/farm_details.html.twig', ['production_data' => $productionData, 'daily_plan' => $daily_plan, 'farm' => $farm]);
     }
+
     #[Route('/daily_plan/insert_visits_feedbacks/{daily_plan}', name: 'insert_visits_feedbacks', methods: ['GET', 'POST'])]
-    public function insertFarmVisitsFeedbacks(Request $request, DailyPlan $daily_plan): \Symfony\Component\HttpFoundation\Response
+    public function insertFarmVisitsFeedbacks(Request $request, DailyPlan $daily_plan): Response
     {
         // if the user is not an agronomist, error
         $agronomist = $this->getUser();
@@ -311,7 +325,7 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
 
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $formData = $form->getData();
             $feedbacks = new ArrayCollection();
             /** @var FarmVisit $farmVisit */
@@ -326,7 +340,7 @@ class DailyPlanController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
                 $this->em->flush();
                 return $this->redirectToRoute('daily_plan_date',
                     ['daily_plan' => $daily_plan->getId()]);
-            } catch(\Exception $e) {
+            } catch (Exception $e) {
                 throw new BadRequestException($e->getMessage());
             }
         }

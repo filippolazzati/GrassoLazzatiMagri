@@ -2,13 +2,11 @@
 
 namespace App\Tests\DailyPlan;
 
-use _PHPStan_daf7d5577\Nette\Utils\DateTime;
 use App\Entity\Area;
 use App\Entity\DailyPlan\FarmVisit;
 use App\Entity\Farm;
 use App\Entity\Farmer;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class FarmVisitRepositoryTest extends KernelTestCase

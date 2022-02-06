@@ -37,6 +37,7 @@ class DailyPlanRepository extends ServiceEntityRepository
                  WHERE dp.agronomist = :agronomist AND dp.date = :date'
         )->setParameter('agronomist', $agronomist)
             ->setParameter('date', $date)
+            ->setMaxResults(1)
             ->getOneOrNullResult();
     }
 
