@@ -266,10 +266,14 @@ php bin/console d:s:u -f % synchronize schema
     \begin{minted}{shell}
 symfony server:start
     \end{minted}
-    \item call the commands \textit{app:setup:populate-database} and \textit{app:setup:populate-areas} to populate the database with sample data (in particular Telangana areas, needed to create a farmer account):
+\item call the commands \textit{app:setup:populate-database} and \textit{app:setup:populate-areas} to populate the database with sample data (in particular Telangana areas, needed to create a farmer account):
     \begin{minted}{shell}
 php bin/console app:setup:populate-database
 php bin/console app:setup:populate-areas
+    \end{minted}
+\item use the following command to create an agronomist user (you can create farmer users in the UI directly):
+    \begin{minted}{shell}
+php bin/console app:user:create example@example.com password agronomist
     \end{minted}
 \item you can now open a browser and go to \url{localhost:8000/} to connect to \verb|DREAM|.
 \end{enumerate}
